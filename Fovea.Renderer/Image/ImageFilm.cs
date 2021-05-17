@@ -49,5 +49,19 @@ namespace Fovea.Renderer.Image
             var imageAsByteArray = _imageBuffer.SelectMany(pixelColor => pixelColor.ToByteArray());
             File.WriteAllBytes(fileName, headerAsByteArray.Concat(imageAsByteArray).ToArray());
         }
+        
+        public void Average(int numSamples)
+        {
+            var scale = 1.0f / numSamples; // average samples
+            // square root for a rough gamma correction approximation (~ Gamma = 2)
+            for (var cIdx = 0; cIdx < _imageBuffer.Length; ++cIdx)
+            {
+                var colorAtIndex = _imageBuffer[cIdx];
+                _imageBuffer[cIdx] = new RGBColor(
+                    MathF.Sqrt(colorAtIndex.R * scale),
+                    MathF.Sqrt(colorAtIndex.G * scale),
+                    MathF.Sqrt(colorAtIndex.B * scale));
+            }
+        }
     }
 }

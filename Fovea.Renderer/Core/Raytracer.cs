@@ -1,6 +1,7 @@
 ﻿using System;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Primitives;
+using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core
@@ -9,6 +10,9 @@ namespace Fovea.Renderer.Core
     {
         private PrimitiveList _scene;
 
+        public int MaxDepth { get; } = 40;
+        public int NumSamples { get; } = 100;
+        
         public Raytracer()
         {
             _scene = new PrimitiveList();
@@ -16,12 +20,17 @@ namespace Fovea.Renderer.Core
             _scene.Add(new Sphere(new Point3(0, -100.5f, -1), 100));
         }
         
-        RGBColor ColorRay(Ray ray)
+        RGBColor ColorRay(Ray ray, int depth)
         {
+            if (depth <= 0)
+                return new RGBColor(0.0f);
+            
             var hitRecord = new HitRecord();
             if (_scene.Hit(ray, 1e-4f, float.PositiveInfinity, hitRecord))
             {
-                return new RGBColor(hitRecord.Normal.X + 1, hitRecord.Normal.Y + 1, hitRecord.Normal.Z + 1) * 0.5f;
+                var target = hitRecord.HitPoint + hitRecord.Normal + Sampler.Instance.RandomOnUnitSphere();
+                var nextRay = new Ray(hitRecord.HitPoint, target - hitRecord.HitPoint);
+                return ColorRay(nextRay, depth - 1) * 0.5f;
             }
 
             var normalizedDir = Vec3.Normalize(ray.Direction);
@@ -50,14 +59,20 @@ namespace Fovea.Renderer.Core
             {
                 for (var py = 0; py < imageHeight; ++py)
                 {
-                    var u = (float)px / (imageWidth - 1);
-                    var v = (float) py / (imageHeight - 1);
-                    var ray = new Ray(origin, lowerLeftCorner + horizontal * u + vertical * v - origin);
-                    var c = ColorRay(ray);
-                    image[(px, imageHeight - py - 1)] = c;
+                    var color = new RGBColor();
+                    for (var s = 0; s < NumSamples; ++s)
+                    {
+                        var u = (px + Sampler.Instance.Random01()) / (imageWidth - 1);
+                        var v = (py + Sampler.Instance.Random01()) / (imageHeight - 1);
+                        var ray = new Ray(origin, lowerLeftCorner + horizontal * u + vertical * v - origin);
+                        color += ColorRay(ray, MaxDepth);
+                            
+                    }
+                    image[(px, imageHeight - py - 1)] = color;
                 }
             }
-            
+            // average and gamma correct whole image in one go
+            image.Average(NumSamples);
             image.SaveAs("output.ppm");
         }
     }
