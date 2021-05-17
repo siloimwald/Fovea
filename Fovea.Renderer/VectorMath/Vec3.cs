@@ -1,5 +1,4 @@
 ﻿using System;
-
 using static System.MathF;
 
 namespace Fovea.Renderer.VectorMath
@@ -34,12 +33,13 @@ namespace Fovea.Renderer.VectorMath
             Y = y;
             Z = z;
         }
-        
+
         #region operators
+
         // vector plus vector
         public static Vec3 operator +(Vec3 left, Vec3 right)
             => new(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
-        
+
         // vector minus vector
         public static Vec3 operator -(Vec3 left, Vec3 right)
             => new(left.X - right.X, left.Y - right.Y, left.Z - left.Z);
@@ -47,6 +47,11 @@ namespace Fovea.Renderer.VectorMath
         // scalar multiplication
         public static Vec3 operator *(Vec3 vec, float scalar)
             => new(vec.X * scalar, vec.Y * scalar, vec.Z * scalar);
+
+        // unary minus
+        public static Vec3 operator -(Vec3 v)
+            => new(-v.X, -v.Y, -v.Z);
+        
         #endregion
 
         /// <summary>
@@ -55,6 +60,17 @@ namespace Fovea.Renderer.VectorMath
         /// <returns></returns>
         public float Length() => Sqrt(X * X + Y * Y + Z * Z);
 
+        /// <summary>
+        /// squared length of vector
+        /// </summary>
+        public float LengthSquared() => X * X + Y * Y + Z * Z;
+
+        /// <summary>
+        /// dot product of both vectors
+        /// </summary>
+        public static float Dot(Vec3 left, Vec3 right)
+            => left.X * right.X + left.Y * right.Y + left.Z * right.Z;
+        
         /// <summary>
         /// returns the vector normalized, with length 1
         /// </summary>
@@ -65,6 +81,5 @@ namespace Fovea.Renderer.VectorMath
             var oneOverLen = 1.0f / v.Length();
             return new Vec3(v.X * oneOverLen, v.Y * oneOverLen, v.Z * oneOverLen);
         }
-        
     }
 }

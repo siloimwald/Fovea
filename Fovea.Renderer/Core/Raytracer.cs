@@ -1,12 +1,29 @@
-﻿using Fovea.Renderer.Image;
+﻿using System;
+using Fovea.Renderer.Image;
+using Fovea.Renderer.Primitives;
 using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core
 {
     public class Raytracer
     {
+        private PrimitiveList _scene;
+
+        public Raytracer()
+        {
+            _scene = new PrimitiveList();
+            _scene.Add(new Sphere(new Point3(0, 0, -1), 0.5f));
+            _scene.Add(new Sphere(new Point3(0, -100.5f, -1), 100));
+        }
+        
         RGBColor ColorRay(Ray ray)
         {
+            var hitRecord = new HitRecord();
+            if (_scene.Hit(ray, 1e-4f, float.PositiveInfinity, hitRecord))
+            {
+                return new RGBColor(hitRecord.Normal.X + 1, hitRecord.Normal.Y + 1, hitRecord.Normal.Z + 1) * 0.5f;
+            }
+
             var normalizedDir = Vec3.Normalize(ray.Direction);
             var t = 0.5f * (normalizedDir.Y + 1);
             return new RGBColor(1.0f) * (1.0f - t) + new RGBColor(0.5f, 0.7f, 1.0f) * t;
