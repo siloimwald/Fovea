@@ -51,7 +51,7 @@ namespace Fovea.Renderer.VectorMath
         // unary minus
         public static Vec3 operator -(Vec3 v)
             => new(-v.X, -v.Y, -v.Z);
-        
+
         #endregion
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Fovea.Renderer.VectorMath
         /// </summary>
         public static float Dot(Vec3 left, Vec3 right)
             => left.X * right.X + left.Y * right.Y + left.Z * right.Z;
-        
+
         /// <summary>
         /// returns the vector normalized, with length 1
         /// </summary>
@@ -80,6 +80,17 @@ namespace Fovea.Renderer.VectorMath
         {
             var oneOverLen = 1.0f / v.Length();
             return new Vec3(v.X * oneOverLen, v.Y * oneOverLen, v.Z * oneOverLen);
+        }
+
+        /// <summary>
+        /// cross product
+        /// </summary>
+        /// <returns></returns>
+        public static Vec3 Cross(Vec3 left, Vec3 right)
+        {
+            return new(left.Y * right.Z - left.Z * right.Y,
+                left.Z * right.X - left.X * right.Z,
+                left.X * right.Y - left.Y * right.X);
         }
     }
 }

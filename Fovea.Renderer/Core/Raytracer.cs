@@ -3,6 +3,7 @@ using Fovea.Renderer.Image;
 using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
+using Fovea.Renderer.Viewing;
 
 namespace Fovea.Renderer.Core
 {
@@ -45,16 +46,17 @@ namespace Fovea.Renderer.Core
             var imageWidth = 400;
             var imageHeight = (int) (imageWidth / aspectRatio);
             var image = new ImageFilm(imageWidth, imageHeight);
+
             // Camera
-            var viewportHeight = 2.0f;
-            var viewportWidth = aspectRatio * viewportHeight;
-            var focalLength = 1.0f;
+            var orientation = new Orientation
+            {
+                LookAt = new Point3(0, 0, -1),
+                LookFrom = new Point3(),
+                UpDirection = new Vec3(0, 1, 0)
+            };
 
-            var origin = new Point3(0.0f);
-            var horizontal = new Vec3(viewportWidth, 0, 0);
-            var vertical = new Vec3(0, viewportHeight, 0);
-            var lowerLeftCorner = origin - horizontal * 0.5f - vertical * 0.5f - new Vec3(0, 0, focalLength);
-
+            var cam = new PerspectiveCamera(orientation, aspectRatio, 90.0f);
+            
             for (var px = 0; px < imageWidth; ++px)
             {
                 for (var py = 0; py < imageHeight; ++py)
@@ -64,7 +66,7 @@ namespace Fovea.Renderer.Core
                     {
                         var u = (px + Sampler.Instance.Random01()) / (imageWidth - 1);
                         var v = (py + Sampler.Instance.Random01()) / (imageHeight - 1);
-                        var ray = new Ray(origin, lowerLeftCorner + horizontal * u + vertical * v - origin);
+                        var ray = cam.ShootRay(u, v);
                         color += ColorRay(ray, MaxDepth);
                             
                     }
