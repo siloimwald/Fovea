@@ -8,11 +8,13 @@ namespace Fovea.Renderer.Primitives
     {
         private readonly Point3 _center;
         private readonly float _radius;
+        private readonly IMaterial _material;
 
-        public Sphere(Point3 center, float radius)
+        public Sphere(Point3 center, float radius, IMaterial material)
         {
             _center = center;
             _radius = radius;
+            _material = material;
         }
 
         public bool Hit(Ray ray, float tMin, float tMax, HitRecord hitRecord)
@@ -39,7 +41,8 @@ namespace Fovea.Renderer.Primitives
             hitRecord.RayT = root;
             hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
             hitRecord.Normal = (hitRecord.HitPoint - _center) * (1.0f / _radius);
-
+            hitRecord.Material = _material;
+            
             return true;
         }
 

@@ -6,7 +6,7 @@ namespace Fovea.Renderer.Primitives
 {
     public class PrimitiveList : IPrimitive
     {
-        private List<IPrimitive> _primitives = new ();
+        private readonly List<IPrimitive> _primitives = new ();
 
         public void Add(IPrimitive p) => _primitives.Add(p);
         
@@ -23,8 +23,11 @@ namespace Fovea.Renderer.Primitives
             }
 
             // make normal point into right direction
-            hitRecord.ProcessNormal(ray);
-            
+            if (hitSomething)
+            {
+                hitRecord.ProcessNormal(ray);
+            }
+
             return hitSomething;
         }
     }

@@ -42,7 +42,7 @@ namespace Fovea.Renderer.VectorMath
 
         // vector minus vector
         public static Vec3 operator -(Vec3 left, Vec3 right)
-            => new(left.X - right.X, left.Y - right.Y, left.Z - left.Z);
+            => new(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
         // scalar multiplication
         public static Vec3 operator *(Vec3 vec, float scalar)
@@ -66,11 +66,18 @@ namespace Fovea.Renderer.VectorMath
         public float LengthSquared() => X * X + Y * Y + Z * Z;
 
         /// <summary>
+        /// test whether this vector is close to the zero vector
+        /// </summary>
+        /// <returns></returns>
+        public bool IsNearZero()
+            => Abs(X) < 1e-8f && Abs(Y) < 1e-8f && Abs(Z) < 1e-8f;
+        
+        /// <summary>
         /// dot product of both vectors
         /// </summary>
         public static float Dot(Vec3 left, Vec3 right)
             => left.X * right.X + left.Y * right.Y + left.Z * right.Z;
-
+        
         /// <summary>
         /// returns the vector normalized, with length 1
         /// </summary>
@@ -91,6 +98,17 @@ namespace Fovea.Renderer.VectorMath
             return new(left.Y * right.Z - left.Z * right.Y,
                 left.Z * right.X - left.X * right.Z,
                 left.X * right.Y - left.Y * right.X);
+        }
+
+        /// <summary>
+        /// compute outgoing direction for a vector reflected across normal n
+        /// </summary>
+        /// <param name="w">incoming vector</param>
+        /// <param name="n">surface normal</param>
+        /// <returns></returns>
+        public static Vec3 Reflect(Vec3 w, Vec3 n)
+        {
+            return w - n * Dot(w, n) * 2.0f;
         }
     }
 }

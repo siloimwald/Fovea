@@ -1,0 +1,34 @@
+using Fovea.Renderer.Core;
+using Fovea.Renderer.Image;
+using Fovea.Renderer.Sampling;
+
+namespace Fovea.Renderer.Materials
+{
+    public class Lambertian : IMaterial
+    {
+        private readonly RGBColor _albedo;
+
+        public Lambertian(RGBColor albedo)
+        {
+            _albedo = albedo;
+        }
+
+        public Lambertian(float r, float g, float b):this(new RGBColor(r,g,b))
+        {
+        }
+
+        public bool Scatter(Ray rayIn, HitRecord hitRecord, ScatterResult scatterResult)
+        {
+            // book uses "random unit vector", which is a normalized vector from a sample
+            // withIN the unit sphere, sampling directly ON the sphere should be the same
+            var scatterDirection = hitRecord.Normal + Sampler.Instance.RandomOnUnitSphere();
+
+            if (scatterDirection.IsNearZero())
+                scatterDirection = hitRecord.Normal;
+
+            scatterResult.Attenuation = _albedo;
+            scatterResult.OutgoingRay = new Ray(hitRecord.HitPoint, scatterDirection);
+            return true;
+        }
+    }
+}

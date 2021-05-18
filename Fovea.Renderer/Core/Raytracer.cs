@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using Fovea.Renderer.Image;
+using Fovea.Renderer.Materials;
 using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
@@ -17,11 +19,17 @@ namespace Fovea.Renderer.Core
         public Raytracer()
         {
             _scene = new PrimitiveList();
-            _scene.Add(new Sphere(new Point3(0, 0, -1), 0.5f));
-            _scene.Add(new Sphere(new Point3(0, -100.5f, -1), 100));
+            var centerMaterial = new Lambertian(0.7f, 0.3f, 0.3f);
+            var groundMaterial = new Lambertian(0.8f, 0.8f, 0.0f);
+            var materialLeft = new Metal(0.8f, 0.8f, 0.8f, 0.3f);
+            var materialRight = new Metal(0.8f, 0.6f, 0.2f, 1.0f);
+            _scene.Add(new Sphere(new Point3( 0, 0, -1), 0.5f, centerMaterial));
+            _scene.Add(new Sphere(new Point3( 0, -100.5f, -1), 100, groundMaterial));
+            _scene.Add(new Sphere(new Point3(-1, 0, -1), 0.5f, materialLeft));
+            _scene.Add(new Sphere(new Point3( 1, 0, -1), 0.5f, materialRight));
         }
         
-        RGBColor ColorRay(Ray ray, int depth)
+        private RGBColor ColorRay(Ray ray, int depth)
         {
             if (depth <= 0)
                 return new RGBColor(0.0f);
@@ -29,9 +37,12 @@ namespace Fovea.Renderer.Core
             var hitRecord = new HitRecord();
             if (_scene.Hit(ray, 1e-4f, float.PositiveInfinity, hitRecord))
             {
-                var target = hitRecord.HitPoint + hitRecord.Normal + Sampler.Instance.RandomOnUnitSphere();
-                var nextRay = new Ray(hitRecord.HitPoint, target - hitRecord.HitPoint);
-                return ColorRay(nextRay, depth - 1) * 0.5f;
+                var scatterResult = new ScatterResult();
+                if (hitRecord.Material.Scatter(ray, hitRecord, scatterResult))
+                {
+                    return scatterResult.Attenuation * ColorRay(scatterResult.OutgoingRay, depth - 1);    
+                }
+                return new RGBColor();
             }
 
             var normalizedDir = Vec3.Normalize(ray.Direction);
@@ -55,8 +66,11 @@ namespace Fovea.Renderer.Core
                 UpDirection = new Vec3(0, 1, 0)
             };
 
-            var cam = new PerspectiveCamera(orientation, aspectRatio, 90.0f);
+            // print what we're doing
+            Console.WriteLine($"Image size {imageWidth}x{imageHeight}, samples = {NumSamples}");
             
+            var cam = new PerspectiveCamera(orientation, aspectRatio, 90.0f);
+            var sw = Stopwatch.StartNew(); 
             for (var px = 0; px < imageWidth; ++px)
             {
                 for (var py = 0; py < imageHeight; ++py)
@@ -75,6 +89,7 @@ namespace Fovea.Renderer.Core
             }
             // average and gamma correct whole image in one go
             image.Average(NumSamples);
+            Console.WriteLine($"Finished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
             image.SaveAs("output.ppm");
         }
     }

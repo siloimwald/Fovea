@@ -36,5 +36,10 @@ namespace Fovea.Renderer.Core
             IsFrontFace = Vec3.Dot(ray.Direction, Normal) < 0;
             Normal = IsFrontFace ? Normal : -Normal;
         }
+        
+        /// <summary>
+        /// material at intersection
+        /// </summary>
+        public IMaterial Material { get; set; }
     }
 }
