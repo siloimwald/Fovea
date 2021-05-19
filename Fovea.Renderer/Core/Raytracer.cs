@@ -14,18 +14,19 @@ namespace Fovea.Renderer.Core
         private PrimitiveList _scene;
 
         public int MaxDepth { get; } = 40;
-        public int NumSamples { get; } = 100;
+        public int NumSamples { get; } = 500;
         
         public Raytracer()
         {
             _scene = new PrimitiveList();
-            var centerMaterial = new Lambertian(0.7f, 0.3f, 0.3f);
+            var centerMaterial = new Lambertian(0.1f, 0.2f, 0.5f);
             var groundMaterial = new Lambertian(0.8f, 0.8f, 0.0f);
-            var materialLeft = new Metal(0.8f, 0.8f, 0.8f, 0.3f);
-            var materialRight = new Metal(0.8f, 0.6f, 0.2f, 1.0f);
+            var materialLeft = new Dielectric(1.5f);
+            var materialRight = new Metal(0.8f, 0.6f, 0.2f, 0.1f);
             _scene.Add(new Sphere(new Point3( 0, 0, -1), 0.5f, centerMaterial));
             _scene.Add(new Sphere(new Point3( 0, -100.5f, -1), 100, groundMaterial));
             _scene.Add(new Sphere(new Point3(-1, 0, -1), 0.5f, materialLeft));
+            _scene.Add(new Sphere(new Point3(-1, 0, -1), -0.45f, materialLeft));
             _scene.Add(new Sphere(new Point3( 1, 0, -1), 0.5f, materialRight));
         }
         
@@ -61,15 +62,15 @@ namespace Fovea.Renderer.Core
             // Camera
             var orientation = new Orientation
             {
-                LookAt = new Point3(0, 0, -1),
-                LookFrom = new Point3(),
+                LookAt = new Point3(0,0, -1),
+                LookFrom = new Point3(-2, 2, 1),
                 UpDirection = new Vec3(0, 1, 0)
             };
 
             // print what we're doing
             Console.WriteLine($"Image size {imageWidth}x{imageHeight}, samples = {NumSamples}");
             
-            var cam = new PerspectiveCamera(orientation, aspectRatio, 90.0f);
+            var cam = new PerspectiveCamera(orientation, aspectRatio, 20.0f);
             var sw = Stopwatch.StartNew(); 
             for (var px = 0; px < imageWidth; ++px)
             {

@@ -111,6 +111,22 @@ namespace Fovea.Renderer.VectorMath
             return w - n * Dot(w, n) * 2.0f;
         }
 
+        /// <summary>
+        /// refract incoming direction at surface normal with
+        /// the given refraction index
+        /// </summary>
+        /// <param name="uv">incoming direction</param>
+        /// <param name="normal">surface normal at intersection</param>
+        /// <param name="etaIOverEtaN">eta i / eta n (refraction indices)</param>
+        /// <returns></returns>
+        public static Vec3 Refract(Vec3 uv, Vec3 normal, float etaIOverEtaN)
+        {
+            var cosTheta = Min(1.0f, Dot(-uv, normal));
+            var dirOutPerpendicular = (uv + normal * cosTheta) * etaIOverEtaN;
+            var dirOutParallel = normal * -Sqrt(Abs(1.0f - dirOutPerpendicular.LengthSquared()));
+            return dirOutParallel + dirOutPerpendicular;
+        }
+        
         // IEquatable, almost exclusively used for unit tests. mostly to have
         // the 'fuzzy' equality
         
