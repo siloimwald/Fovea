@@ -6,7 +6,7 @@ namespace Fovea.Renderer.VectorMath
     /// <summary>
     /// 3D Vector
     /// </summary>
-    public readonly struct Vec3
+    public readonly struct Vec3 : IEquatable<Vec3>
     {
         public readonly float X;
         public readonly float Y;
@@ -51,9 +51,9 @@ namespace Fovea.Renderer.VectorMath
         // unary minus
         public static Vec3 operator -(Vec3 v)
             => new(-v.X, -v.Y, -v.Z);
-
+        
         #endregion
-
+        
         /// <summary>
         /// length or magnitude of vector
         /// </summary>
@@ -110,5 +110,14 @@ namespace Fovea.Renderer.VectorMath
         {
             return w - n * Dot(w, n) * 2.0f;
         }
+
+        // IEquatable, almost exclusively used for unit tests. mostly to have
+        // the 'fuzzy' equality
+        
+        public bool Equals(Vec3 other) => (this - other).Length() < 1e-8f;
+        public override bool Equals(object obj) => obj is Vec3 other && Equals(other);
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z);
+        public static bool operator ==(Vec3 left, Vec3 right) => left.Equals(right);
+        public static bool operator !=(Vec3 left, Vec3 right) => !(left == right);
     }
 }

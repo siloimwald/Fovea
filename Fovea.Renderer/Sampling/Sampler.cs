@@ -43,8 +43,6 @@ namespace Fovea.Renderer.Sampling
             return new Vec3(r * Cos(phi), r * Sin(phi), 1.0f - 2.0f * r2);
         }
 
-        public Vec3 RandomUnitVector() => Vec3.Normalize(RandomOnUnitSphere());
-
         public RGBColor RandomColor(float min = 0.0f, float max = 1.0f) 
             => new(Random(min, max), Random(min, max), Random(min, max));
     }

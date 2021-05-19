@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fovea.Renderer", "Fovea.Ren
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fovea.CmdLine", "Fovea.CmdLine\Fovea.CmdLine.csproj", "{69A92D99-D9FF-4F27-8CDE-174BCF0F9712}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fovea.Tests", "Fovea.Tests\Fovea.Tests.csproj", "{F6E1C62E-25C6-4C5B-A161-5CB89A934C1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{69A92D99-D9FF-4F27-8CDE-174BCF0F9712}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69A92D99-D9FF-4F27-8CDE-174BCF0F9712}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69A92D99-D9FF-4F27-8CDE-174BCF0F9712}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6E1C62E-25C6-4C5B-A161-5CB89A934C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6E1C62E-25C6-4C5B-A161-5CB89A934C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6E1C62E-25C6-4C5B-A161-5CB89A934C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6E1C62E-25C6-4C5B-A161-5CB89A934C1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
