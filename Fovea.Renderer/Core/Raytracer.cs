@@ -13,8 +13,9 @@ namespace Fovea.Renderer.Core
     {
         private PrimitiveList _scene;
 
-        public int MaxDepth { get; } = 40;
-        public int NumSamples { get; } = 500;
+        public int MaxDepth { get; set; } = 50;
+        public int NumSamples { get; set; } = 100;
+        public int ImageWidth { get; set; } = 400;
         
         public Raytracer()
         {
@@ -55,7 +56,7 @@ namespace Fovea.Renderer.Core
         {
             // Image
             var aspectRatio = 16.0f / 9.0f;
-            var imageWidth = 400;
+            var imageWidth = ImageWidth;
             var imageHeight = (int) (imageWidth / aspectRatio);
             var image = new ImageFilm(imageWidth, imageHeight);
 
