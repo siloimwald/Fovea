@@ -8,6 +8,11 @@ namespace Fovea.Renderer.Primitives
     {
         private readonly List<IPrimitive> _primitives = new ();
 
+        public PrimitiveList(List<IPrimitive> prims)
+        {
+            _primitives = prims;
+        }
+
         public void Add(IPrimitive p) => _primitives.Add(p);
         
         public bool Hit(Ray ray, float tMin, float tMax, HitRecord hitRecord)

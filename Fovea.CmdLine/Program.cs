@@ -13,10 +13,10 @@ namespace Fovea.CmdLine
                 {
                     var renderer = new Raytracer
                     {
-                        NumSamples = opts.NumSamples,
-                        ImageWidth = opts.ImageWidth
+                        NumSamples = opts.NumSamples
                     };
-                    renderer.Render();        
+                    var scene = DemoSceneCreator.MakeScene(DemoScenes.HollowGlass, opts.ImageWidth);
+                    renderer.Render(scene);        
                 });
             
         }
