@@ -2,15 +2,13 @@ namespace Fovea.Renderer.Image
 {
     public readonly struct ImageSize
     {
-        public ImageSize(int imageWidth, int imageHeight, float aspectRatio)
+        public ImageSize(int imageWidth, int imageHeight)
         {
             ImageWidth = imageWidth;
             ImageHeight = imageHeight;
-            AspectRatio = aspectRatio;
         }
 
         public readonly int ImageWidth;
         public readonly int ImageHeight;
-        public readonly float AspectRatio;
     }
 }

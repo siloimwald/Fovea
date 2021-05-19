@@ -8,7 +8,7 @@ namespace Fovea.Renderer.Core
     {
         public IPrimitive World { get; set; }
         public PerspectiveCamera Camera { get; set; }
-        public ImageSize OutputSize { get; set; }
+        public (int imageWidth, int ImageHeight) OutputSize { get; set; }
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Materials;
 using Fovea.Renderer.Primitives;
@@ -37,17 +38,17 @@ namespace Fovea.Renderer.Core
 
         public void Render(Scene scene)
         {
-            var imageWidth = scene.OutputSize.ImageWidth;
-            var imageHeight = scene.OutputSize.ImageHeight;
+            var (imageWidth, imageHeight) = scene.OutputSize;
             var image = new ImageFilm(imageWidth, imageHeight);
             
             // print what we're doing
             Console.WriteLine($"Image size {imageWidth}x{imageHeight}, samples = {NumSamples}");
             
-            var sw = Stopwatch.StartNew(); 
-            for (var px = 0; px < imageWidth; ++px)
+            var sw = Stopwatch.StartNew();
+
+            void RenderScanLine(int py)
             {
-                for (var py = 0; py < imageHeight; ++py)
+                for (var px = 0; px < imageWidth; ++px)
                 {
                     var color = new RGBColor();
                     for (var s = 0; s < NumSamples; ++s)
@@ -61,6 +62,9 @@ namespace Fovea.Renderer.Core
                     image[(px, imageHeight - py - 1)] = color;
                 }
             }
+
+            Parallel.For(0, imageHeight, RenderScanLine);
+            
             // average and gamma correct whole image in one go
             image.Average(NumSamples);
             Console.WriteLine($"Finished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");

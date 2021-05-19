@@ -19,7 +19,7 @@ namespace Fovea.CmdLine
     
     public static class DemoSceneCreator
     {
-        public const float AspectRatio = 16.0f / 9.0f;
+        private const float DefaultAspectRatio = 16.0f / 9.0f;
         
         public static Scene MakeScene(DemoScenes sceneId, int imageWidth)
         {
@@ -29,7 +29,13 @@ namespace Fovea.CmdLine
                 _ => GetHollowGlassScene()
             };
 
-            scene.OutputSize = new ImageSize(imageWidth, (int)(imageWidth / AspectRatio), AspectRatio);
+            var ar = sceneId switch
+            {
+                DemoScenes.FinalSceneBookOne => 3.0 / 2.0,
+                _ => DefaultAspectRatio
+            };
+            
+            scene.OutputSize = (imageWidth, (int)(imageWidth / ar));
             return scene;
         }
 
@@ -57,7 +63,7 @@ namespace Fovea.CmdLine
             };
             
             var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-            var cam = new PerspectiveCamera(orientation, AspectRatio, 90.0f, .1f, focusDist);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 90.0f, .1f, focusDist);
 
             return new Scene
             {
