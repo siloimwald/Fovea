@@ -11,13 +11,13 @@ namespace Fovea.Renderer.Materials
         private readonly RGBColor _albedo;
         private readonly float _fuzzy;
 
-        public Metal(RGBColor albedo, float fuzzy)
+        public Metal(RGBColor albedo, float fuzzy = 0.0f)
         {
             _fuzzy = MathF.Min(fuzzy, 1.0f);
             _albedo = albedo;
         }
 
-        public Metal(float r, float g, float b, float fuzzy) : this(new RGBColor(r, g, b), fuzzy)
+        public Metal(float r, float g, float b, float fuzzy = 0.0f) : this(new RGBColor(r, g, b), fuzzy)
         {
         }
 
