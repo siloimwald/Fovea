@@ -52,6 +52,20 @@ namespace Fovea.Renderer.VectorMath
         public static Vec3 operator -(Vec3 v)
             => new(-v.X, -v.Y, -v.Z);
         
+        public float this[int index]
+        {
+            get
+            {
+                return index switch
+                {
+                    0 => X,
+                    1 => Y,
+                    2 => Z,
+                    _ => throw new ArgumentException("invalid index", nameof(index))
+                };
+            }
+        }
+        
         #endregion
         
         /// <summary>

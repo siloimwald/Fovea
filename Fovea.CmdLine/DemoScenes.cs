@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Core.BVH;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Materials;
 using Fovea.Renderer.Primitives;
@@ -67,7 +68,7 @@ namespace Fovea.CmdLine
 
             return new Scene
             {
-                World = new PrimitiveList(prims),
+                World = new BVHTree(prims),
                 Camera = cam
             };
         }
@@ -119,7 +120,7 @@ namespace Fovea.CmdLine
             
             return new Scene
             {
-                World = new PrimitiveList(prims),
+                World = new BVHTree(prims),
                 Camera = cam
             };
         }

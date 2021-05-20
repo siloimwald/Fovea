@@ -25,6 +25,20 @@ namespace Fovea.Renderer.VectorMath
         
         #region operators
 
+        public float this[int index]
+        {
+            get
+            {
+                return index switch
+                {
+                    0 => PX,
+                    1 => PY,
+                    2 => PZ,
+                    _ => throw new ArgumentException("invalid index", nameof(index))
+                };
+            }
+        }
+        
         // point plus vectors yields (translated) new point
         public static Point3 operator +(Point3 p, Vec3 v)
             => new(p.PX + v.X, p.PY + v.Y, p.PZ + v.Z);
@@ -39,6 +53,25 @@ namespace Fovea.Renderer.VectorMath
 
         #endregion
 
+        public static Point3 Max(Point3 left, Point3 right)
+        {
+            return new(
+                MathF.Max(left.PX, right.PX),
+                MathF.Max(left.PY, right.PY),
+                MathF.Max(left.PZ, right.PZ)
+            );
+        }
+        
+        public static Point3 Min(Point3 left, Point3 right)
+        {
+            return new(
+                MathF.Min(left.PX, right.PX),
+                MathF.Min(left.PY, right.PY),
+                MathF.Min(left.PZ, right.PZ)
+            );
+        }
+        
+        
         // IEquatable interface, see Vec3
         
         public bool Equals(Point3 other) => (this - other).Length() < 1e-8f;

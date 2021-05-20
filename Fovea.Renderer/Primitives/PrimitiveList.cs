@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
 
@@ -6,7 +7,7 @@ namespace Fovea.Renderer.Primitives
 {
     public class PrimitiveList : IPrimitive
     {
-        private readonly List<IPrimitive> _primitives = new ();
+        private readonly List<IPrimitive> _primitives;
 
         public PrimitiveList(List<IPrimitive> prims)
         {
@@ -34,6 +35,14 @@ namespace Fovea.Renderer.Primitives
             }
 
             return hitSomething;
+        }
+
+        public BoundingBox GetBoundingBox()
+        {
+            return 
+                _primitives
+                    .Select(p => p.GetBoundingBox())
+                    .Aggregate(BoundingBox.CreateMaxEmptyBox(), BoundingBox.Union);
         }
     }
 }

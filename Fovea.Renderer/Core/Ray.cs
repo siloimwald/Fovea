@@ -10,11 +10,13 @@ namespace Fovea.Renderer.Core
     {
         public Point3 Origin;
         public Vec3 Direction;
-
+        public Vec3 InverseDirection;
+        
         public Ray(Point3 origin, Vec3 direction)
         {
             Origin = origin;
             Direction = direction;
+            InverseDirection = new Vec3(1.0f / Direction.X, 1.0f / Direction.Y, 1.0f / Direction.Z);
         }
 
         /// <summary>
