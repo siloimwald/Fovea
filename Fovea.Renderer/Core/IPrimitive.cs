@@ -4,7 +4,7 @@ namespace Fovea.Renderer.Core
 {
     public interface IPrimitive
     {
-        bool Hit(in Ray ray, float tMin, float tMax, ref HitRecord hitRecord);
+        bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord);
         BoundingBox GetBoundingBox();
     }
 }

@@ -1,23 +1,23 @@
 ﻿using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
-using static System.MathF;
+using static System.Math;
 
 namespace Fovea.Renderer.Primitives
 {
     public class Sphere : IPrimitive
     {
         private readonly Point3 _center;
-        private readonly float _radius;
+        private readonly double _radius;
         private readonly IMaterial _material;
 
-        public Sphere(Point3 center, float radius, IMaterial material)
+        public Sphere(Point3 center, double radius, IMaterial material)
         {
             _center = center;
             _radius = radius;
             _material = material;
         }
 
-        public bool Hit(in Ray ray, float tMin, float tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var oc = ray.Origin - _center;
             var a = ray.Direction.LengthSquared();
@@ -40,7 +40,7 @@ namespace Fovea.Renderer.Primitives
 
             hitRecord.RayT = root;
             hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
-            hitRecord.Normal = (hitRecord.HitPoint - _center) * (1.0f / _radius);
+            hitRecord.Normal = (hitRecord.HitPoint - _center) * (1.0 / _radius);
             hitRecord.Material = _material;
             
             return true;

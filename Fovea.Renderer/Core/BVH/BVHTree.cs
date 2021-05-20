@@ -25,7 +25,7 @@ namespace Fovea.Renderer.Core.BVH
         /// <summary>
         /// create a leaf if a node's centroid bounds volume is below this value
         /// </summary>
-        private const float BoundsVolumeThreshold = 1e-4f;
+        private const double BoundsVolumeThreshold = 1e-4;
 
         /// <summary>
         /// minimal primitive count in a leaf node before stopping recursion
@@ -97,7 +97,7 @@ namespace Fovea.Renderer.Core.BVH
                 $"Inner Nodes {inner}, Leaf nodes {leafCount}, max leaf size {maxLeafSize}, total node count {_nodes.Length}");
         }
 
-        public bool Hit(in Ray ray, float tMin, float tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             Span<int> nodeStack = stackalloc int[MaxDepth * 2];
             
@@ -235,7 +235,7 @@ namespace Fovea.Renderer.Core.BVH
             else
             {
                 // compute centroid bounds for current node box
-                var (centroidMin, centroidMax) = (new Point3(float.MaxValue), new Point3(float.MinValue));
+                var (centroidMin, centroidMax) = (new Point3(double.MaxValue), new Point3(double.MinValue));
                 for (var p = left; p < right; ++p)
                 {
                     centroidMin = Point3.Min(centroidMin, primitiveBoxes[p].GetCentroid());

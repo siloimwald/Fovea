@@ -5,15 +5,15 @@ namespace Fovea.Renderer.Image
 {
     public struct RGBColor
     {
-        public float R;
-        public float G;
-        public float B;
+        public double R;
+        public double G;
+        public double B;
 
-        public RGBColor(float s = 0.0f) : this(s, s, s)
+        public RGBColor(double s = 0.0) : this(s, s, s)
         {
         }
 
-        public RGBColor(float r, float g, float b)
+        public RGBColor(double r, double g, double b)
         {
             R = r;
             G = g;
@@ -27,7 +27,7 @@ namespace Fovea.Renderer.Image
         }
 
         // scalar multiplication
-        public static RGBColor operator *(RGBColor color, float s)
+        public static RGBColor operator *(RGBColor color, double s)
         {
             return new(color.R * s, color.G * s, color.B * s);
         }
@@ -50,9 +50,9 @@ namespace Fovea.Renderer.Image
         {
             return new[]
             {
-                (byte) (Math.Clamp(R, 0.0f, 1.0f) * 255.999f),
-                (byte) (Math.Clamp(G, 0.0f, 1.0f) * 255.999f),
-                (byte) (Math.Clamp(B, 0.0f, 1.0f) * 255.999f)
+                (byte) (Math.Clamp(R, 0.0, 1.0) * 255.999),
+                (byte) (Math.Clamp(G, 0.0, 1.0) * 255.999),
+                (byte) (Math.Clamp(B, 0.0, 1.0) * 255.999)
             };
         }
         

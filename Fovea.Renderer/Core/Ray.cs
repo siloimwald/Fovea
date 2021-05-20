@@ -16,7 +16,7 @@ namespace Fovea.Renderer.Core
         {
             Origin = origin;
             Direction = direction;
-            InverseDirection = new Vec3(1.0f / Direction.X, 1.0f / Direction.Y, 1.0f / Direction.Z);
+            InverseDirection = new Vec3(1.0 / Direction.X, 1.0 / Direction.Y, 1.0 / Direction.Z);
         }
 
         /// <summary>
@@ -25,6 +25,6 @@ namespace Fovea.Renderer.Core
         /// </summary>
         /// <param name="t">ray parameter</param>
         /// <returns></returns>
-        public Point3 PointsAt(float t) => Origin + Direction * t;
+        public Point3 PointsAt(double t) => Origin + Direction * t;
     }
 }

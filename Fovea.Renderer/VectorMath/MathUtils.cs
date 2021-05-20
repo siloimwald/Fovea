@@ -4,6 +4,6 @@ namespace Fovea.Renderer.VectorMath
 {
     public static class MathUtils
     {
-        public static float DegToRad(float degree) => degree * MathF.PI / 180.0f;
+        public static double DegToRad(double degree) => degree * Math.PI / 180.0;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using Fovea.Renderer.Core;
-using static System.MathF;
+﻿using Fovea.Renderer.Core;
 
 namespace Fovea.Renderer.VectorMath
 {
@@ -36,7 +34,7 @@ namespace Fovea.Renderer.VectorMath
         /// </summary>
         public Point3 GetCentroid()
         {
-            return _min + GetExtent() * 0.5f;
+            return _min + GetExtent() * 0.5;
         }
 
         private Vec3 GetExtent() => _max - _min;
@@ -45,7 +43,7 @@ namespace Fovea.Renderer.VectorMath
         /// compute the volume of bounding box
         /// </summary>
         /// <returns></returns>
-        public float GetVolume()
+        public double GetVolume()
         {
             var ext = GetExtent();
             return ext.X * ext.Y * ext.Z;
@@ -55,10 +53,10 @@ namespace Fovea.Renderer.VectorMath
         /// area of bounding box
         /// </summary>
         /// <returns>area of this bounding box</returns>
-        public float GetArea()
+        public double GetArea()
         {
             var ext = GetExtent();
-            return 2.0f * (ext.X * ext.Y + ext.Y * ext.Z + ext.Z * ext.X);
+            return 2.0 * (ext.X * ext.Y + ext.Y * ext.Z + ext.Z * ext.X);
         }
 
         /// <summary>
@@ -79,7 +77,7 @@ namespace Fovea.Renderer.VectorMath
                 var t0 = (_min[a] - org) * invD;
                 var t1 = (_max[a] - org) * invD;
 
-                if (invD < 0.0f)
+                if (invD < 0.0)
                 {
                     (t0, t1) = (t1, t0);
                 }
@@ -110,8 +108,8 @@ namespace Fovea.Renderer.VectorMath
         public static BoundingBox CreateMaxEmptyBox()
         {
             return new(
-                new Point3(float.MaxValue, float.MaxValue, float.MaxValue),
-                new Point3(float.MinValue, float.MinValue, float.MinValue));
+                new Point3(double.MaxValue, double.MaxValue, double.MaxValue),
+                new Point3(double.MinValue, double.MinValue, double.MinValue));
         }
         
         /// <summary>

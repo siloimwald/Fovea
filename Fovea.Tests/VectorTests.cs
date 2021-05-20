@@ -1,6 +1,6 @@
 using Fovea.Renderer.VectorMath;
 using Xunit;
-using static System.MathF;
+using static System.Math;
 
 namespace Fovea.Tests
 {

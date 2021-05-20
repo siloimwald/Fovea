@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.VectorMath;
-using static System.MathF;
+using static System.Math;
 
 namespace Fovea.Renderer.Sampling
 {
@@ -17,15 +17,15 @@ namespace Fovea.Renderer.Sampling
         private readonly ThreadLocal<Random> _random = new(() => new Random(0xAAFFEE));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Random01() => (float) _random.Value.NextDouble();
+        public double Random01() => _random.Value.NextDouble();
 
-        public float Random(float min, float max) => min + (max - min) * Random01();
+        public double Random(double min, double max) => min + (max - min) * Random01();
 
-        public (float px, float py) RandomOnUnitDisk()
+        public (double px, double py) RandomOnUnitDisk()
         {
             // found all over the internets, but perfectly uniformly distributed, but good enough
             var r = Sqrt(Random01());
-            var theta = 2.0f * PI * Random01();
+            var theta = 2.0 * PI * Random01();
             return (r * Cos(theta), r * Sin(theta));
         }
 
@@ -38,12 +38,12 @@ namespace Fovea.Renderer.Sampling
         {
             var r1 = Random01();
             var r2 = Random01();
-            var r = 2.0f * Sqrt(r2 * (1.0f - r2));
-            var phi = 2.0f * PI * r1;
-            return new Vec3(r * Cos(phi), r * Sin(phi), 1.0f - 2.0f * r2);
+            var r = 2.0 * Sqrt(r2 * (1.0 - r2));
+            var phi = 2.0 * PI * r1;
+            return new Vec3(r * Cos(phi), r * Sin(phi), 1.0 - 2.0 * r2);
         }
 
-        public RGBColor RandomColor(float min = 0.0f, float max = 1.0f) 
+        public RGBColor RandomColor(double min = 0.0, double max = 1.0) 
             => new(Random(min, max), Random(min, max), Random(min, max));
     }
 }

@@ -18,10 +18,10 @@ namespace Fovea.Renderer.Core
         private RGBColor ColorRay(Ray ray, IPrimitive world, int depth)
         {
             if (depth <= 0)
-                return new RGBColor(0.0f);
+                return new RGBColor(0.0);
             
             var hitRecord = new HitRecord();
-            if (world.Hit(ray, 1e-4f, float.PositiveInfinity, ref hitRecord))
+            if (world.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
             {
                 var scatterResult = new ScatterResult();
                 if (hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
@@ -32,8 +32,8 @@ namespace Fovea.Renderer.Core
             }
 
             var normalizedDir = Vec3.Normalize(ray.Direction);
-            var t = 0.5f * (normalizedDir.Y + 1);
-            return new RGBColor(1.0f) * (1.0f - t) + new RGBColor(0.5f, 0.7f, 1.0f) * t;
+            var t = 0.5 * (normalizedDir.Y + 1);
+            return new RGBColor(1.0) * (1.0 - t) + new RGBColor(0.5, 0.7, 1.0) * t;
         }
 
         public void Render(Scene scene)

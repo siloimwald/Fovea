@@ -16,7 +16,7 @@ namespace Fovea.Renderer.Primitives
 
         public void Add(IPrimitive p) => _primitives.Add(p);
         
-        public bool Hit(in Ray ray, float tMin, float tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var hitSomething = false;
             hitRecord.RayT = tMax;

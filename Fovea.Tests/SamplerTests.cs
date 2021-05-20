@@ -1,6 +1,6 @@
 using Fovea.Renderer.Sampling;
 using Xunit;
-using static System.MathF;
+using static System.Math;
 
 namespace Fovea.Tests
 {
@@ -14,10 +14,10 @@ namespace Fovea.Tests
             {
                 var v = Sampler.Instance.RandomOnUnitSphere();
                 // is normal and abs of each component is <= 1
-                Assert.Equal(1.0f, v.Length(), 3);
-                Assert.True(Abs(v.X) <= 1f);
-                Assert.True(Abs(v.Y) <= 1f);
-                Assert.True(Abs(v.Z) <= 1f);
+                Assert.Equal(1.0, v.Length(), 3);
+                Assert.True(Abs(v.X) <= 1);
+                Assert.True(Abs(v.Y) <= 1);
+                Assert.True(Abs(v.Z) <= 1);
             }
         }
         

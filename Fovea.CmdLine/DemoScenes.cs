@@ -20,7 +20,7 @@ namespace Fovea.CmdLine
     
     public static class DemoSceneCreator
     {
-        private const float DefaultAspectRatio = 16.0f / 9.0f;
+        private const double DefaultAspectRatio = 16.0 / 9.0;
         
         public static Scene MakeScene(DemoScenes sceneId, int imageWidth)
         {
@@ -32,7 +32,7 @@ namespace Fovea.CmdLine
 
             var ar = sceneId switch
             {
-                DemoScenes.FinalSceneBookOne => 3.0 / 2.0,
+                DemoScenes.FinalSceneBookOne => 16.0 / 9.0,
                 _ => DefaultAspectRatio
             };
             
@@ -42,17 +42,17 @@ namespace Fovea.CmdLine
 
         private static Scene GetHollowGlassScene()
         {
-            var centerMaterial = new Lambertian(0.1f, 0.2f, 0.5f);
-            var groundMaterial = new Lambertian(0.8f, 0.8f, 0.0f);
-            var materialLeft = new Dielectric(1.5f);
-            var materialRight = new Metal(0.8f, 0.6f, 0.2f, 0.1f);
+            var centerMaterial = new Lambertian(0.1, 0.2, 0.5);
+            var groundMaterial = new Lambertian(0.8, 0.8, 0.0);
+            var materialLeft = new Dielectric(1.5);
+            var materialRight = new Metal(0.8, 0.6, 0.2, 0.1);
             var prims = new List<IPrimitive>
             {
-                new Sphere(new Point3(0, 0, -1), 0.5f, centerMaterial),
-                new Sphere(new Point3(0, -100.5f, -1), 100, groundMaterial),
-                new Sphere(new Point3(-1, 0, -1), 0.5f, materialLeft),
-                new Sphere(new Point3(-1, 0, -1), -0.45f, materialLeft),
-                new Sphere(new Point3(1, 0, -1), 0.5f, materialRight)
+                new Sphere(new Point3(0, 0, -1), 0.5, centerMaterial),
+                new Sphere(new Point3(0, -100.5, -1), 100, groundMaterial),
+                new Sphere(new Point3(-1, 0, -1), 0.5, materialLeft),
+                new Sphere(new Point3(-1, 0, -1), -0.45, materialLeft),
+                new Sphere(new Point3(1, 0, -1), 0.5, materialRight)
             };
             
             // Camera
@@ -64,7 +64,7 @@ namespace Fovea.CmdLine
             };
             
             var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 90.0f, .1f, focusDist);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 90.0f, .1, focusDist);
 
             return new Scene
             {
@@ -76,11 +76,11 @@ namespace Fovea.CmdLine
         private static Scene GetFinalSceneBookOne()
         {
             var prims = new List<IPrimitive>();
-            var groundMat = new Lambertian(0.5f, 0.5f, 0.5f);
+            var groundMat = new Lambertian(0.5, 0.5, 0.5);
             prims.Add(new Sphere(new Point3(0, -1000, 0), 1000, groundMat));
-            prims.Add(new Sphere(new Point3(0, 1,0), 1, new Dielectric(1.5f)));
-            prims.Add(new Sphere(new Point3(-4, 1, 0), 1, new Lambertian(0.4f, 0.2f, 0.1f)));
-            prims.Add(new Sphere(new Point3( 4, 1, 0), 1, new Metal(0.7f, 0.6f, 0.5f)));
+            prims.Add(new Sphere(new Point3(0, 1,0), 1, new Dielectric(1.5)));
+            prims.Add(new Sphere(new Point3(-4, 1, 0), 1, new Lambertian(0.4, 0.2, 0.1)));
+            prims.Add(new Sphere(new Point3( 4, 1, 0), 1, new Metal(0.7, 0.6, 0.5)));
             
             // just for the sake of writing some slightly more modern c#
             
@@ -89,24 +89,24 @@ namespace Fovea.CmdLine
                 var r = Sampler.Instance.Random01();
                 return r switch
                 {
-                    < 0.8f => new Lambertian(Sampler.Instance.RandomColor()*Sampler.Instance.RandomColor()),
-                    < 0.95f => new Metal(Sampler.Instance.RandomColor(0.5f, 1.0f), Sampler.Instance.Random(0.0f, 0.05f)),
-                    _ => new Dielectric(1.5f)
+                    < 0.8 => new Lambertian(Sampler.Instance.RandomColor()*Sampler.Instance.RandomColor()),
+                    < 0.95 => new Metal(Sampler.Instance.RandomColor(0.5f, 1.0f), Sampler.Instance.Random(0.0, 0.05)),
+                    _ => new Dielectric(1.5)
                 };
             }
             
-            var offLimitsZone = new Point3(4, 0.2f, 0);
+            var offLimitsZone = new Point3(4, 0.2, 0);
             
             prims.AddRange(Enumerable
                 .Range(-11, 22)
                 .SelectMany(a => Enumerable.Range(-11, 22).Select(b => (a, b)))
                 .Select(tpl =>
                     new Point3(
-                        tpl.a + 0.9f * Sampler.Instance.Random01(),
-                        0.2f,
-                        tpl.b + 0.9f * Sampler.Instance.Random01()))
-                .Where(center => (center - offLimitsZone).Length() > 0.9f)
-                .Select(center => new Sphere(center, 0.2f, RandomMaterial())));
+                        tpl.a + 0.9 * Sampler.Instance.Random01(),
+                        0.2,
+                        tpl.b + 0.9 * Sampler.Instance.Random01()))
+                .Where(center => (center - offLimitsZone).Length() > 0.9)
+                .Select(center => new Sphere(center, 0.2, RandomMaterial())));
 
             var orientation = new Orientation
             {
@@ -115,8 +115,8 @@ namespace Fovea.CmdLine
                 UpDirection = new Vec3(0, 1, 0)
             };
 
-            const float ar = 3.0f / 2.0f;
-            var cam = new PerspectiveCamera(orientation, ar, 20.0f, .1f, 10.0f);
+            const double ar = 16.0 / 9.0;
+            var cam = new PerspectiveCamera(orientation, ar, 20.0, .1, 10.0);
             
             return new Scene
             {

@@ -8,16 +8,16 @@ namespace Fovea.Renderer.VectorMath
     /// </summary>
     public readonly struct Point3 : IEquatable<Point3>
     {
-        public readonly float PX;
-        public readonly float PY;
-        public readonly float PZ;
+        public readonly double PX;
+        public readonly double PY;
+        public readonly double PZ;
 
-        public Point3(float s = 0.0f)
+        public Point3(double s = 0.0)
         {
             PX = PY = PZ = s;
         }
 
-        public Point3(float px, float py, float pz)
+        public Point3(double px, double py, double pz)
         {
             PX = px;
             PY = py;
@@ -26,7 +26,7 @@ namespace Fovea.Renderer.VectorMath
         
         #region operators
 
-        public float this[int index]
+        public double this[int index]
         {
             // looks ugly, but is only used during bounding box intersection and bvh construction
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -62,18 +62,18 @@ namespace Fovea.Renderer.VectorMath
         public static Point3 Max(Point3 left, Point3 right)
         {
             return new(
-                MathF.Max(left.PX, right.PX),
-                MathF.Max(left.PY, right.PY),
-                MathF.Max(left.PZ, right.PZ)
+                Math.Max(left.PX, right.PX),
+                Math.Max(left.PY, right.PY),
+                Math.Max(left.PZ, right.PZ)
             );
         }
         
         public static Point3 Min(Point3 left, Point3 right)
         {
             return new(
-                MathF.Min(left.PX, right.PX),
-                MathF.Min(left.PY, right.PY),
-                MathF.Min(left.PZ, right.PZ)
+                Math.Min(left.PX, right.PX),
+                Math.Min(left.PY, right.PY),
+                Math.Min(left.PZ, right.PZ)
             );
         }
 
@@ -81,7 +81,7 @@ namespace Fovea.Renderer.VectorMath
 
         // IEquatable interface, see Vec3
         
-        public bool Equals(Point3 other) => (this - other).Length() < 1e-8f;
+        public bool Equals(Point3 other) => (this - other).Length() < 1e-8;
         public override bool Equals(object obj) => obj is Point3 other && Equals(other);
         public override int GetHashCode() => HashCode.Combine(PX, PY, PZ);
         public static bool operator ==(Point3 left, Point3 right) => left.Equals(right);

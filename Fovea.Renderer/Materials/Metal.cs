@@ -9,15 +9,15 @@ namespace Fovea.Renderer.Materials
     public class Metal : IMaterial
     {
         private readonly RGBColor _albedo;
-        private readonly float _fuzzy;
+        private readonly double _fuzzy;
 
-        public Metal(RGBColor albedo, float fuzzy = 0.0f)
+        public Metal(RGBColor albedo, double fuzzy = 0.0)
         {
-            _fuzzy = MathF.Min(fuzzy, 1.0f);
+            _fuzzy = Math.Min(fuzzy, 1.0);
             _albedo = albedo;
         }
 
-        public Metal(float r, float g, float b, float fuzzy = 0.0f) : this(new RGBColor(r, g, b), fuzzy)
+        public Metal(double r, double g, double b, double fuzzy = 0.0) : this(new RGBColor(r, g, b), fuzzy)
         {
         }
 
@@ -27,7 +27,7 @@ namespace Fovea.Renderer.Materials
             scatterResult.Attenuation = _albedo;
             scatterResult.OutgoingRay =
                 new Ray(hitRecord.HitPoint, reflected + Sampler.Instance.RandomOnUnitSphere() * _fuzzy);
-            return Vec3.Dot(scatterResult.OutgoingRay.Direction, hitRecord.Normal) > 0.0f;
+            return Vec3.Dot(scatterResult.OutgoingRay.Direction, hitRecord.Normal) > 0.0;
         }
     }
 }

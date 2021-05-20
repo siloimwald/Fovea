@@ -15,7 +15,7 @@ namespace Fovea.Renderer.Core
         /// <summary>
         /// the ray parameter for this hit
         /// </summary>
-        public float RayT;
+        public double RayT;
 
         /// <summary>
         /// normal at intersection. the correction towards outward facing normal is done just before shading

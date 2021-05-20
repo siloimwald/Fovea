@@ -11,19 +11,19 @@ namespace Fovea.Renderer.Viewing
         private readonly Point3 _lowerLeft;
         private readonly Vec3 _vertical;
         private readonly Vec3 _horizontal;
-        private readonly float _lensRadius;
+        private readonly double _lensRadius;
         private readonly Vec3 _uAxis;
         private readonly Vec3 _vAxis;
 
         public PerspectiveCamera(Orientation orientation,
-            float aspectRatio,
-            float verticalFieldOfView,
-            float aperture,
-            float focusDistance)
+            double aspectRatio,
+            double verticalFieldOfView,
+            double aperture,
+            double focusDistance)
         {
             var theta = MathUtils.DegToRad(verticalFieldOfView);
-            var h = MathF.Tan(theta / 2.0f);
-            var viewportHeight = 2.0f * h;
+            var h = Math.Tan(theta / 2.0);
+            var viewportHeight = 2.0 * h;
             var viewportWidth = aspectRatio * viewportHeight;
 
             var wAxis = Vec3.Normalize(orientation.LookFrom - orientation.LookAt);
@@ -34,11 +34,11 @@ namespace Fovea.Renderer.Viewing
             _vertical = _vAxis * viewportHeight * focusDistance;
 
             _origin = orientation.LookFrom;
-            _lowerLeft = _origin - _horizontal * 0.5f - _vertical * 0.5f - wAxis * focusDistance;
-            _lensRadius = aperture / 2.0f;
+            _lowerLeft = _origin - _horizontal * 0.5 - _vertical * 0.5 - wAxis * focusDistance;
+            _lensRadius = aperture / 2.0;
         }
 
-        public Ray ShootRay(float s, float t)
+        public Ray ShootRay(double s, double t)
         {
             var (px, py) = Sampler.Instance.RandomOnUnitDisk();
             var offset = _uAxis * (px * _lensRadius) + _vAxis * (py * _lensRadius);

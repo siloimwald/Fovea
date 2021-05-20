@@ -13,7 +13,7 @@ namespace Fovea.Renderer.Materials
             _albedo = albedo;
         }
 
-        public Lambertian(float r, float g, float b):this(new RGBColor(r,g,b))
+        public Lambertian(double r, double g, double b):this(new RGBColor(r,g,b))
         {
         }
 
