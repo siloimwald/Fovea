@@ -17,7 +17,7 @@ namespace Fovea.Renderer.Primitives
             _material = material;
         }
 
-        public bool Hit(Ray ray, float tMin, float tMax, HitRecord hitRecord)
+        public bool Hit(in Ray ray, float tMin, float tMax, ref HitRecord hitRecord)
         {
             var oc = ray.Origin - _center;
             var a = ray.Direction.LengthSquared();

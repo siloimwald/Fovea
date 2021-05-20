@@ -32,12 +32,6 @@ namespace Fovea.Renderer.Core.BVH
         /// </summary>
         private const int MinPrimCount = 2;
 
-        /// <summary>
-        /// having a node stack reused across stacks (with late initialization) beats
-        /// allocating a stack on each call for "Hit"
-        /// </summary>
-        [ThreadStatic] private static int[] _nodeStack;
-
         private readonly BVHNode[] _nodes;
 
         private readonly List<IPrimitive> _primitives;
@@ -103,19 +97,19 @@ namespace Fovea.Renderer.Core.BVH
                 $"Inner Nodes {inner}, Leaf nodes {leafCount}, max leaf size {maxLeafSize}, total node count {_nodes.Length}");
         }
 
-        public bool Hit(Ray ray, float tMin, float tMax, HitRecord hitRecord)
+        public bool Hit(in Ray ray, float tMin, float tMax, ref HitRecord hitRecord)
         {
-            _nodeStack ??= new int[_nodes.Length];
-
+            Span<int> nodeStack = stackalloc int[MaxDepth * 2];
+            
             var pointer = 0;
-            _nodeStack[pointer++] = 0;
+            nodeStack[pointer++] = 0;
 
             var hit = false;
             hitRecord.RayT = tMax;
             
             while (pointer > 0)
             {
-                var nodeIndex = _nodeStack[--pointer];
+                var nodeIndex = nodeStack[--pointer];
                 var node = _nodes[nodeIndex];
 
                 if (!node.Box.Intersect(ray, 0, hitRecord.RayT))
@@ -125,14 +119,14 @@ namespace Fovea.Renderer.Core.BVH
                 {
                     for (var p = node.OtherNodeFirstPrim; p < node.OtherNodeFirstPrim + node.Count; ++p)
                     {
-                        if (!_primitives[p].Hit(ray, tMin, hitRecord.RayT, hitRecord)) continue;
+                        if (!_primitives[p].Hit(ray, tMin, hitRecord.RayT, ref hitRecord)) continue;
                         hit = true;
                     }
                 }
                 else
                 {
-                    _nodeStack[pointer++] = nodeIndex + 1;
-                    _nodeStack[pointer++] = node.OtherNodeFirstPrim;
+                    nodeStack[pointer++] = nodeIndex + 1;
+                    nodeStack[pointer++] = node.OtherNodeFirstPrim;
                 }
             }
 

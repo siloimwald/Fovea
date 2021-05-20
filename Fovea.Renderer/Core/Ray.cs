@@ -6,11 +6,11 @@ namespace Fovea.Renderer.Core
     /// a ray in 3d space starting at some origin and pointing at some direction.
     /// This is way too big for a struct by any guidelines, but is allocated all over the place many many times
     /// </summary>
-    public struct Ray
+    public readonly struct Ray
     {
-        public Point3 Origin;
-        public Vec3 Direction;
-        public Vec3 InverseDirection;
+        public readonly Point3 Origin;
+        public readonly Vec3 Direction;
+        public readonly Vec3 InverseDirection;
         
         public Ray(Point3 origin, Vec3 direction)
         {

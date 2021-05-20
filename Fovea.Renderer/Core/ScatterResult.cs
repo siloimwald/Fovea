@@ -5,9 +5,9 @@ namespace Fovea.Renderer.Core
     /// <summary>
     /// result of material interaction, we'll see how good this one plays out
     /// </summary>
-    public class ScatterResult
+    public struct ScatterResult
     {
-        public RGBColor Attenuation { get; set; }
-        public Ray OutgoingRay { get; set; }
+        public RGBColor Attenuation;
+        public Ray OutgoingRay;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Fovea.Renderer.VectorMath
 {
@@ -28,6 +29,7 @@ namespace Fovea.Renderer.VectorMath
         public float this[int index]
         {
             // looks ugly, but is only used during bounding box intersection and bvh construction
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return index switch
@@ -41,14 +43,17 @@ namespace Fovea.Renderer.VectorMath
         }
         
         // point plus vectors yields (translated) new point
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3 operator +(Point3 p, Vec3 v)
             => new(p.PX + v.X, p.PY + v.Y, p.PZ + v.Z);
 
         // point minus vector yields... point as well. This is just convenience instead of writing p+(-v)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3 operator -(Point3 p, Vec3 v)
             => new(p.PX - v.X, p.PY - v.Y, p.PZ - v.Z);
 
         // point minus points yields the vector between both points
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator -(Point3 left, Point3 right)
             => new(left.PX - right.PX, left.PY - right.PY, left.PZ - right.PZ);
 

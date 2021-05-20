@@ -3,9 +3,9 @@ using Fovea.Renderer.VectorMath;
 namespace Fovea.Renderer.Core
 {
     /// <summary>
-    /// keeps track of various bits of an intersection
+    /// keeps track of various bits of an intersection.
     /// </summary>
-    public class HitRecord
+    public struct HitRecord
     {
         /// <summary>
         /// point where we've hit the object

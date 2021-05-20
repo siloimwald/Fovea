@@ -21,10 +21,10 @@ namespace Fovea.Renderer.Core
                 return new RGBColor(0.0f);
             
             var hitRecord = new HitRecord();
-            if (world.Hit(ray, 1e-4f, float.PositiveInfinity, hitRecord))
+            if (world.Hit(ray, 1e-4f, float.PositiveInfinity, ref hitRecord))
             {
                 var scatterResult = new ScatterResult();
-                if (hitRecord.Material.Scatter(ray, hitRecord, scatterResult))
+                if (hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
                 {
                     return scatterResult.Attenuation * ColorRay(scatterResult.OutgoingRay, world, depth - 1);    
                 }

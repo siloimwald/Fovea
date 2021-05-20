@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using static System.MathF;
 
 namespace Fovea.Renderer.VectorMath
@@ -37,23 +38,28 @@ namespace Fovea.Renderer.VectorMath
         #region operators
 
         // vector plus vector
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator +(Vec3 left, Vec3 right)
             => new(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
 
         // vector minus vector
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator -(Vec3 left, Vec3 right)
             => new(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
         // scalar multiplication
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator *(Vec3 vec, float scalar)
             => new(vec.X * scalar, vec.Y * scalar, vec.Z * scalar);
 
         // unary minus
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator -(Vec3 v)
             => new(-v.X, -v.Y, -v.Z);
         
         public float this[int index]
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return index switch
@@ -74,23 +80,27 @@ namespace Fovea.Renderer.VectorMath
         /// length or magnitude of vector
         /// </summary>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float Length() => Sqrt(X * X + Y * Y + Z * Z);
 
         /// <summary>
         /// squared length of vector
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float LengthSquared() => X * X + Y * Y + Z * Z;
 
         /// <summary>
         /// test whether this vector is close to the zero vector
         /// </summary>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsNearZero()
             => Abs(X) < 1e-8f && Abs(Y) < 1e-8f && Abs(Z) < 1e-8f;
         
         /// <summary>
         /// dot product of both vectors
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Dot(Vec3 left, Vec3 right)
             => left.X * right.X + left.Y * right.Y + left.Z * right.Z;
         
@@ -99,6 +109,7 @@ namespace Fovea.Renderer.VectorMath
         /// </summary>
         /// <param name="v">3d vector</param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 Normalize(Vec3 v)
         {
             var oneOverLen = 1.0f / v.Length();
@@ -109,6 +120,7 @@ namespace Fovea.Renderer.VectorMath
         /// cross product
         /// </summary>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 Cross(Vec3 left, Vec3 right)
         {
             return new(left.Y * right.Z - left.Z * right.Y,
@@ -122,6 +134,7 @@ namespace Fovea.Renderer.VectorMath
         /// <param name="w">incoming vector</param>
         /// <param name="n">surface normal</param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 Reflect(Vec3 w, Vec3 n)
         {
             return w - n * Dot(w, n) * 2.0f;
@@ -135,6 +148,7 @@ namespace Fovea.Renderer.VectorMath
         /// <param name="normal">surface normal at intersection</param>
         /// <param name="etaIOverEtaN">eta i / eta n (refraction indices)</param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 Refract(Vec3 uv, Vec3 normal, float etaIOverEtaN)
         {
             var cosTheta = Min(1.0f, Dot(-uv, normal));

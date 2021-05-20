@@ -17,7 +17,7 @@ namespace Fovea.Renderer.Materials
         {
         }
 
-        public bool Scatter(Ray rayIn, HitRecord hitRecord, ScatterResult scatterResult)
+        public bool Scatter(Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
         {
             // book uses "random unit vector", which is a normalized vector from a sample
             // withIN the unit sphere, sampling directly ON the sphere should be the same
