@@ -67,7 +67,9 @@ namespace Fovea.Renderer.VectorMath
         }
         
         #endregion
-        
+
+        public override string ToString() => $"[{X}, {Y}, {Z}]";
+
         /// <summary>
         /// length or magnitude of vector
         /// </summary>

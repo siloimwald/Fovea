@@ -41,7 +41,7 @@ namespace Fovea.Renderer.Core.BVH
         private readonly BVHNode[] _nodes;
 
         private readonly List<IPrimitive> _primitives;
-        private int _nodeIndex = 0;
+        private int _nodeIndex;
 
         /// <summary>
         /// build a bvh structure for the given primitives using 'sah binning' as a splitting
@@ -111,23 +111,22 @@ namespace Fovea.Renderer.Core.BVH
             _nodeStack[pointer++] = 0;
 
             var hit = false;
-            var closestSoFar = tMax;
-
+            hitRecord.RayT = tMax;
+            
             while (pointer > 0)
             {
                 var nodeIndex = _nodeStack[--pointer];
                 var node = _nodes[nodeIndex];
 
-                if (!node.Box.Intersect(ray, 0, closestSoFar))
+                if (!node.Box.Intersect(ray, 0, hitRecord.RayT))
                     continue;
 
                 if (node.Count > 0)
                 {
                     for (var p = node.OtherNodeFirstPrim; p < node.OtherNodeFirstPrim + node.Count; ++p)
                     {
-                        if (!_primitives[p].Hit(ray, tMin, closestSoFar, hitRecord)) continue;
+                        if (!_primitives[p].Hit(ray, tMin, hitRecord.RayT, hitRecord)) continue;
                         hit = true;
-                        closestSoFar = hitRecord.RayT;
                     }
                 }
                 else
@@ -137,6 +136,12 @@ namespace Fovea.Renderer.Core.BVH
                 }
             }
 
+            // make normal point into right direction
+            if (hit)
+            {
+                hitRecord.ProcessNormal(ray);
+            }
+            
             return hit;
         }
 

@@ -19,7 +19,7 @@ namespace Fovea.Renderer.Primitives
         public bool Hit(Ray ray, float tMin, float tMax, HitRecord hitRecord)
         {
             var hitSomething = false;
-            hitRecord.RayT = float.PositiveInfinity;
+            hitRecord.RayT = tMax;
             for (var p = 0; p < _primitives.Count; ++p)
             {
                 if (_primitives[p].Hit(ray, tMin, hitRecord.RayT, hitRecord))

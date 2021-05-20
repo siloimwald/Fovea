@@ -27,6 +27,7 @@ namespace Fovea.Renderer.VectorMath
 
         public float this[int index]
         {
+            // looks ugly, but is only used during bounding box intersection and bvh construction
             get
             {
                 return index switch
@@ -70,8 +71,9 @@ namespace Fovea.Renderer.VectorMath
                 MathF.Min(left.PZ, right.PZ)
             );
         }
-        
-        
+
+        public override string ToString() => $"<{PX}, {PY}, {PZ}>";
+
         // IEquatable interface, see Vec3
         
         public bool Equals(Point3 other) => (this - other).Length() < 1e-8f;

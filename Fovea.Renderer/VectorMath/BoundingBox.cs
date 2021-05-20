@@ -109,7 +109,7 @@ namespace Fovea.Renderer.VectorMath
         /// <returns>inverted, maximal empty bounding box :)</returns>
         public static BoundingBox CreateMaxEmptyBox()
         {
-            return new BoundingBox(
+            return new(
                 new Point3(float.MaxValue, float.MaxValue, float.MaxValue),
                 new Point3(float.MinValue, float.MinValue, float.MinValue));
         }

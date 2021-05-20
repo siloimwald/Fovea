@@ -48,7 +48,7 @@ namespace Fovea.Renderer.Primitives
 
         public BoundingBox GetBoundingBox()
         {
-            return new(_center - new Vec3(-_radius, -_radius, -_radius),
+            return new(_center - new Vec3(_radius, _radius, _radius),
                 _center + new Vec3(_radius, _radius, _radius));
         }
     }
