@@ -1,4 +1,5 @@
-﻿using Fovea.Renderer.Core;
+﻿using System;
+using Fovea.Renderer.Core;
 
 namespace Fovea.Renderer.VectorMath
 {
@@ -61,36 +62,34 @@ namespace Fovea.Renderer.VectorMath
 
         /// <summary>
         /// test whether the given ray intersects this bounding box
-        /// (Andrew Kensler)
-        /// http://psgraphics.blogspot.com/2016/02/new-simple-ray-box-test-from-andrew.html
         /// </summary>
         /// <param name="ray">ray to test against</param>
         /// <param name="tMin">existing min of ray interval</param>
         /// <param name="tMax">existing max of ray interval</param>
         /// <returns>true if ray intersects box</returns>
-        public bool Intersect(Ray ray, double tMin, double tMax)
+        public bool Intersect(in Ray ray, double tMin, double tMax)
         {
-            for (var a = 0; a < 3; ++a)
-            {
-                var invD = ray.InverseDirection[a];
-                var org = ray.Origin[a];
-                var t0 = (_min[a] - org) * invD;
-                var t1 = (_max[a] - org) * invD;
+            var tx1 = (_min.PX - ray.Origin.PX) * ray.InverseDirection.X;
+            var tx2 = (_max.PX - ray.Origin.PX) * ray.InverseDirection.X;
 
-                if (invD < 0.0)
-                {
-                    (t0, t1) = (t1, t0);
-                }
+            tMin = Math.Max(tMin, Math.Min(tx1, tx2));
+            tMax = Math.Min(tMax, Math.Max(tx1, tx2));
+            
+            var ty1 = (_min.PY - ray.Origin.PY) * ray.InverseDirection.Y;
+            var ty2 = (_max.PY - ray.Origin.PY) * ray.InverseDirection.Y;
 
-                tMin = t0 > tMin ? t0 : tMin;
-                tMax = t1 < tMax ? t1 : tMax;
-                if (tMax < tMin)
-                    return false;
-            }
+            tMin = Math.Max(tMin, Math.Min(ty1, ty2));
+            tMax = Math.Min(tMax, Math.Max(ty1, ty2));
+            
+            var tz1 = (_min.PZ - ray.Origin.PZ) * ray.InverseDirection.Z;
+            var tz2 = (_max.PZ - ray.Origin.PZ) * ray.InverseDirection.Z;
 
-            return true;
+            tMin = Math.Max(tMin, Math.Min(tz1, tz2));
+            tMax = Math.Min(tMax, Math.Max(tz1, tz2));
+
+            return tMax >= tMin && tMax >= 0.0;
         }
-
+        
         /// <summary>
         /// unite two bounding boxes by computing the minimal box that fully contains both input parameters
         /// </summary>
