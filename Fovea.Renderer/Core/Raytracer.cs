@@ -63,7 +63,7 @@ namespace Fovea.Renderer.Core
                 }
             }
 
-            Parallel.For(0, imageHeight, RenderScanLine);
+            Parallel.For(0, imageHeight, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, RenderScanLine);
             
             // average and gamma correct whole image in one go
             image.Average(NumSamples);
