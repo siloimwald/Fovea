@@ -21,7 +21,7 @@ namespace Fovea.Renderer.Materials
         {
         }
 
-        public bool Scatter(Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
+        public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
         {
             var reflected = Vec3.Reflect(Vec3.Normalize(rayIn.Direction), hitRecord.Normal);
             scatterResult.Attenuation = _albedo;

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Numerics;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using Fovea.Renderer.Core;
 
 namespace Fovea.Renderer.VectorMath
@@ -88,6 +91,34 @@ namespace Fovea.Renderer.VectorMath
             tMax = Math.Min(tMax, Math.Max(tz1, tz2));
 
             return tMax >= tMin && tMax >= 0.0;
+        }
+
+        private const byte ShuffleMask = ((3 << 4) | (2 << 2) | 1);
+        
+        public bool IntersectSse(in Ray ray, double tMin, double tMax)
+        {
+            var invDir = Vector128.Create((float) ray.InverseDirection.X, (float) ray.InverseDirection.Y,
+                (float) ray.InverseDirection.Z, 0.0f);
+            var org = Vector128.Create((float) ray.Origin.PX, (float) ray.Origin.PY, (float) ray.Origin.PZ, 0.0f);
+            var minVec = Vector128.Create((float) _min.PX, (float) _min.PY, (float) _min.PZ, 0.0f);
+            var maxVec = Vector128.Create((float) _max.PX, (float) _max.PY, (float) _max.PZ, 0.0f);
+
+            var t0 = Sse.Multiply(Sse.Subtract(minVec, org), invDir);
+            var t1 = Sse.Multiply(Sse.Subtract(maxVec, org), invDir);
+            
+            var min = Sse.Min(t0, t1);
+            var max = Sse.Max(t0, t1);
+            
+            // compares min0 and min1 and min1 and min2
+            // shuffle again and compare to get overall min/max in first component
+            var minStage0 = Sse.Max(Sse.Shuffle(min, min, ShuffleMask), min);
+            var gTMin = Sse.Max(Sse.Shuffle(minStage0, minStage0, ShuffleMask), minStage0).GetElement(0);
+            var maxStage0 = Sse.Min(Sse.Shuffle(max, max, ShuffleMask), max);
+            var gTMax = Sse.Min(Sse.Shuffle(maxStage0, maxStage0, ShuffleMask), maxStage0).GetElement(0);
+
+            gTMin = Math.Max((float)tMin, gTMin);
+            gTMax = Math.Min((float)tMax, gTMax);
+            return gTMax >= gTMin && gTMax > 0;
         }
         
         /// <summary>

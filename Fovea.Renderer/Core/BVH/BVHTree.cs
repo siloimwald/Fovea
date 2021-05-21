@@ -112,7 +112,7 @@ namespace Fovea.Renderer.Core.BVH
                 var nodeIndex = nodeStack[--pointer];
                 var node = _nodes[nodeIndex];
 
-                if (!node.Box.Intersect(ray, 0, hitRecord.RayT))
+                if (!node.Box.IntersectSse(ray, 0, hitRecord.RayT))
                     continue;
 
                 if (node.Count > 0)

@@ -15,7 +15,7 @@ namespace Fovea.Renderer.Materials
             _ior = ior;
         }
         
-        public bool Scatter(Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
+        public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
         {
             var ratio = hitRecord.IsFrontFace ? (1.0 / _ior) : _ior;
             var unitDirection = Vec3.Normalize(rayIn.Direction);
