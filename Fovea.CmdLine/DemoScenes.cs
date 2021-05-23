@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
-using Fovea.Renderer.Image;
 using Fovea.Renderer.Materials;
 using Fovea.Renderer.Primitives;
+using Fovea.Renderer.Primitives.CSG;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 using Fovea.Renderer.Viewing;
@@ -15,6 +14,7 @@ namespace Fovea.CmdLine
     public enum DemoScenes
     {
         FinalSceneBookOne,
+        CSGTest,
         HollowGlass
     }
     
@@ -27,17 +27,57 @@ namespace Fovea.CmdLine
             var scene = sceneId switch
             {
                 DemoScenes.FinalSceneBookOne => GetFinalSceneBookOne(),
+                DemoScenes.CSGTest => GetCSGTestScene(),
                 _ => GetHollowGlassScene()
             };
+            
+            scene.OutputSize = (imageWidth, (int)(imageWidth / DefaultAspectRatio));
+            return scene;
+        }
 
-            var ar = sceneId switch
+        private static Scene GetCSGTestScene()
+        {
+            var blueish = new Lambertian(0.1, 0.2, 0.5);
+            var greenish = new Lambertian(0.1, 0.6, 0.2);
+            var groundMaterial = new Lambertian(0.8, 0.8, 0.0);
+            
+            var centerSphere = new Sphere(new Point3(0, 0, -1), 1, blueish);
+            
+            var cutFront = new Sphere(new Point3(0, 0.0, -0.2), 0.6, greenish);
+            var cutRight = new Sphere(new Point3(0.8, 0.0, -1), 0.6, greenish);
+            var cutLeft = new Sphere(new Point3(-0.8, 0.0, -1), 0.6, greenish);
+            var cutBack = new Sphere(new Point3(0, 0, -1.8), 0.6, greenish);
+
+            var cut =
+                new CSGPrimitive(cutBack,
+                    new CSGPrimitive(cutLeft,
+                        new CSGPrimitive(cutFront, cutRight, CSGOperation.Union), CSGOperation.Union)
+                    , CSGOperation.Union);
+                    
+            var blob = new CSGPrimitive(centerSphere, cut, CSGOperation.Difference);
+            
+            var prims = new List<IPrimitive>
             {
-                DemoScenes.FinalSceneBookOne => 16.0 / 9.0,
-                _ => DefaultAspectRatio
+                blob,
+                new Sphere(new Point3(0, -101, -1), 100, groundMaterial),
             };
             
-            scene.OutputSize = (imageWidth, (int)(imageWidth / ar));
-            return scene;
+            // Camera
+            var orientation = new Orientation
+            {
+                LookFrom = new Point3(2, 1, 2),
+                LookAt = new Point3(0,0, -1),
+                UpDirection = new Vec3(0, 1, 0)
+            };
+            
+            var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 60.0f, .1, focusDist);
+
+            return new Scene
+            {
+                World = new PrimitiveList(prims),
+                Camera = cam
+            };
         }
 
         private static Scene GetHollowGlassScene()
@@ -115,8 +155,7 @@ namespace Fovea.CmdLine
                 UpDirection = new Vec3(0, 1, 0)
             };
 
-            const double ar = 16.0 / 9.0;
-            var cam = new PerspectiveCamera(orientation, ar, 20.0, .1, 10.0);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0, .1, 10.0);
             
             return new Scene
             {

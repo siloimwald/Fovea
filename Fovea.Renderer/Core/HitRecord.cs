@@ -13,10 +13,10 @@ namespace Fovea.Renderer.Core
         public Point3 HitPoint;
 
         /// <summary>
-        /// the ray parameter for this hit
+        /// the ray parameter for the closest intersection
         /// </summary>
         public double RayT;
-
+        
         /// <summary>
         /// normal at intersection. the correction towards outward facing normal is done just before shading
         /// so this might point into any direction prior to that

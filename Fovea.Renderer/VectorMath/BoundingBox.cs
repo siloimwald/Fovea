@@ -131,6 +131,19 @@ namespace Fovea.Renderer.VectorMath
             => new(Point3.Min(boxA._min, boxB._min), Point3.Max(boxA._max, boxB._max));
 
         /// <summary>
+        /// compute the intersection of two bounding boxes
+        /// </summary>
+        /// <param name="boxA">bounding box object</param>
+        /// <param name="boxB">bounding box object</param>
+        /// <returns>box = boxA n BoxB</returns>
+        public static BoundingBox Intersect(BoundingBox boxA, BoundingBox boxB)
+        {
+            return new(
+                Point3.Max(boxA._min, boxB._min),
+                Point3.Min(boxA._max, boxB._max));
+        }
+        
+        /// <summary>
         /// creates a bounding box with bounds [maxFloat,maxFloat,maxFloat] to [-maxFloat, -maxFloat, -maxFloat]
         /// to be used for union loops
         /// </summary>
