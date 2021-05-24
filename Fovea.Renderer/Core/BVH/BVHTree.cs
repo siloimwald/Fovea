@@ -129,12 +129,6 @@ namespace Fovea.Renderer.Core.BVH
                     nodeStack[pointer++] = node.OtherNodeFirstPrim;
                 }
             }
-
-            // make normal point into right direction
-            if (hit)
-            {
-                hitRecord.ProcessNormal(ray);
-            }
             
             return hit;
         }

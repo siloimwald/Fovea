@@ -33,7 +33,7 @@ namespace Fovea.Renderer.Primitives
             if (Math.Abs(det) < 1e-4) // parallel to triangle plane
                 return false;
 
-            var invDet = 1.0f / det;
+            var invDet = 1.0 / det;
 
             var tVec = ray.Origin - _vertexA;
             var u = Vec3.Dot(tVec, pVec) * invDet;
@@ -43,12 +43,12 @@ namespace Fovea.Renderer.Primitives
             if (v < 0.0f || v + u > 1.0f) return false;
             var t0 = Vec3.Dot(qVec, _edgeAC) * invDet;
 
-            if (t0 <= tMin || tMax < t0) return false;
+            if (t0 < tMin || tMax < t0) return false;
 
             hitRecord.RayT = t0;
             hitRecord.HitPoint = ray.PointsAt(t0);
             hitRecord.Material = _material;
-            hitRecord.Normal = _normal;
+            hitRecord.SetFaceNormal(ray, _normal);
 
             return true; // hit at t0
         }

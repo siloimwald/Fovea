@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
 
@@ -41,15 +40,20 @@ namespace Fovea.Renderer.Primitives.CSG
             do
             {
                 action = ApplyActionTable(stateLeft, stateRight);
-
+                
                 if (action.HasFlag(CSGLoopAction.ReturnMiss))
                 {
                     return false;
                 }
                 
+                // NOTE: checking for <= and >= in both directions, otherwise
+                // this breaks as an infinite loop for triangles which are in the same
+                // plane and having the exact same hit. 
+                // This might yield Enter, Enter for both, which breaks ReturnXIfFarther for Intersection
+                
                 if (action.HasFlag(CSGLoopAction.ReturnA)
                     || (action.HasFlag(CSGLoopAction.ReturnAIfCloser) && hrLeft.RayT <= hrRight.RayT)
-                    || (action.HasFlag(CSGLoopAction.ReturnAIfFarther) && hrLeft.RayT > hrRight.RayT))
+                    || (action.HasFlag(CSGLoopAction.ReturnAIfFarther) && hrLeft.RayT >= hrRight.RayT))
                 {
                     hitRecord = hrLeft;
                     return true;
@@ -57,10 +61,11 @@ namespace Fovea.Renderer.Primitives.CSG
 
                 if (action.HasFlag(CSGLoopAction.ReturnB)
                     || (action.HasFlag(CSGLoopAction.ReturnBIfCloser) && hrRight.RayT <= hrLeft.RayT)
-                    || (action.HasFlag(CSGLoopAction.ReturnBIfFarther) && hrRight.RayT > hrLeft.RayT))
+                    || (action.HasFlag(CSGLoopAction.ReturnBIfFarther) && hrRight.RayT >= hrLeft.RayT))
                 {
                     if (action.HasFlag(CSGLoopAction.FlipB))
                     {
+                        // or toggle IsFrontFace? still not sure...
                         hrRight.Normal = -hrRight.Normal;
                     }
 
@@ -162,8 +167,7 @@ namespace Fovea.Renderer.Primitives.CSG
             if (!hit)
                 return CSGHitClassification.Miss;
 
-            // this requires that any primitive involved does not do any normal flipping already
-            return Vec3.Dot(hitRecord.Normal, ray.Direction) < 0
+            return hitRecord.IsFrontFace
                 ? CSGHitClassification.Enter 
                 : CSGHitClassification.Exit;
         }

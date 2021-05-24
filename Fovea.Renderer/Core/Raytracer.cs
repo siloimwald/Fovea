@@ -2,11 +2,8 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Fovea.Renderer.Image;
-using Fovea.Renderer.Materials;
-using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
-using Fovea.Renderer.Viewing;
 
 namespace Fovea.Renderer.Core
 {
@@ -46,6 +43,7 @@ namespace Fovea.Renderer.Core
             
             var sw = Stopwatch.StartNew();
 
+            var linesDone = 0;
             void RenderScanLine(int py)
             {
                 for (var px = 0; px < imageWidth; ++px)
@@ -61,13 +59,20 @@ namespace Fovea.Renderer.Core
                     }
                     image[(px, imageHeight - py - 1)] = color;
                 }
+
+                lock (this)
+                {
+                    linesDone++;
+                    var p = linesDone / (double)imageHeight * 100.0;
+                    Console.Write($"\rDone {p:#.##}  ");
+                }
             }
 
             Parallel.For(0, imageHeight, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, RenderScanLine);
             
             // average and gamma correct whole image in one go
             image.Average(NumSamples);
-            Console.WriteLine($"Finished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
+            Console.WriteLine($"\nFinished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
             image.SaveAs("output.ppm");
         }
     }

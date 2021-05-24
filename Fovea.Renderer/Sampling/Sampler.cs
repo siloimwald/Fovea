@@ -14,7 +14,7 @@ namespace Fovea.Renderer.Sampling
     public class Sampler
     {
         public static readonly Sampler Instance = new();
-        private readonly ThreadLocal<Random> _random = new(() => new Random());
+        private readonly ThreadLocal<Random> _random = new(() => new Random(0xAAFFEE));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double Random01() => _random.Value.NextDouble();

@@ -60,7 +60,7 @@ namespace Fovea.Renderer.Primitives
                 hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
                 var foo =  ba * (y / baba);
                 var inner = new Point3(foo.X, foo.Y, foo.Z);
-                hitRecord.Normal = Vec3.Normalize((hitRecord.HitPoint - inner) * (1.0 / _radius));
+                hitRecord.SetFaceNormal(ray, Vec3.Normalize((hitRecord.HitPoint - inner) * (1.0 / _radius)));
                 hitRecord.Material = _material;
                 return true;
             }
@@ -73,7 +73,7 @@ namespace Fovea.Renderer.Primitives
                 hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
                 var f = y >= 0 ? 1.0 : -1.0;
                 var normal = ba * (f / baba);
-                hitRecord.Normal = Vec3.Normalize(normal);
+                hitRecord.SetFaceNormal(ray, normal);
                 hitRecord.Material = _material;
                 return true;
             }

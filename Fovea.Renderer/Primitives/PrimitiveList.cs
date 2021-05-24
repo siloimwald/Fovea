@@ -28,12 +28,6 @@ namespace Fovea.Renderer.Primitives
                 }
             }
 
-            // make normal point into right direction
-            if (hitSomething)
-            {
-                hitRecord.ProcessNormal(ray);
-            }
-
             return hitSomething;
         }
 
