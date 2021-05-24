@@ -6,7 +6,7 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Mesh
 {
-    public class Mesh
+    public class TriangleMesh
     {
         public List<Point3> Vertices { get; init; }
         public List<(int f0,int f1,int f2)> Faces { get; init; }

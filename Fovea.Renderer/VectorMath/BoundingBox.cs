@@ -41,7 +41,7 @@ namespace Fovea.Renderer.VectorMath
             return _min + GetExtent() * 0.5;
         }
 
-        private Vec3 GetExtent() => _max - _min;
+        public Vec3 GetExtent() => _max - _min;
 
         /// <summary>
         /// compute the volume of bounding box

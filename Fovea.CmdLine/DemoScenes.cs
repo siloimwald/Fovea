@@ -4,6 +4,7 @@ using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
 using Fovea.Renderer.Materials;
 using Fovea.Renderer.Mesh;
+using Fovea.Renderer.Parser;
 using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Primitives.CSG;
 using Fovea.Renderer.Sampling;
@@ -18,6 +19,7 @@ namespace Fovea.CmdLine
         SphereCSGTest,
         BoxCSGTest,
         BoxTest,
+        ObjFileTest,
         HollowGlass
     }
     
@@ -33,11 +35,54 @@ namespace Fovea.CmdLine
                 DemoScenes.SphereCSGTest => GetSphereCSGTestScene(),
                 DemoScenes.BoxTest => GetBoxTestScene(),
                 DemoScenes.BoxCSGTest => GetBoxCSGTestScene(),
+                DemoScenes.ObjFileTest => GetObjFileTestScene(),
                 _ => GetHollowGlassScene()
             };
             
             scene.OutputSize = (imageWidth, (int)(imageWidth / DefaultAspectRatio));
             return scene;
+        }
+
+        // read teapot.obj and render it
+        private static Scene GetObjFileTestScene()
+        {
+            var groundMaterial = new Lambertian(0.5, 0.5, 0.5);
+
+            var groundPlane0 = new Triangle(new Point3(-5, -1, 5), new Point3(5, -1, 5),
+                new Point3(5, -1, -5),
+                groundMaterial);
+            
+            var groundPlane1 = new Triangle(new Point3(5, -1, -5), new Point3(-5, -1, -5),
+                new Point3(-5, -1, 5), groundMaterial);
+
+            var yellowish = new Lambertian(0.8, 0.7, 0.1);
+
+            var prims = new List<IPrimitive>
+            {
+                groundPlane0,
+                groundPlane1
+            };
+
+            var mesh = ObjReader.ReadObjFile(@"assets\teapot.obj", true);
+
+            prims.AddRange(mesh.CreateSingleTriangles(yellowish));
+            
+            // Camera
+            var orientation = new Orientation
+            {
+                LookFrom = new Point3(-3, 3, 2),
+                LookAt = new Point3(0, 0, 0),
+                UpDirection = new Vec3(0, 1, 0)
+            };
+            
+            var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0f, .1, focusDist);
+
+            return new Scene
+            {
+                World = new BVHTree(prims),
+                Camera = cam
+            };
         }
 
         /// <summary>

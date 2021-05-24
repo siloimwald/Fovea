@@ -12,7 +12,7 @@ namespace Fovea.Renderer.Mesh
         /// produce a mesh for a box with the given extents
         /// </summary>
         /// <returns></returns>
-        public static Mesh Produce(double xMin, double xMax, double yMin, double yMax, double zMin, double zMax)
+        public static TriangleMesh Produce(double xMin, double xMax, double yMin, double yMax, double zMin, double zMax)
         {
             (xMin, xMax) = xMin <= xMax ? (xMin, xMax) : (xMax, xMin);
             (yMin, yMax) = yMin <= yMax ? (yMin, yMax) : (yMax, yMin);
@@ -49,7 +49,7 @@ namespace Fovea.Renderer.Mesh
                 (6, 5, 1), (2, 6, 1)
             };
 
-            return new Mesh
+            return new TriangleMesh
             {
                 Faces = faces,
                 Vertices = vertices

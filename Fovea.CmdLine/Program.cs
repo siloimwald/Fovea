@@ -1,6 +1,7 @@
 ﻿using System;
 using Fovea.Renderer.Core;
 using CommandLine;
+using Fovea.Renderer.Parser;
 
 namespace Fovea.CmdLine
 {
@@ -15,8 +16,8 @@ namespace Fovea.CmdLine
                     {
                         NumSamples = opts.NumSamples
                     };
-                    var scene = DemoSceneCreator.MakeScene(DemoScenes.BoxCSGTest, opts.ImageWidth);
-                    renderer.Render(scene);        
+                    var scene = DemoSceneCreator.MakeScene(DemoScenes.ObjFileTest, opts.ImageWidth);
+                    renderer.Render(scene);
                 });
             
         }
