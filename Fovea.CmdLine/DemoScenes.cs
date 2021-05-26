@@ -20,6 +20,7 @@ namespace Fovea.CmdLine
         BoxCSGTest,
         BoxTest,
         ObjFileTest,
+        CylinderTest,
         HollowGlass
     }
     
@@ -36,11 +37,34 @@ namespace Fovea.CmdLine
                 DemoScenes.BoxTest => GetBoxTestScene(),
                 DemoScenes.BoxCSGTest => GetBoxCSGTestScene(),
                 DemoScenes.ObjFileTest => GetObjFileTestScene(),
+                DemoScenes.CylinderTest => GetCylinderTestScene(),
                 _ => GetHollowGlassScene()
             };
             
             scene.OutputSize = (imageWidth, (int)(imageWidth / DefaultAspectRatio));
             return scene;
+        }
+
+        private static Scene GetCylinderTestScene()
+        {
+            var cyl = new Cylinder(-2, 2, 2, new Lambertian(0.8, 0.3, 0.2));
+            
+            // Camera
+            var orientation = new Orientation
+            {
+                LookFrom = new Point3(-4, 0, 5),
+                LookAt = new Point3(0, 0, 0),
+                UpDirection = new Vec3(0, 1, 0)
+            };
+            
+            var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 90.0f, .1, focusDist);
+
+            return new Scene
+            {
+                World = cyl,
+                Camera = cam
+            };
         }
 
         // read teapot.obj and render it

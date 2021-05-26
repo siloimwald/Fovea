@@ -4,89 +4,123 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives
 {
-    // there is some bug somewhere
     public class Cylinder : IPrimitive
     {
-        private readonly Point3 _pa;
-        private readonly Point3 _pb;
+        private readonly double _zMin;
+        private readonly double _zMax;
         private readonly double _radius;
         private readonly IMaterial _material;
 
-        public Cylinder(Point3 pa, Point3 pb, double radius, IMaterial material)
+        public Cylinder(double zMin, double zMax, double radius, IMaterial material)
         {
-            _pa = pa;
-            _pb = pb;
+            _zMin = Math.Min(zMin, zMax);
+            _zMax = Math.Max(zMin, zMax);
             _radius = radius;
             _material = material;
         }
-        
-        // https://www.iquilezles.org/www/articles/intersectors/intersectors.htm
-        // this works, sort of, but cylinder is shifted somehow? leaving it for the time being
+
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
-            var ba = _pb - _pa;
-            var oc = ray.Origin - _pa;
-
-            var unitDir = Vec3.Normalize(ray.Direction);
             
-            var baba = Vec3.Dot(ba, ba);
-            var bard = Vec3.Dot(ba, unitDir);
-            var baoc = Vec3.Dot(ba, oc);
 
-            var a = baba - bard * bard;
-            var b = baba * Vec3.Dot(oc, unitDir) - baoc * bard;
-            var c = baba * Vec3.Dot(oc, oc) - baoc * baoc - _radius * _radius * baba;
-            var h = b * b - a * c;
-            
-            if (h < 0)
+            // get better cap hit, if any
+            var tCap = 0.0;
+            var hitCap = TestCapHit(ray, tMin, tMax, ref tCap);
+            var tBody = 0.0;
+            var hitBody = TestBodyHit(ray, tMin, tMax, ref tBody);
+
+            if (!hitBody && !hitCap)
+                return false;
+                        
+            if (hitBody && !hitCap || hitBody && tBody < tCap)
+            {
+                var hitPoint = ray.PointsAt(tBody);
+                var n = (hitPoint - new Point3(0, 0, hitPoint.PZ)) * (1.0 / _radius);
+                hitRecord.HitPoint = hitPoint;
+                hitRecord.Material = _material;
+                hitRecord.RayT = tBody;
+                hitRecord.SetFaceNormal(ray, n);
+                return true;
+            }
+
+            // cap hit
+            hitRecord.HitPoint = ray.PointsAt(tCap);
+            hitRecord.RayT = tCap;
+            hitRecord.Material = _material;
+            // flip the normal accordingly
+            hitRecord.SetFaceNormal(ray, new Vec3(0,0, Math.Sign(hitRecord.HitPoint.PZ) * 1));
+            return true;
+        }
+
+        /// <summary>
+        /// returns true if we hit either of the caps
+        /// </summary>
+        /// <param name="ray">ray</param>
+        /// <param name="tMin">ray min param</param>
+        /// <param name="tMax">ray max param</param>
+        /// <param name="tCap">reference to better cap hit</param>
+        /// <returns></returns>
+        private bool TestCapHit(in Ray ray, double tMin, double tMax, ref double tCap)
+        {
+            // parallel to plane
+            if (Math.Abs(ray.Direction.Z) < 1e-6)
                 return false;
 
-            h = Math.Sqrt(h);
-            var t = (-b - h) / a;
+            var t0 = (_zMin - ray.Origin.PZ) / ray.Direction.Z;
+            var t1 = (_zMax - ray.Origin.PZ) / ray.Direction.Z;
 
-            if (t < tMin || tMax < t)
+            if (t0 > t1)
             {
-                t = (-b + h) / a;
-                if (t < tMin || tMax < t)
+                MathUtils.Swap(ref t0, ref t1);
+            }
+            
+            tCap = t0;
+            var hp = ray.PointsAt(tCap);
+            var r2 = _radius * _radius;
+            if (!(tCap < tMin) && !(tMax < tCap) && !(hp.PX * hp.PX + hp.PY * hp.PY > r2)) return true;
+            tCap = t1;
+            hp = ray.PointsAt(tCap);
+
+            return !(tCap < tMin) && !(tMax < tCap) && !(hp.PX*hp.PX + hp.PY*hp.PY>r2);
+        }
+
+        /// <summary>
+        /// test ray against cylinder body
+        /// </summary>
+        /// <param name="ray">incoming ray</param>
+        /// <param name="tMin">min ray param</param>
+        /// <param name="tMax">max ray param</param>
+        /// <param name="tBody">potential closest body hit</param>
+        /// <returns></returns>
+        private bool TestBodyHit(in Ray ray, double tMin, double tMax, ref double tBody)
+        {
+            var a = ray.Direction.X * ray.Direction.X + ray.Direction.Y * ray.Direction.Y;
+            var b = 2.0 * (ray.Direction.X * ray.Origin.PX + ray.Direction.Y * ray.Origin.PY);
+            var c = ray.Origin.PX * ray.Origin.PX + ray.Origin.PY * ray.Origin.PY - _radius * _radius;
+            
+            double t0 = 0.0, t1 = 0.0;
+            if (!MathUtils.SolveQuadratic(a, b, c, ref t0, ref t1))
+                return false;
+            
+            tBody = t0;
+            // test against ray interval and clip
+            var hpz = ray.Origin.PZ + tBody * ray.Direction.Z;
+            if (tBody < tMin || tMax < tBody || hpz < _zMin || hpz > _zMax)
+            {
+                tBody = t1;
+                hpz = ray.Origin.PZ + tBody * ray.Direction.Z;
+                if (tBody < tMin || tMax < tBody || hpz < _zMin || hpz > _zMax)
                     return false;
             }
 
-            // body hit
-            var y = baoc + t * bard;
-
-            if (y > 0 && y < baba)
-            {
-                hitRecord.RayT = t;
-                hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
-                var foo =  ba * (y / baba);
-                var inner = new Point3(foo.X, foo.Y, foo.Z);
-                hitRecord.SetFaceNormal(ray, Vec3.Normalize((hitRecord.HitPoint - inner) * (1.0 / _radius)));
-                hitRecord.Material = _material;
-                return true;
-            }
-            
-            // caps hit
-            t = ((y < 0 ? 0 : baba) - baoc) / bard;
-            if (Math.Abs(b + a * t) < h)
-            {
-                hitRecord.RayT = t;
-                hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
-                var f = y >= 0 ? 1.0 : -1.0;
-                var normal = ba * (f / baba);
-                hitRecord.SetFaceNormal(ray, normal);
-                hitRecord.Material = _material;
-                return true;
-            }
-
-            return false;
+            return true;
         }
-
+        
         public BoundingBox GetBoundingBox()
         {
-            var min = Point3.Min(_pa, _pb);
-            var max = Point3.Max(_pa, _pb);
-            var vr = new Vec3(_radius, _radius, _radius);
-            return new BoundingBox(min - vr, max + vr);
+            var min = new Point3(-_radius, -_radius, _zMin);
+            var max = new Point3(_radius, _radius, _zMax);
+            return new BoundingBox(min, max);
         }
     }
 }
