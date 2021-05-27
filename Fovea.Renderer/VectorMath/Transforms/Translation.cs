@@ -13,7 +13,7 @@ namespace Fovea.Renderer.VectorMath.Transforms
         public readonly double TY;
         public readonly double TZ;
 
-        public Matrix4 GetMatrix() => Matrix4.MakeTranslation(this);
-        public Matrix4 GetInverseMatrix() => Matrix4.MakeTranslation(new Translation(-TX, -TY, -TZ));
+        public Matrix4 GetMatrix() => Matrix4.GetTranslation(this);
+        public Matrix4 GetInverseMatrix() => Matrix4.GetTranslation(new Translation(-TX, -TY, -TZ));
     }
 }

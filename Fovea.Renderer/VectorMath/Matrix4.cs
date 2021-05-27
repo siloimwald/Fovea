@@ -26,7 +26,7 @@ namespace Fovea.Renderer.VectorMath
             return m;
         }
 
-        public static Matrix4 MakeTranslation(Translation translation)
+        public static Matrix4 GetTranslation(Translation translation)
         {
             var m = new Matrix4();
             m._matrix[0, 0] = m._matrix[1, 1] = m._matrix[2, 2] = m._matrix[3, 3] = 1.0;
@@ -36,7 +36,7 @@ namespace Fovea.Renderer.VectorMath
             return m;
         }
 
-        public static Matrix4 MakeScaling(Scaling scaling)
+        public static Matrix4 GetScaling(Scaling scaling)
         {
             var m = new Matrix4();
             m._matrix[0, 0] = scaling.SX;
@@ -133,6 +133,15 @@ namespace Fovea.Renderer.VectorMath
                 .All(index => Abs(_matrix[index.rowIndex, index.columnIndex]) < eps);
 
             return diagonalOk && restOk;
+        }
+        
+        public Vec3 TransformVectorTransposed(Vec3 normal)
+        {
+            return new(
+                normal.X * _matrix[0, 0] + normal.Y * _matrix[1, 0] + normal.Z * _matrix[2, 0],
+                normal.X * _matrix[0, 1] + normal.Y * _matrix[1, 1] + normal.Z * _matrix[2, 1],
+                normal.X * _matrix[0, 2] + normal.Y * _matrix[1, 2] + normal.Z * _matrix[2, 2]
+            );
         }
     }
 }

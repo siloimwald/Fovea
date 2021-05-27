@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using Fovea.Renderer.Core;
@@ -171,6 +170,15 @@ namespace Fovea.Renderer.VectorMath
                 ext.X > 0 ? o.X / ext.X : o.X,
                 ext.Y > 0 ? o.Y / ext.Y : o.Y,
                 ext.Z > 0 ? o.Z / ext.Z : o.Z);
+        }
+
+        public BoundingBox Transform(Matrix4 transform)
+        {
+            var transformedMin = transform * _min;
+            var transformedMax = transform * _max;
+            return new BoundingBox(
+                Point3.Min(transformedMin, transformedMax),
+                Point3.Max(transformedMin, transformedMax));
         }
     }
 }
