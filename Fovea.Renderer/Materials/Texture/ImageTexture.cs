@@ -38,6 +38,9 @@ namespace Fovea.Renderer.Materials.Texture
 
         public RGBColor Value(double u, double v, Point3 p)
         {
+            if (_imageBuffer == null)
+                return new RGBColor(0, 1, 1);
+            
             var texU = Math.Clamp(u, 0.0, 1.0);
             var texV = Math.Clamp(v, 0.0, 1.0);
             var px = (int) (texU * (_imageBuffer.Width - 1));

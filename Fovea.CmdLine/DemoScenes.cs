@@ -53,13 +53,14 @@ namespace Fovea.CmdLine
         private static Scene GetTextureTestScene()
         {
             var checker = new Lambertian(new CheckerBoard(new RGBColor(0.2, 0.3, 0.3), new RGBColor(0.9)));
+            var checker2 = new Lambertian(new ImageTexture(@"Assets\cb.jpg"));
             var earth = new Lambertian(new ImageTexture(@"Assets\earth.jpg"));
-            var baseCylinder = new Cylinder(0, 4, 1, checker);
+            var baseCylinder = new Cylinder(0, 4, 1, checker2);
             var prims = new List<IPrimitive>
             {
                 new Sphere(new Point3(0, -1000, 0), 1000, new Lambertian(0.6, 0.5, 0.3)),
                 new Sphere(new Point3(3, 2, -1.5), 2, earth),
-                new Sphere(new Point3(1.5, 1, 2), 1, checker),
+                new Sphere(new Point3(1.5, 1, 2), 1, checker2),
                 new Instance(baseCylinder, new Transformation().Rotate(-90, Axis.X).Translate(-1,0,0)),
                 new Instance(baseCylinder, new Transformation().Rotate(45, Axis.Y).Translate(-4.5,1,0))
             };
