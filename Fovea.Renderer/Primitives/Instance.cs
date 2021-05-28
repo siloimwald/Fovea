@@ -1,5 +1,6 @@
 using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
+using Fovea.Renderer.VectorMath.Transforms;
 
 namespace Fovea.Renderer.Primitives
 {
@@ -20,6 +21,9 @@ namespace Fovea.Renderer.Primitives
             _transform = transform;
             _inverseTransform = inverseTransform;
         }
+        
+        public Instance(IPrimitive instance, Transformation transformation)
+            : this(instance, transformation.GetMatrix(), transformation.GetInverseMatrix()) {}
         
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {

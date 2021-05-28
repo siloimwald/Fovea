@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
+using Fovea.Renderer.Image;
 using Fovea.Renderer.Materials;
+using Fovea.Renderer.Materials.Texture;
 using Fovea.Renderer.Mesh;
 using Fovea.Renderer.Parser;
 using Fovea.Renderer.Primitives;
@@ -22,7 +24,8 @@ namespace Fovea.CmdLine
         BoxTest,
         ObjFileTest,
         CylinderTest,
-        HollowGlass
+        HollowGlass,
+        TextureDemo
     }
 
     public static class DemoSceneCreator
@@ -39,11 +42,44 @@ namespace Fovea.CmdLine
                 DemoScenes.BoxCSGTest => GetBoxCSGTestScene(),
                 DemoScenes.ObjFileTest => GetObjFileTestScene(),
                 DemoScenes.CylinderTest => GetCylinderTestScene(),
+                DemoScenes.TextureDemo => GetTextureTestScene(),
                 _ => GetHollowGlassScene()
             };
 
             scene.OutputSize = (imageWidth, (int) (imageWidth / DefaultAspectRatio));
             return scene;
+        }
+
+        private static Scene GetTextureTestScene()
+        {
+            var checker = new Lambertian(new CheckerBoard(new RGBColor(0.2, 0.3, 0.3), new RGBColor(0.9)));
+            var earth = new Lambertian(new ImageTexture(@"Assets\earth.jpg"));
+            var baseCylinder = new Cylinder(0, 4, 1, checker);
+            var prims = new List<IPrimitive>
+            {
+                new Sphere(new Point3(0, -1000, 0), 1000, new Lambertian(0.6, 0.5, 0.3)),
+                new Sphere(new Point3(3, 2, -1.5), 2, earth),
+                new Sphere(new Point3(1.5, 1, 2), 1, checker),
+                new Instance(baseCylinder, new Transformation().Rotate(-90, Axis.X).Translate(-1,0,0)),
+                new Instance(baseCylinder, new Transformation().Rotate(45, Axis.Y).Translate(-4.5,1,0))
+            };
+            
+            // Camera
+            var orientation = new Orientation
+            {
+                LookFrom = new Point3(1, 5, 5),
+                LookAt = new Point3(0, 1, 0),
+                UpDirection = new Vec3(0, 0, -1)
+            };
+
+            var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 75.0f, .1, focusDist);
+
+            return new Scene
+            {
+                World = new PrimitiveList(prims),
+                Camera = cam
+            };
         }
 
         private static Scene GetCylinderTestScene()

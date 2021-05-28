@@ -1,9 +1,11 @@
 ﻿using System;
+using Fovea.Renderer.Materials;
+using Fovea.Renderer.VectorMath;
 
 
 namespace Fovea.Renderer.Image
 {
-    public struct RGBColor
+    public struct RGBColor : ITexture
     {
         public double R;
         public double G;
@@ -55,6 +57,7 @@ namespace Fovea.Renderer.Image
                 (byte) (Math.Clamp(B, 0.0, 1.0) * 255.999)
             };
         }
-        
+
+        public RGBColor Value(double u, double v, Point3 p) => this;
     }
 }

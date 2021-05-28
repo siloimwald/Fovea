@@ -6,9 +6,9 @@ namespace Fovea.Renderer.Materials
 {
     public class Lambertian : IMaterial
     {
-        private readonly RGBColor _albedo;
+        private readonly ITexture _albedo;
 
-        public Lambertian(RGBColor albedo)
+        public Lambertian(ITexture albedo)
         {
             _albedo = albedo;
         }
@@ -26,7 +26,7 @@ namespace Fovea.Renderer.Materials
             if (scatterDirection.IsNearZero())
                 scatterDirection = hitRecord.Normal;
 
-            scatterResult.Attenuation = _albedo;
+            scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
             scatterResult.OutgoingRay = new Ray(hitRecord.HitPoint, scatterDirection);
             return true;
         }

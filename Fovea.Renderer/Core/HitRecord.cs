@@ -41,5 +41,14 @@ namespace Fovea.Renderer.Core
         /// material at intersection
         /// </summary>
         public IMaterial Material { get; set; }
+
+        /// <summary>
+        /// u texture coordinate
+        /// </summary>
+        public double TextureU;
+        /// <summary>
+        /// v texture coordinate
+        /// </summary>
+        public double TextureV;
     }
 }

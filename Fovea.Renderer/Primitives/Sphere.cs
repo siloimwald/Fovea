@@ -40,8 +40,15 @@ namespace Fovea.Renderer.Primitives
 
             hitRecord.RayT = root;
             hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
-            hitRecord.SetFaceNormal(ray, (hitRecord.HitPoint - _center) * (1.0 / _radius));
+            var outwardNormal = (hitRecord.HitPoint - _center) * (1.0 / _radius);
+            hitRecord.SetFaceNormal(ray, outwardNormal);
             hitRecord.Material = _material;
+            
+            // maybe conditionally skip these, doesn't look cheap...
+            var theta = Acos(-outwardNormal.Y);
+            var phi = Atan2(outwardNormal.X, outwardNormal.Z) + PI;
+            hitRecord.TextureU = 0.5 + Atan2(outwardNormal.X, outwardNormal.Z) / (2 * PI);
+            hitRecord.TextureV = outwardNormal.Y * 0.5 + 0.5;
             
             return true;
         }
