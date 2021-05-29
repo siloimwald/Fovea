@@ -14,7 +14,7 @@ namespace Fovea.CmdLine
                     {
                         NumSamples = opts.NumSamples
                     };
-                    var scene = DemoSceneCreator.MakeScene(DemoScenes.TextureDemo, opts.ImageWidth);
+                    var scene = DemoSceneCreator.MakeScene(DemoScenes.DiskTestScene, opts.ImageWidth);
                     renderer.Render(scene);
                 });
             

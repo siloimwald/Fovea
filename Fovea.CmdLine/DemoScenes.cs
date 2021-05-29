@@ -26,7 +26,8 @@ namespace Fovea.CmdLine
         CylinderTest,
         HollowGlass,
         TextureDemo,
-        PerlinNoise
+        PerlinNoise,
+        DiskTestScene,
     }
 
     public static class DemoSceneCreator
@@ -45,11 +46,50 @@ namespace Fovea.CmdLine
                 DemoScenes.CylinderTest => GetCylinderTestScene(),
                 DemoScenes.TextureDemo => GetTextureTestScene(),
                 DemoScenes.PerlinNoise => GetPerlinNoiseTestScene(),
+                DemoScenes.DiskTestScene => GetDiskTestScene(),
                 _ => GetHollowGlassScene()
             };
 
             scene.OutputSize = (imageWidth, (int) (imageWidth / DefaultAspectRatio));
             return scene;
+        }
+
+        private static Scene GetDiskTestScene()
+        {
+            var mat = new Lambertian(0.7, 0.8, 0.2);
+            
+            var prims = new List<IPrimitive>
+            {
+                new Sphere(new Point3(0, -1000, 0), 999, new Lambertian(0.3, 0.3, 0.3)),
+                new Disk(new Point3(-2, 2, 0), new Vec3(0,0,1), 1, mat),
+                new Disk(new Point3(0, 2, 0), new Vec3(0,1,1), 1, mat),
+                new Disk(new Point3(2, 2, 0), new Vec3(0,-1,1), 1, mat),
+                
+                new Disk(new Point3(-2, 4, 0), new Vec3(0, 1,0), 1, mat),
+                new Disk(new Point3( 0, 4, 0), new Vec3(0, 1,-1), 1, mat),
+                new Disk(new Point3( 2, 4, 0), new Vec3(0, 0,-1), 1, mat),
+                
+                new Disk(new Point3(-2, 0, 0), new Vec3(1, 1, 0), 1, mat),
+                new Disk(new Point3( 0, 0, 0), new Vec3(0, 1, 0), 1, mat),
+                new Disk(new Point3( 2, 0, 0), new Vec3(-1, 1, 0), 1, mat),
+            };
+            
+            // Camera
+            var orientation = new Orientation
+            {
+                LookFrom = new Point3(0, 2, 4),
+                LookAt = new Point3(0, 2, 0),
+                UpDirection = new Vec3(0, 1, 0)
+            };
+
+            var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 70.0f, .1, focusDist);
+
+            return new Scene
+            {
+                World = new BVHTree(prims),
+                Camera = cam
+            };
         }
 
         private static Scene GetPerlinNoiseTestScene()
