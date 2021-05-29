@@ -21,6 +21,8 @@ namespace Fovea.Renderer.Sampling
 
         public double Random(double min, double max) => min + (max - min) * Random01();
 
+        public int RandomInt(int min, int max) => _random.Value.Next(min, max);
+        
         public (double px, double py) RandomOnUnitDisk()
         {
             // found all over the internets, but perfectly uniformly distributed, but good enough

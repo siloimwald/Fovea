@@ -25,7 +25,8 @@ namespace Fovea.CmdLine
         ObjFileTest,
         CylinderTest,
         HollowGlass,
-        TextureDemo
+        TextureDemo,
+        PerlinNoise
     }
 
     public static class DemoSceneCreator
@@ -43,6 +44,7 @@ namespace Fovea.CmdLine
                 DemoScenes.ObjFileTest => GetObjFileTestScene(),
                 DemoScenes.CylinderTest => GetCylinderTestScene(),
                 DemoScenes.TextureDemo => GetTextureTestScene(),
+                DemoScenes.PerlinNoise => GetPerlinNoiseTestScene(),
                 _ => GetHollowGlassScene()
             };
 
@@ -50,10 +52,39 @@ namespace Fovea.CmdLine
             return scene;
         }
 
+        private static Scene GetPerlinNoiseTestScene()
+        {
+            var perlinTex
+                = new Lambertian(new NoiseTexture(4));
+            
+            var prims = new List<IPrimitive>
+            {
+                new Sphere(new Point3(0, -1000, 0), 1000, perlinTex),
+                new Sphere(new Point3(0,2,0), 2, perlinTex)
+            };
+            
+            // Camera
+            var orientation = new Orientation
+            {
+                LookFrom = new Point3(13, 2, 3),
+                LookAt = new Point3(0, 0, 0),
+                UpDirection = new Vec3(0, 1, 0)
+            };
+
+            var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0f, .1, focusDist);
+
+            return new Scene
+            {
+                World = new PrimitiveList(prims),
+                Camera = cam
+            };
+        }
+
         private static Scene GetTextureTestScene()
         {
-            var checker = new Lambertian(new CheckerBoard(new RGBColor(0.2, 0.3, 0.3), new RGBColor(0.9)));
-            var checker2 = new Lambertian(new ImageTexture(@"Assets\cb.jpg"));
+            var checker2 = new Lambertian(new CheckerBoard(new RGBColor(0.2, 0.3, 0.3), new RGBColor(0.9)));
+            //var checker2 = new Lambertian(new ImageTexture(@"Assets\cb.jpg"));
             var earth = new Lambertian(new ImageTexture(@"Assets\earth.jpg"));
             var baseCylinder = new Cylinder(0, 4, 1, checker2);
             var prims = new List<IPrimitive>

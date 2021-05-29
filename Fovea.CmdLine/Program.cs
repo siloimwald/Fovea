@@ -1,7 +1,5 @@
-﻿using System;
-using Fovea.Renderer.Core;
+﻿using Fovea.Renderer.Core;
 using CommandLine;
-using Fovea.Renderer.Parser;
 
 namespace Fovea.CmdLine
 {
