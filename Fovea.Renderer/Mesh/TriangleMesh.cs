@@ -25,5 +25,15 @@ namespace Fovea.Renderer.Mesh
                     .Select(face => new Triangle(Vertices[face.f0], Vertices[face.f1], Vertices[face.f2], material))
                     .ToList<IPrimitive>();
         }
+
+        public TriangleMesh ApplyTransform(Matrix4 matrix)
+        {
+            for (var i = 0; i < Vertices.Count; i++)
+            {
+                Vertices[i] = matrix * Vertices[i];
+            }
+
+            return this;
+        }
     }
 }

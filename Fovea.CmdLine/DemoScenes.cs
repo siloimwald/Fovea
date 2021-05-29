@@ -28,6 +28,7 @@ namespace Fovea.CmdLine
         TextureDemo,
         PerlinNoise,
         DiskTestScene,
+        CornellBox
     }
 
     public static class DemoSceneCreator
@@ -47,11 +48,67 @@ namespace Fovea.CmdLine
                 DemoScenes.TextureDemo => GetTextureTestScene(),
                 DemoScenes.PerlinNoise => GetPerlinNoiseTestScene(),
                 DemoScenes.DiskTestScene => GetDiskTestScene(),
+                DemoScenes.CornellBox => GetCornellBoxScene(),
                 _ => GetHollowGlassScene()
             };
 
             scene.OutputSize = (imageWidth, (int) (imageWidth / DefaultAspectRatio));
             return scene;
+        }
+
+        private static Scene GetCornellBoxScene()
+        {
+            var red = new Lambertian(0.65, 0.05, 0.05);
+            var white = new Lambertian(0.73, 0.73, 0.73);
+            var green = new Lambertian(0.12, 0.45, 0.15);
+            var light = new DiffuseLight(new RGBColor(15, 15, 15));
+
+            var prims = new List<IPrimitive>();
+
+            // light source
+            // prims.AddRange(QuadProducer.Produce(213,343, 227,332,554, Axis.Y).CreateSingleTriangles(light));
+            
+            // spot lights
+            prims.Add(new Disk(new Point3(140, 554, 140), new Vec3(0,-1,0), 40, light));
+            prims.Add(new Disk(new Point3(415, 554, 140), new Vec3(0,-1,0), 40, light));
+            prims.Add(new Disk(new Point3(140, 554, 415), new Vec3(0,-1,0), 40, light));
+            prims.Add(new Disk(new Point3(415, 554, 415), new Vec3(0,-1,0), 40, light));
+            
+            // wall in the back
+            prims.AddRange(QuadProducer.Produce(0, 555, 0, 555, 555, Axis.Z).CreateSingleTriangles(white));
+            // floor and ceiling
+            prims.AddRange(QuadProducer.Produce(0, 555, 0, 555, 555, Axis.Y).CreateSingleTriangles(white));
+            prims.AddRange(QuadProducer.Produce(0, 555, 0, 555, 0, Axis.Y).CreateSingleTriangles(white));
+            // left and right wall
+            prims.AddRange(QuadProducer.Produce(0, 555, 0, 555, 0, Axis.X).CreateSingleTriangles(red));
+            prims.AddRange(QuadProducer.Produce(0, 555, 0, 555, 555, Axis.X).CreateSingleTriangles(green));
+            
+            // tall left box
+            // don't use instancing here, rather transform stuff directly
+            var leftBox = BoxProducer.Produce(0, 165, 0, 330, 0, 165)
+                .ApplyTransform(new Transformation().Rotate(15, Axis.Y).Translate(265, 0, 295).GetMatrix())
+                .CreateSingleTriangles(white);
+            prims.AddRange(leftBox);
+            var rightBox = BoxProducer.Produce(0, 165, 0, 165, 0, 165)
+                .ApplyTransform(new Transformation().Rotate(-18, Axis.Y).Translate(130, 0, 65).GetMatrix())
+                .CreateSingleTriangles(white);
+            prims.AddRange(rightBox);
+            
+            var orientation = new Orientation
+            {
+                LookFrom = new Point3(278, 278, -800),
+                LookAt = new Point3(278, 278, 0),
+                UpDirection = new Vec3(0, 1, 0)
+            };
+            
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 40.0f, 0, 10.0);
+
+            return new Scene
+            {
+                World = new BVHTree(prims),
+                Camera = cam,
+                Background = new RGBColor()
+            };
         }
 
         private static Scene GetDiskTestScene()

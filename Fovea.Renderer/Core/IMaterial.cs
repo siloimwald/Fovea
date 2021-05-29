@@ -1,3 +1,6 @@
+using Fovea.Renderer.Image;
+using Fovea.Renderer.VectorMath;
+
 namespace Fovea.Renderer.Core
 {
     public interface IMaterial
@@ -10,5 +13,10 @@ namespace Fovea.Renderer.Core
         /// <param name="scatterResult">result of interaction</param>
         /// <returns>true if ScatterResult contents should be used (and are set)</returns>
         bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult);
+
+        RGBColor Emitted(double u, double v, Point3 p)
+        {
+            return new RGBColor();
+        }
     }
 }

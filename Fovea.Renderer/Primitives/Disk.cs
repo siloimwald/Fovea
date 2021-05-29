@@ -35,7 +35,7 @@ namespace Fovea.Renderer.Primitives
             var hp = ray.PointsAt(tPlane);
 
             // clip against radius
-            if ((hp - _center).LengthSquared() > _radius)
+            if ((hp - _center).LengthSquared() > _radius*_radius)
                 return false;
 
             hitRecord.RayT = tPlane;

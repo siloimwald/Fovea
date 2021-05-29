@@ -11,26 +11,25 @@ namespace Fovea.Renderer.Core
     {
         public int MaxDepth { get; set; } = 50;
         public int NumSamples { get; set; } = 100;
-
-        private RGBColor ColorRay(Ray ray, IPrimitive world, int depth)
+        
+        private RGBColor ColorRay(Ray ray, Scene scene, int depth)
         {
             if (depth <= 0)
                 return new RGBColor(0.0);
             
             var hitRecord = new HitRecord();
-            if (world.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
-            {
-                var scatterResult = new ScatterResult();
-                if (hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
-                {
-                    return scatterResult.Attenuation * ColorRay(scatterResult.OutgoingRay, world, depth - 1);    
-                }
-                return new RGBColor();
-            }
 
-            var normalizedDir = Vec3.Normalize(ray.Direction);
-            var t = 0.5 * (normalizedDir.Y + 1);
-            return new RGBColor(1.0) * (1.0 - t) + new RGBColor(0.5, 0.7, 1.0) * t;
+            if (!scene.World.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
+                return scene.Background;
+            
+            var scatterResult = new ScatterResult();
+            var emitted = hitRecord.Material.Emitted(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
+            if (!hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
+                return emitted;
+
+            return emitted 
+                   + scatterResult.Attenuation
+                   * ColorRay(scatterResult.OutgoingRay, scene, depth - 1);
         }
 
         public void Render(Scene scene)
@@ -54,7 +53,7 @@ namespace Fovea.Renderer.Core
                         var u = (px + Sampler.Instance.Random01()) / (imageWidth - 1);
                         var v = (py + Sampler.Instance.Random01()) / (imageHeight - 1);
                         var ray = scene.Camera.ShootRay(u, v);
-                        color += ColorRay(ray, scene.World, MaxDepth);
+                        color += ColorRay(ray, scene, MaxDepth);
                             
                     }
                     image[(px, imageHeight - py - 1)] = color;
