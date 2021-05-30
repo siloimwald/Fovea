@@ -19,10 +19,30 @@ namespace Fovea.Renderer.Primitives
 
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
-            var oc = ray.Origin - _center;
+            var root = 0.0;
+            if (!IntersectSphere(ray, _center, _radius, tMin, tMax, ref root))
+                return false;
+
+            hitRecord.RayT = root;
+            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
+            var outwardNormal = (hitRecord.HitPoint - _center) * (1.0 / _radius);
+            hitRecord.SetFaceNormal(ray, outwardNormal);
+            hitRecord.Material = _material;
+
+            hitRecord.TextureU = 0.5 + Atan2(outwardNormal.X, outwardNormal.Z) / (2 * PI);
+            hitRecord.TextureV = outwardNormal.Y * 0.5 + 0.5;
+            
+            return true;
+        }
+
+        public static bool IntersectSphere(
+            in Ray ray, in Point3 center, double radius,
+            double tMin, double tMax, ref double tRay)
+        {
+            var oc = ray.Origin - center;
             var a = ray.Direction.LengthSquared();
             var h = Vec3.Dot(oc, ray.Direction); // b=2h
-            var c = oc.LengthSquared() - _radius * _radius;
+            var c = oc.LengthSquared() - radius * radius;
             var disc = h * h - a * c;
 
             if (disc < 0)
@@ -38,25 +58,16 @@ namespace Fovea.Renderer.Primitives
                     return false;
             }
 
-            hitRecord.RayT = root;
-            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
-            var outwardNormal = (hitRecord.HitPoint - _center) * (1.0 / _radius);
-            hitRecord.SetFaceNormal(ray, outwardNormal);
-            hitRecord.Material = _material;
-            
-            // maybe conditionally skip these, doesn't look cheap...
-            var theta = Acos(-outwardNormal.Y);
-            var phi = Atan2(outwardNormal.X, outwardNormal.Z) + PI;
-            hitRecord.TextureU = 0.5 + Atan2(outwardNormal.X, outwardNormal.Z) / (2 * PI);
-            hitRecord.TextureV = outwardNormal.Y * 0.5 + 0.5;
-            
+            tRay = root;
             return true;
         }
-
-        public BoundingBox GetBoundingBox()
+        
+        public static BoundingBox SphereBox(Point3 center, double radius)
         {
-            return new(_center - new Vec3(_radius, _radius, _radius),
-                _center + new Vec3(_radius, _radius, _radius));
+            return new(center - new Vec3(radius, radius, radius),
+                center + new Vec3(radius, radius, radius));
         }
+        
+        public BoundingBox GetBoundingBox(double t0, double t1) => SphereBox(_center, _radius);
     }
 }

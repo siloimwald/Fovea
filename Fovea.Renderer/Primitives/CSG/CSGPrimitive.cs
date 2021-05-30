@@ -172,13 +172,13 @@ namespace Fovea.Renderer.Primitives.CSG
                 : CSGHitClassification.Exit;
         }
         
-        public BoundingBox GetBoundingBox()
+        public BoundingBox GetBoundingBox(double t0, double t1)
         {
             return _op switch
             {
-                CSGOperation.Union => BoundingBox.Union(_left.GetBoundingBox(), _right.GetBoundingBox()),
-                CSGOperation.Intersect => BoundingBox.Intersect(_left.GetBoundingBox(), _right.GetBoundingBox()),
-                _ => _left.GetBoundingBox() // we can't reduce the left one in any way, but right does not matter
+                CSGOperation.Union => BoundingBox.Union(_left.GetBoundingBox(t0, t1), _right.GetBoundingBox(t0, t1)),
+                CSGOperation.Intersect => BoundingBox.Intersect(_left.GetBoundingBox(t0, t1), _right.GetBoundingBox(t0, t1)),
+                _ => _left.GetBoundingBox(t0, t1) // we can't reduce the left one in any way, but right does not matter
             };
         }
     }

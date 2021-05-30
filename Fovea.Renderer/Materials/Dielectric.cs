@@ -29,7 +29,7 @@ namespace Fovea.Renderer.Materials
                             : Vec3.Refract(unitDirection, hitRecord.Normal, ratio);
 
             scatterResult.Attenuation = new RGBColor(1.0, 1.0, 1.0);
-            scatterResult.OutgoingRay = new Ray(hitRecord.HitPoint, outDir);
+            scatterResult.OutgoingRay = new Ray(hitRecord.HitPoint, outDir, rayIn.Time);
             return true;
         }
 

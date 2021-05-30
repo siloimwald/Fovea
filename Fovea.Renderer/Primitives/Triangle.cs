@@ -53,7 +53,7 @@ namespace Fovea.Renderer.Primitives
             return true; // hit at t0
         }
 
-        public BoundingBox GetBoundingBox()
+        public BoundingBox GetBoundingBox(double t0, double t1)
         {
             var vb = _vertexA + _edgeAB;
             var vc = _vertexA + _edgeAC;

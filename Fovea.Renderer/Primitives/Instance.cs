@@ -41,9 +41,9 @@ namespace Fovea.Renderer.Primitives
             return true;
         }
 
-        public BoundingBox GetBoundingBox()
+        public BoundingBox GetBoundingBox(double t0, double t1)
         {
-            return _instance.GetBoundingBox().Transform(_transform);
+            return _instance.GetBoundingBox(t0, t1).Transform(_transform);
         }
     }
 }

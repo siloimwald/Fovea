@@ -127,7 +127,7 @@ namespace Fovea.Renderer.Primitives
             return true;
         }
         
-        public BoundingBox GetBoundingBox()
+        public BoundingBox GetBoundingBox(double t0, double t1)
         {
             var min = new Point3(-_radius, -_radius, _zMin);
             var max = new Point3(_radius, _radius, _zMax);

@@ -27,7 +27,7 @@ namespace Fovea.Renderer.Materials
                 scatterDirection = hitRecord.Normal;
 
             scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
-            scatterResult.OutgoingRay = new Ray(hitRecord.HitPoint, scatterDirection);
+            scatterResult.OutgoingRay = new Ray(hitRecord.HitPoint, scatterDirection, rayIn.Time);
             return true;
         }
     }

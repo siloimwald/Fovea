@@ -123,7 +123,7 @@ namespace Fovea.Tests
         public void TestCylinderBox()
         {
             var cyl = new Cylinder(-5, 1, 5, null);
-            var box = cyl.GetBoundingBox();
+            var box = cyl.GetBoundingBox(0, 1);
             Assert.Equal(new Vec3(10, 10, 6), box.GetExtent());
             Assert.Equal(new Point3(0,0, -2), box.GetCentroid());
         }

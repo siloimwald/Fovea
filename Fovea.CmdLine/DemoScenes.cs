@@ -507,7 +507,13 @@ namespace Fovea.CmdLine
                         0.2,
                         tpl.b + 0.9 * Sampler.Instance.Random01()))
                 .Where(center => (center - offLimitsZone).Length() > 0.9)
-                .Select(center => new Sphere(center, 0.2, RandomMaterial())));
+                .Select<Point3, IPrimitive>(center =>
+                {
+                    var mat = RandomMaterial();
+                    if (mat is not Lambertian) return new Sphere(center, 0.2, RandomMaterial());
+                    var center2 = center + new Vec3(0, Sampler.Instance.Random(0, 0.5), 0);
+                    return new MovingSphere(center, 0, center2, 1, 0.2, mat);
+                }));
 
             var orientation = new Orientation
             {
@@ -516,7 +522,7 @@ namespace Fovea.CmdLine
                 UpDirection = new Vec3(0, 1, 0)
             };
 
-            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0, .1, 10.0);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0, .1, 10.0, time0: 0, time1: 1);
 
             return new Scene
             {

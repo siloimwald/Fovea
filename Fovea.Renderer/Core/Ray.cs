@@ -10,12 +10,14 @@ namespace Fovea.Renderer.Core
     {
         public readonly Point3 Origin;
         public readonly Vec3 Direction;
+        public readonly double Time;
         public readonly Vec3 InverseDirection;
         
-        public Ray(Point3 origin, Vec3 direction)
+        public Ray(Point3 origin, Vec3 direction, double time = 0.0)
         {
             Origin = origin;
             Direction = direction;
+            Time = time;
             InverseDirection = new Vec3(1.0 / Direction.X, 1.0 / Direction.Y, 1.0 / Direction.Z);
         }
 

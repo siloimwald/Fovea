@@ -31,11 +31,11 @@ namespace Fovea.Renderer.Primitives
             return hitSomething;
         }
 
-        public BoundingBox GetBoundingBox()
+        public BoundingBox GetBoundingBox(double t0, double t1)
         {
             return 
                 _primitives
-                    .Select(p => p.GetBoundingBox())
+                    .Select(p => p.GetBoundingBox(t0, t1))
                     .Aggregate(BoundingBox.CreateMaxEmptyBox(), BoundingBox.Union);
         }
     }

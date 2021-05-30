@@ -42,7 +42,9 @@ namespace Fovea.Renderer.Core.BVH
         /// strategy
         /// </summary>
         /// <param name="primitives">list of scene primitives</param>
-        public BVHTree(List<IPrimitive> primitives)
+        /// <param name="time0">ray time parameter lower bound</param>
+        /// <param name="time1">ray time parameter upper bound</param>
+        public BVHTree(List<IPrimitive> primitives, double time0 = 0, double time1 = 1)
         {
             _nodes = new BVHNode[2 * primitives.Count - 1];
             var primitiveBoxes = new List<BoundingBox>(primitives.Count);
@@ -52,7 +54,7 @@ namespace Fovea.Renderer.Core.BVH
             // precompute bounding boxes for all primitives and compute scene bounds along the way
             foreach (var t in primitives)
             {
-                var primBox = t.GetBoundingBox();
+                var primBox = t.GetBoundingBox(time0, time1);
                 primitiveBoxes.Add(primBox);
                 sceneBounds = BoundingBox.Union(sceneBounds, primBox);
             }
@@ -133,7 +135,7 @@ namespace Fovea.Renderer.Core.BVH
             return hit;
         }
 
-        public BoundingBox GetBoundingBox()
+        public BoundingBox GetBoundingBox(double t0, double t1)
         {
             return _nodes[0]?.Box; // root node box
         }
