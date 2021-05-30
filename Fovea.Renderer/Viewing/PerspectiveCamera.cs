@@ -7,6 +7,7 @@ namespace Fovea.Renderer.Viewing
 {
     public class PerspectiveCamera
     {
+        public double AspectRatio { get; }
         private readonly double _time0;
         private readonly double _time1;
         private readonly Point3 _origin;
@@ -25,6 +26,7 @@ namespace Fovea.Renderer.Viewing
             double time0 = 0,
             double time1 = 0)
         {
+            AspectRatio = aspectRatio;
             _time0 = time0;
             _time1 = time1;
             

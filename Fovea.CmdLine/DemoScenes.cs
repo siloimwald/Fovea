@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fovea.Renderer.Core;
@@ -19,6 +20,7 @@ namespace Fovea.CmdLine
     public enum DemoScenes
     {
         FinalSceneBookOne,
+        FinalSceneBookTwo,
         SphereCSGTest,
         BoxCSGTest,
         BoxTest,
@@ -49,11 +51,88 @@ namespace Fovea.CmdLine
                 DemoScenes.PerlinNoise => GetPerlinNoiseTestScene(),
                 DemoScenes.DiskTestScene => GetDiskTestScene(),
                 DemoScenes.CornellBox => GetCornellBoxScene(),
+                DemoScenes.FinalSceneBookTwo => GetFinalSceneBookTwo(),
                 _ => GetHollowGlassScene()
             };
 
-            scene.OutputSize = (imageWidth, (int) (imageWidth / DefaultAspectRatio));
+            scene.OutputSize = (imageWidth, (int) (imageWidth / scene.Camera.AspectRatio));
             return scene;
+        }
+
+        private static Scene GetFinalSceneBookTwo()
+        {
+            var prims = new List<IPrimitive>();
+            var baseBoxMaterial = new Lambertian(0.48, 0.83, 0.53);
+            
+            const int boxesPerSide = 20;
+            for (var i = 0; i < boxesPerSide; ++i)
+            {
+                for (var j = 0; j < boxesPerSide; ++j)
+                {
+                    const double w = 100.0;
+                    var x0 = -1000.0 + i * w;
+                    var z0 = -1000.0 + j * w;
+                    var y1 = Sampler.Instance.Random(1, 101);
+                    
+                    prims.AddRange(BoxProducer.Produce(x0, x0 + w, 0.0, y1, z0, z0 + w)
+                        .CreateSingleTriangles(baseBoxMaterial));
+                }
+            }
+            
+            // light source
+            prims.AddRange(QuadProducer.Produce(123, 412, 147, 423, 554, Axis.Y).CreateSingleTriangles(new DiffuseLight(new RGBColor(7,7,7))));
+            
+            // moving sphere top left
+            var center1 = new Point3(400, 400, 200);
+            prims.Add(new MovingSphere(center1, 0, center1 + new Vec3(30,0,0), 1, 50, 
+                new Lambertian(0.7, 0.3, 0.1)));
+            
+            // glass sphere
+            prims.Add(new Sphere(new Point3(260, 150, 45), 50, new Dielectric(1.5)));
+            // metal sphere
+            prims.Add(new Sphere(new Point3(0, 150, 145), 50, new Metal(0.8, 0.8, 0.9,1.0)));
+            
+            // earth ball
+            prims.Add(new Sphere(new Point3(400, 200, 400), 100, new Lambertian(new ImageTexture(@"Assets\earth.jpg"))));
+            // perlin noise ball
+            prims.Add(new Sphere(new Point3(220, 280, 300), 80, new Lambertian(new NoiseTexture(0.1))));
+            
+            var boundary = new Sphere(new Point3(360, 150, 145), 70, new Dielectric(1.5));
+            prims.Add(boundary);
+            prims.Add(new ConstantMedium(boundary, 0.2, new RGBColor(0.2, 0.4, 0.9)));
+            // some english fog to cover everything :)
+            boundary = new Sphere(new Point3(), 5000, new Dielectric(1.5));
+            prims.Add(new ConstantMedium(boundary, 0.0001, new RGBColor(1,1,1)));
+            
+            // sphere cluster right top
+            var white = new Lambertian(0.73, 0.73, 0.73);
+            var transform = new Transformation().Rotate(15, Axis.Y).Translate(-100, 270, 395);
+            prims.AddRange(Enumerable.Range(0, 1000).Select(_ =>
+            {
+                var x = Sampler.Instance.RandomInt(0, 165);
+                var y = Sampler.Instance.RandomInt(0, 165);
+                var z = Sampler.Instance.RandomInt(0, 165);
+            
+                return new Instance(
+                    new Sphere(new Point3(x, y, z), 10, white),
+                    transform.GetMatrix(), transform.GetInverseMatrix());
+            }));
+            
+            var orientation = new Orientation
+            {
+                LookFrom = new Point3(478, 278, -600),
+                LookAt = new Point3(278, 278, 0),
+                UpDirection = new Vec3(0, 1, 0)
+            };
+            
+            var cam = new PerspectiveCamera(orientation, 1, 40.0f, 0, 10.0, 0, 1);
+            
+            return new Scene
+            {
+                World = new BVHTree(prims),
+                Camera = cam,
+                Background = new RGBColor()
+            };
         }
 
         private static Scene GetCornellBoxScene()
@@ -87,12 +166,15 @@ namespace Fovea.CmdLine
             // don't use instancing here, rather transform stuff directly
             var leftBox = BoxProducer.Produce(0, 165, 0, 330, 0, 165)
                 .ApplyTransform(new Transformation().Rotate(15, Axis.Y).Translate(265, 0, 295).GetMatrix())
-                .CreateSingleTriangles(white);
-            prims.AddRange(leftBox);
+                .CreateSingleTriangles(null);
+            var leftBoxSmoke = new ConstantMedium(new PrimitiveList(leftBox), 0.01, new RGBColor(0, 0, 0));
+            prims.Add(leftBoxSmoke);
+            
             var rightBox = BoxProducer.Produce(0, 165, 0, 165, 0, 165)
                 .ApplyTransform(new Transformation().Rotate(-18, Axis.Y).Translate(130, 0, 65).GetMatrix())
-                .CreateSingleTriangles(white);
-            prims.AddRange(rightBox);
+                .CreateSingleTriangles(null);
+            var rightBoxSmoke = new ConstantMedium(new PrimitiveList(rightBox), 0.01, new RGBColor(1, 1, 1));
+            prims.Add(rightBoxSmoke);
             
             var orientation = new Orientation
             {
