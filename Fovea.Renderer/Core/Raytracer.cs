@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core
 {
@@ -42,32 +42,47 @@ namespace Fovea.Renderer.Core
             
             var sw = Stopwatch.StartNew();
 
-            var linesDone = 0;
-            void RenderScanLine(int py)
+            // a simple image partitioning scheme, each thread renders chunks of 'pixelPerThread'
+            // many pixels. the next chunk is found by simply skipping the chunks of all other threads
+            
+            const int pixelPerThread = 10;
+            var threadCount = Environment.ProcessorCount;
+            var totalPixels = imageHeight * imageWidth;
+            var pixelDone = 0;
+            void RenderInterleaved(int taskNum)
             {
-                for (var px = 0; px < imageWidth; ++px)
+                var pixelBufferStart = taskNum * pixelPerThread;
+                var increment = pixelPerThread * threadCount;
+                for (var offset = pixelBufferStart; offset < totalPixels; offset += increment)
                 {
-                    var color = new RGBColor();
-                    for (var s = 0; s < NumSamples; ++s)
+                    var max = Math.Min(offset + pixelPerThread, totalPixels);
+                    for (var p = offset; p < max; p++)
                     {
-                        var u = (px + Sampler.Instance.Random01()) / (imageWidth - 1);
-                        var v = (py + Sampler.Instance.Random01()) / (imageHeight - 1);
-                        var ray = scene.Camera.ShootRay(u, v);
-                        color += ColorRay(ray, scene, MaxDepth);
+                        var py = Math.DivRem(p, imageWidth, out var px);
+                        var color = new RGBColor();
+                        for (var s = 0; s < NumSamples; ++s)
+                        {
+                            var u = (px + Sampler.Instance.Random01()) / (imageWidth - 1);
+                            var v = (py + Sampler.Instance.Random01()) / (imageHeight - 1);
+                            var ray = scene.Camera.ShootRay(u, v);
+                            color += ColorRay(ray, scene, MaxDepth);
                             
+                        }
+                        image[(px, imageHeight - py - 1)] = color;
                     }
-                    image[(px, imageHeight - py - 1)] = color;
-                }
 
-                lock (this)
-                {
-                    linesDone++;
-                    var p = linesDone / (double)imageHeight * 100.0;
-                    Console.Write($"\rDone {p:#.##}  ");
+                    Interlocked.Add(ref pixelDone, max - offset);
+
+                    if (taskNum != 0) continue;
+                    
+                    var percent = pixelDone / (double) totalPixels * 100.0; 
+                    Console.Write($"\r{percent:#.00}% done  ");
+                    
                 }
             }
-
-            Parallel.For(0, imageHeight, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, RenderScanLine);
+            
+            Parallel.For(0, threadCount,
+                new ParallelOptions {MaxDegreeOfParallelism = Environment.ProcessorCount}, RenderInterleaved);
             
             // average and gamma correct whole image in one go
             image.Average(NumSamples);
