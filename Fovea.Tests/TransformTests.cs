@@ -11,7 +11,7 @@ namespace Fovea.Tests
         {
             var m = new Transformation().Translate(2, -3, 0).GetMatrix();
             var p = new Point3(5, -3, 0.2);
-            
+
             var transformedPoint = m * p;
             Assert.Equal(new Point3(7, -6, 0.2), transformedPoint);
 
@@ -68,22 +68,22 @@ namespace Fovea.Tests
         public void TestCompoundTransform()
         {
             // play nice and use the 'common' TRS order
-            
+
             var transform = new Transformation()
                 .Scale(2, 1, 2) // 10,2,-4
                 .Rotate(90, Axis.X) // 10, 4, 2 
                 .Translate(100, 100, -100);
-            
+
             var forward = transform.GetMatrix();
             var p = new Point3(5, 2, -2);
             var transformedPoint = forward * p;
             Assert.Equal(new Point3(110, 104, -98), transformedPoint);
-            
+
             // invert it, get old point back
             var inverse = transform.GetInverseMatrix();
             Assert.Equal(p, inverse * transformedPoint);
         }
-        
+
         [Fact]
         public void TestLargerCompoundTransform()
         {
@@ -101,7 +101,7 @@ namespace Fovea.Tests
             var inverse = transform.GetInverseMatrix();
             var shouldBeI = forward * inverse;
             Assert.True(shouldBeI.IsIdentity());
-            Assert.True((inverse*forward).IsIdentity());
+            Assert.True((inverse * forward).IsIdentity());
         }
     }
 }

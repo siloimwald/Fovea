@@ -23,7 +23,7 @@ namespace Fovea.Renderer.VectorMath
             PY = py;
             PZ = pz;
         }
-        
+
         #region operators
 
         public double this[int index]
@@ -41,7 +41,7 @@ namespace Fovea.Renderer.VectorMath
                 };
             }
         }
-        
+
         // point plus vectors yields (translated) new point
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3 operator +(Point3 p, Vec3 v)
@@ -67,7 +67,7 @@ namespace Fovea.Renderer.VectorMath
                 Math.Max(left.PZ, right.PZ)
             );
         }
-        
+
         public static Point3 Min(Point3 left, Point3 right)
         {
             return new(
@@ -80,7 +80,7 @@ namespace Fovea.Renderer.VectorMath
         public override string ToString() => $"<{PX}, {PY}, {PZ}>";
 
         // IEquatable interface, see Vec3
-        
+
         public bool Equals(Point3 other) => (this - other).Length() < 1e-8;
         public override bool Equals(object obj) => obj is Point3 other && Equals(other);
         public override int GetHashCode() => HashCode.Combine(PX, PY, PZ);

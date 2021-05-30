@@ -14,7 +14,7 @@ namespace Fovea.Renderer.Materials
         {
             _ior = ior;
         }
-        
+
         public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
         {
             var ratio = hitRecord.IsFrontFace ? (1.0 / _ior) : _ior;
@@ -25,8 +25,8 @@ namespace Fovea.Renderer.Materials
 
             var cannotRefract = ratio * sinTheta > 1.0;
             var outDir = cannotRefract || Reflectance(cosTheta, ratio) > Sampler.Instance.Random01()
-                            ? Vec3.Reflect(unitDirection, hitRecord.Normal)
-                            : Vec3.Refract(unitDirection, hitRecord.Normal, ratio);
+                ? Vec3.Reflect(unitDirection, hitRecord.Normal)
+                : Vec3.Refract(unitDirection, hitRecord.Normal, ratio);
 
             scatterResult.Attenuation = new RGBColor(1.0, 1.0, 1.0);
             scatterResult.OutgoingRay = new Ray(hitRecord.HitPoint, outDir, rayIn.Time);

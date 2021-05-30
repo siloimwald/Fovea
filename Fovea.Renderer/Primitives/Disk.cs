@@ -7,9 +7,9 @@ namespace Fovea.Renderer.Primitives
     public class Disk : IPrimitive
     {
         private readonly Point3 _center;
+        private readonly IMaterial _material;
         private readonly Vec3 _normal;
         private readonly double _radius;
-        private readonly IMaterial _material;
 
         public Disk(Point3 center, Vec3 normal, double radius, IMaterial material)
         {
@@ -18,7 +18,7 @@ namespace Fovea.Renderer.Primitives
             _radius = radius;
             _material = material;
         }
-        
+
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             // intersect with plane disk is in, check radius afterwards
@@ -31,11 +31,11 @@ namespace Fovea.Renderer.Primitives
 
             if (tPlane < tMin || tMax < tPlane)
                 return false;
-            
+
             var hp = ray.PointsAt(tPlane);
 
             // clip against radius
-            if ((hp - _center).LengthSquared() > _radius*_radius)
+            if ((hp - _center).LengthSquared() > _radius * _radius)
                 return false;
 
             hitRecord.RayT = tPlane;

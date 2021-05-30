@@ -7,11 +7,11 @@ namespace Fovea.Renderer.Primitives
     public class MovingSphere : IPrimitive
     {
         private readonly Point3 _center0;
-        private readonly double _time0;
         private readonly Point3 _center1;
-        private readonly double _time1;
-        private readonly double _radius;
         private readonly IMaterial _material;
+        private readonly double _radius;
+        private readonly double _time0;
+        private readonly double _time1;
 
         public MovingSphere(Point3 center0, double time0, Point3 center1, double time1, double radius,
             IMaterial material)
@@ -30,7 +30,7 @@ namespace Fovea.Renderer.Primitives
             var root = 0.0;
             if (!Sphere.IntersectSphere(ray, center, _radius, tMin, tMax, ref root))
                 return false;
-            
+
             hitRecord.RayT = root;
             hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
             var outwardNormal = (hitRecord.HitPoint - center) * (1.0 / _radius);

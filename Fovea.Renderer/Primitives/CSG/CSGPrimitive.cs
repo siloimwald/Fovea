@@ -14,8 +14,8 @@ namespace Fovea.Renderer.Primitives.CSG
     {
         // picking the names is somewhat arbitrary, if you read it as set operations this might make some sense
         private readonly IPrimitive _left;
-        private readonly IPrimitive _right;
         private readonly CSGOperation _op;
+        private readonly IPrimitive _right;
 
         public CSGPrimitive(IPrimitive left, IPrimitive right, CSGOperation op)
         {
@@ -31,26 +31,26 @@ namespace Fovea.Renderer.Primitives.CSG
 
             var tMinLeft = tMin;
             var tMinRight = tMin;
-            
+
             var stateLeft = Classify(_left, ray, tMinLeft, tMax, ref hrLeft);
             var stateRight = Classify(_right, ray, tMinRight, tMax, ref hrRight);
 
             var action = (CSGLoopAction) 0;
-            
+
             do
             {
                 action = ApplyActionTable(stateLeft, stateRight);
-                
+
                 if (action.HasFlag(CSGLoopAction.ReturnMiss))
                 {
                     return false;
                 }
-                
+
                 // NOTE: checking for <= and >= in both directions, otherwise
                 // this breaks as an infinite loop for triangles which are in the same
                 // plane and having the exact same hit. 
                 // This might yield Enter, Enter for both, which breaks ReturnXIfFarther for Intersection
-                
+
                 if (action.HasFlag(CSGLoopAction.ReturnA)
                     || (action.HasFlag(CSGLoopAction.ReturnAIfCloser) && hrLeft.RayT <= hrRight.RayT)
                     || (action.HasFlag(CSGLoopAction.ReturnAIfFarther) && hrLeft.RayT >= hrRight.RayT))
@@ -83,13 +83,23 @@ namespace Fovea.Renderer.Primitives.CSG
                 }
                 else if (action.HasFlag(CSGLoopAction.AdvanceBAndLoop))
                 {
-                    tMinRight = hrRight.RayT + 1e-4; 
+                    tMinRight = hrRight.RayT + 1e-4;
                     stateRight = Classify(_right, ray, tMinRight, tMax, ref hrRight);
                 }
-
             } while (action != 0);
-            
+
             return false;
+        }
+
+        public BoundingBox GetBoundingBox(double t0, double t1)
+        {
+            return _op switch
+            {
+                CSGOperation.Union => BoundingBox.Union(_left.GetBoundingBox(t0, t1), _right.GetBoundingBox(t0, t1)),
+                CSGOperation.Intersect => BoundingBox.Intersect(_left.GetBoundingBox(t0, t1),
+                    _right.GetBoundingBox(t0, t1)),
+                _ => _left.GetBoundingBox(t0, t1) // we can't reduce the left one in any way, but right does not matter
+            };
         }
 
         private CSGLoopAction ApplyActionTable(CSGHitClassification left, CSGHitClassification right)
@@ -104,16 +114,16 @@ namespace Fovea.Renderer.Primitives.CSG
                         return CSGLoopAction.ReturnMiss;
                     return left == CSGHitClassification.Miss ? CSGLoopAction.ReturnB : CSGLoopAction.ReturnA;
                 }
-                
+
                 if (left == CSGHitClassification.Enter && right == CSGHitClassification.Enter)
                     return CSGLoopAction.ReturnAIfCloser | CSGLoopAction.ReturnBIfCloser;
-                
+
                 if (left == CSGHitClassification.Enter && right == CSGHitClassification.Exit)
                     return CSGLoopAction.ReturnBIfCloser | CSGLoopAction.AdvanceAAndLoop;
-                
+
                 if (left == CSGHitClassification.Exit && right == CSGHitClassification.Enter)
                     return CSGLoopAction.ReturnAIfCloser | CSGLoopAction.AdvanceBAndLoop;
-                
+
                 if (left == CSGHitClassification.Exit && right == CSGHitClassification.Exit)
                     return CSGLoopAction.ReturnAIfFarther | CSGLoopAction.ReturnBIfFarther;
             }
@@ -123,7 +133,7 @@ namespace Fovea.Renderer.Primitives.CSG
                 // again, easy cases first
                 if (left == CSGHitClassification.Miss || right == CSGHitClassification.Miss)
                     return CSGLoopAction.ReturnMiss;
-                
+
                 if (left == CSGHitClassification.Enter && right == CSGHitClassification.Enter)
                     return CSGLoopAction.ReturnAIfFarther | CSGLoopAction.ReturnBIfFarther;
 
@@ -157,29 +167,20 @@ namespace Fovea.Renderer.Primitives.CSG
                 if (left == CSGHitClassification.Exit && right == CSGHitClassification.Exit)
                     return CSGLoopAction.ReturnBIfCloser | CSGLoopAction.FlipB | CSGLoopAction.AdvanceAAndLoop;
             }
-            
+
             return 0;
         }
-        
-        private static CSGHitClassification Classify(IPrimitive prim, in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+
+        private static CSGHitClassification Classify(IPrimitive prim, in Ray ray, double tMin, double tMax,
+            ref HitRecord hitRecord)
         {
             var hit = prim.Hit(ray, tMin, tMax, ref hitRecord);
             if (!hit)
                 return CSGHitClassification.Miss;
 
             return hitRecord.IsFrontFace
-                ? CSGHitClassification.Enter 
+                ? CSGHitClassification.Enter
                 : CSGHitClassification.Exit;
-        }
-        
-        public BoundingBox GetBoundingBox(double t0, double t1)
-        {
-            return _op switch
-            {
-                CSGOperation.Union => BoundingBox.Union(_left.GetBoundingBox(t0, t1), _right.GetBoundingBox(t0, t1)),
-                CSGOperation.Intersect => BoundingBox.Intersect(_left.GetBoundingBox(t0, t1), _right.GetBoundingBox(t0, t1)),
-                _ => _left.GetBoundingBox(t0, t1) // we can't reduce the left one in any way, but right does not matter
-            };
         }
     }
 }

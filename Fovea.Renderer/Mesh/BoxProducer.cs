@@ -17,7 +17,7 @@ namespace Fovea.Renderer.Mesh
             (xMin, xMax) = xMin <= xMax ? (xMin, xMax) : (xMax, xMin);
             (yMin, yMax) = yMin <= yMax ? (yMin, yMax) : (yMax, yMin);
             (zMin, zMax) = zMin <= zMax ? (zMin, zMax) : (zMax, zMin);
-            
+
             var vertices = new List<Point3>
             {
                 // xy 'front' vertices

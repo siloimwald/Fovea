@@ -14,8 +14,6 @@ namespace Fovea.Renderer.Primitives
             _primitives = prims;
         }
 
-        public void Add(IPrimitive p) => _primitives.Add(p);
-        
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var hitSomething = false;
@@ -33,10 +31,12 @@ namespace Fovea.Renderer.Primitives
 
         public BoundingBox GetBoundingBox(double t0, double t1)
         {
-            return 
+            return
                 _primitives
                     .Select(p => p.GetBoundingBox(t0, t1))
                     .Aggregate(BoundingBox.CreateMaxEmptyBox(), BoundingBox.Union);
         }
+
+        public void Add(IPrimitive p) => _primitives.Add(p);
     }
 }

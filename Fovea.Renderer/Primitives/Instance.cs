@@ -12,8 +12,8 @@ namespace Fovea.Renderer.Primitives
     public class Instance : IPrimitive
     {
         private readonly IPrimitive _instance;
-        private readonly Matrix4 _transform;
         private readonly Matrix4 _inverseTransform;
+        private readonly Matrix4 _transform;
 
         public Instance(IPrimitive instance, Matrix4 transform, Matrix4 inverseTransform)
         {
@@ -21,10 +21,12 @@ namespace Fovea.Renderer.Primitives
             _transform = transform;
             _inverseTransform = inverseTransform;
         }
-        
+
         public Instance(IPrimitive instance, Transformation transformation)
-            : this(instance, transformation.GetMatrix(), transformation.GetInverseMatrix()) {}
-        
+            : this(instance, transformation.GetMatrix(), transformation.GetInverseMatrix())
+        {
+        }
+
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var transformedRay = new Ray(_inverseTransform * ray.Origin,

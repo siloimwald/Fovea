@@ -7,16 +7,15 @@ namespace Fovea.Renderer.Viewing
 {
     public class PerspectiveCamera
     {
-        public double AspectRatio { get; }
-        private readonly double _time0;
-        private readonly double _time1;
-        private readonly Point3 _origin;
-        private readonly Point3 _lowerLeft;
-        private readonly Vec3 _vertical;
         private readonly Vec3 _horizontal;
         private readonly double _lensRadius;
+        private readonly Point3 _lowerLeft;
+        private readonly Point3 _origin;
+        private readonly double _time0;
+        private readonly double _time1;
         private readonly Vec3 _uAxis;
         private readonly Vec3 _vAxis;
+        private readonly Vec3 _vertical;
 
         public PerspectiveCamera(Orientation orientation,
             double aspectRatio,
@@ -29,7 +28,7 @@ namespace Fovea.Renderer.Viewing
             AspectRatio = aspectRatio;
             _time0 = time0;
             _time1 = time1;
-            
+
             var theta = MathUtils.DegToRad(verticalFieldOfView);
             var h = Math.Tan(theta / 2.0);
             var viewportHeight = 2.0 * h;
@@ -46,6 +45,8 @@ namespace Fovea.Renderer.Viewing
             _lowerLeft = _origin - _horizontal * 0.5 - _vertical * 0.5 - wAxis * focusDistance;
             _lensRadius = aperture / 2.0;
         }
+
+        public double AspectRatio { get; }
 
         public Ray ShootRay(double s, double t)
         {

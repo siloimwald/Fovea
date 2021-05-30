@@ -19,7 +19,7 @@ namespace Fovea.Renderer.VectorMath.Transforms
         }
 
         public Transformation Translate(Vec3 tVec) => Translate(tVec.X, tVec.Y, tVec.Z);
-        
+
         public Transformation Scale(double sx, double sy, double sz)
         {
             _transforms.Add(new Scaling(sx, sy, sz));
@@ -36,8 +36,8 @@ namespace Fovea.Renderer.VectorMath.Transforms
 
         public Matrix4 GetMatrix()
         {
-            return 
-            (_transforms as IEnumerable<ISimpleTransform>)
+            return
+                (_transforms as IEnumerable<ISimpleTransform>)
                 .Reverse().Select(p => p.GetMatrix()).Aggregate(Matrix4.Identity(), (m0, m1) => m0 * m1);
         }
 

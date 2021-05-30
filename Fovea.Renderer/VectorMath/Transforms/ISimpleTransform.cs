@@ -1,4 +1,3 @@
-
 namespace Fovea.Renderer.VectorMath.Transforms
 {
     public interface ISimpleTransform

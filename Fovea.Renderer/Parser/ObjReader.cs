@@ -20,7 +20,7 @@ namespace Fovea.Renderer.Parser
         {
             var vertices = new List<Point3>();
             var faces = new List<(int f0, int f1, int f2)>();
-            
+
             try
             {
                 var content = File.ReadAllLines(fileName);
@@ -37,19 +37,20 @@ namespace Fovea.Renderer.Parser
                         var point =
                             // using linq just because we can.
                             line[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                            .Select(p =>
-                            {
-                                if (double.TryParse(p, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
+                                .Select(p =>
                                 {
-                                    return number;
-                                }
+                                    if (double.TryParse(p, NumberStyles.Float, CultureInfo.InvariantCulture,
+                                        out var number))
+                                    {
+                                        return number;
+                                    }
 
-                                return (double?) null;
-                            })
-                            .Where(p => p.HasValue)
-                            .Select(p => p.Value)
-                            .ToList();
-                        
+                                    return (double?) null;
+                                })
+                                .Where(p => p.HasValue)
+                                .Select(p => p.Value)
+                                .ToList();
+
                         if (point.Count == 3) // that seems to have worked out
                             vertices.Add(new Point3(point[0], point[1], point[2]));
                     }
@@ -73,15 +74,14 @@ namespace Fovea.Renderer.Parser
                                 .Where(p => p.HasValue)
                                 .Select(p => p.Value)
                                 .ToList();
-                        
+
                         if (fParts.Count == 3)
                             faces.Add((fParts[0], fParts[1], fParts[2]));
                     }
-                    
                 }
 
                 Console.WriteLine($"read {vertices.Count} vertices and {faces.Count} faces.");
-                
+
                 // almost done...
                 // for easier scene placement, transform the whole mesh to the unit cube
                 if (normalize)
@@ -89,11 +89,12 @@ namespace Fovea.Renderer.Parser
                     // this yells SIMD at you
                     var (min, max) = vertices.Aggregate(
                         (currentMin: new Point3(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity),
-                         currentMax: new Point3(double.NegativeInfinity, double.NegativeInfinity, double.NegativeInfinity)),
+                            currentMax: new Point3(double.NegativeInfinity, double.NegativeInfinity,
+                                double.NegativeInfinity)),
                         (acc, p) => (Point3.Min(acc.currentMin, p), Point3.Max(acc.currentMax, p)));
 
                     Console.WriteLine($"bounds {min} {max}");
-                    
+
                     var box = new BoundingBox(min, max);
                     // move things into origin by moving the inverse of the old centroid
                     var translate = box.GetCentroid();
@@ -101,15 +102,14 @@ namespace Fovea.Renderer.Parser
                     var scale = box.GetExtent();
                     // use the longest side as scale factor, this keeps ratios intact
                     var s = Math.Max(scale.X, Math.Max(scale.Y, scale.Z));
-                    
+
                     scale = new Vec3(2.0 / s, 2.0 / s, 2.0 / s);
-                    
+
                     vertices = vertices.Select(v =>
                     {
                         var inOrigin = v - translate;
                         return new Point3(inOrigin.X * scale.X, inOrigin.Y * scale.Y, inOrigin.Z * scale.Z);
                     }).ToList();
-
                 }
 
                 return new TriangleMesh

@@ -9,10 +9,12 @@ namespace Fovea.Renderer.Primitives.CSG
         /// ray origin outside
         /// </summary>
         Enter,
+
         /// <summary>
         /// ray origin inside
         /// </summary>
         Exit,
+
         /// <summary>
         /// no hit
         /// </summary>

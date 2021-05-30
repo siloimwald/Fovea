@@ -20,7 +20,6 @@ namespace Fovea.Renderer.Materials.Texture
 
         public Perlin()
         {
-
             _randomVectors = new Vec3[PointCount];
             // grab us some random doubles
             for (var i = 0; i < _randomVectors.Length; ++i)

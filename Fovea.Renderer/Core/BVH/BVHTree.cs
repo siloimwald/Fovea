@@ -102,13 +102,13 @@ namespace Fovea.Renderer.Core.BVH
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             Span<int> nodeStack = stackalloc int[MaxDepth * 2];
-            
+
             var pointer = 0;
             nodeStack[pointer++] = 0;
 
             var hit = false;
             hitRecord.RayT = tMax;
-            
+
             while (pointer > 0)
             {
                 var nodeIndex = nodeStack[--pointer];
@@ -131,7 +131,7 @@ namespace Fovea.Renderer.Core.BVH
                     nodeStack[pointer++] = node.OtherNodeFirstPrim;
                 }
             }
-            
+
             return hit;
         }
 
@@ -320,7 +320,7 @@ namespace Fovea.Renderer.Core.BVH
             if (b == BucketCount) b--;
             return b;
         }
-        
+
         /// <summary>
         /// compute the surface area heuristic costs scheme for the propose split
         /// </summary>

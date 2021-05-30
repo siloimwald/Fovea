@@ -22,10 +22,10 @@ namespace Fovea.Renderer.Sampling
         public double Random(double min, double max) => min + (max - min) * Random01();
 
         public int RandomInt(int min, int max) => _random.Value.Next(min, max);
-        
+
         public (double px, double py) RandomOnUnitDisk()
         {
-            // found all over the internets, but perfectly uniformly distributed, but good enough
+            // found all over the internets, not perfectly uniformly distributed, but good enough
             var r = Sqrt(Random01());
             var theta = 2.0 * PI * Random01();
             return (r * Cos(theta), r * Sin(theta));
@@ -45,7 +45,7 @@ namespace Fovea.Renderer.Sampling
             return new Vec3(r * Cos(phi), r * Sin(phi), 1.0 - 2.0 * r2);
         }
 
-        public RGBColor RandomColor(double min = 0.0, double max = 1.0) 
+        public RGBColor RandomColor(double min = 0.0, double max = 1.0)
             => new(Random(min, max), Random(min, max), Random(min, max));
     }
 }

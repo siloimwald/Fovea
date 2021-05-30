@@ -56,7 +56,7 @@ namespace Fovea.Renderer.VectorMath
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator -(Vec3 v)
             => new(-v.X, -v.Y, -v.Z);
-        
+
         public double this[int index]
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -71,7 +71,7 @@ namespace Fovea.Renderer.VectorMath
                 };
             }
         }
-        
+
         #endregion
 
         public override string ToString() => $"[{X}, {Y}, {Z}]";
@@ -96,14 +96,14 @@ namespace Fovea.Renderer.VectorMath
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsNearZero()
             => Abs(X) < 1e-8 && Abs(Y) < 1e-8 && Abs(Z) < 1e-8;
-        
+
         /// <summary>
         /// dot product of both vectors
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Dot(Vec3 left, Vec3 right)
             => left.X * right.X + left.Y * right.Y + left.Z * right.Z;
-        
+
         /// <summary>
         /// returns the vector normalized, with length 1
         /// </summary>
@@ -156,10 +156,10 @@ namespace Fovea.Renderer.VectorMath
             var dirOutParallel = normal * -Sqrt(Abs(1.0 - dirOutPerpendicular.LengthSquared()));
             return dirOutParallel + dirOutPerpendicular;
         }
-        
+
         // IEquatable, almost exclusively used for unit tests. mostly to have
         // the 'fuzzy' equality
-        
+
         public bool Equals(Vec3 other) => (this - other).Length() < 1e-8;
         public override bool Equals(object obj) => obj is Vec3 other && Equals(other);
         public override int GetHashCode() => HashCode.Combine(X, Y, Z);

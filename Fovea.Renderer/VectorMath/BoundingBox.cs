@@ -11,6 +11,8 @@ namespace Fovea.Renderer.VectorMath
     /// </summary>
     public class BoundingBox
     {
+        private const byte ShuffleMask = ((3 << 4) | (2 << 2) | 1);
+
         /// <summary>
         /// maximal extent of this bounding box
         /// </summary>
@@ -76,13 +78,13 @@ namespace Fovea.Renderer.VectorMath
 
             tMin = Math.Max(tMin, Math.Min(tx1, tx2));
             tMax = Math.Min(tMax, Math.Max(tx1, tx2));
-            
+
             var ty1 = (_min.PY - ray.Origin.PY) * ray.InverseDirection.Y;
             var ty2 = (_max.PY - ray.Origin.PY) * ray.InverseDirection.Y;
 
             tMin = Math.Max(tMin, Math.Min(ty1, ty2));
             tMax = Math.Min(tMax, Math.Max(ty1, ty2));
-            
+
             var tz1 = (_min.PZ - ray.Origin.PZ) * ray.InverseDirection.Z;
             var tz2 = (_max.PZ - ray.Origin.PZ) * ray.InverseDirection.Z;
 
@@ -92,8 +94,6 @@ namespace Fovea.Renderer.VectorMath
             return tMax >= tMin && tMax >= 0.0;
         }
 
-        private const byte ShuffleMask = ((3 << 4) | (2 << 2) | 1);
-        
         public bool IntersectSse(in Ray ray, double tMin, double tMax)
         {
             var invDir = Vector128.Create((float) ray.InverseDirection.X, (float) ray.InverseDirection.Y,
@@ -104,10 +104,10 @@ namespace Fovea.Renderer.VectorMath
 
             var t0 = Sse.Multiply(Sse.Subtract(minVec, org), invDir);
             var t1 = Sse.Multiply(Sse.Subtract(maxVec, org), invDir);
-            
+
             var min = Sse.Min(t0, t1);
             var max = Sse.Max(t0, t1);
-            
+
             // compares min0 and min1 and min1 and min2
             // shuffle again and compare to get overall min/max in first component
             var minStage0 = Sse.Max(Sse.Shuffle(min, min, ShuffleMask), min);
@@ -115,18 +115,18 @@ namespace Fovea.Renderer.VectorMath
             var maxStage0 = Sse.Min(Sse.Shuffle(max, max, ShuffleMask), max);
             var gTMax = Sse.Min(Sse.Shuffle(maxStage0, maxStage0, ShuffleMask), maxStage0).GetElement(0);
 
-            gTMin = Math.Max((float)tMin, gTMin);
-            gTMax = Math.Min((float)tMax, gTMax);
+            gTMin = Math.Max((float) tMin, gTMin);
+            gTMax = Math.Min((float) tMax, gTMax);
             return gTMax >= gTMin && gTMax > 0;
         }
-        
+
         /// <summary>
         /// unite two bounding boxes by computing the minimal box that fully contains both input parameters
         /// </summary>
         /// <param name="boxA">bounding box object</param>
         /// <param name="boxB">bounding box object</param>
         /// <returns>Box = boxA U boxB </returns>
-        public static BoundingBox Union(BoundingBox boxA, BoundingBox boxB) 
+        public static BoundingBox Union(BoundingBox boxA, BoundingBox boxB)
             => new(Point3.Min(boxA._min, boxB._min), Point3.Max(boxA._max, boxB._max));
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Fovea.Renderer.VectorMath
                 Point3.Max(boxA._min, boxB._min),
                 Point3.Min(boxA._max, boxB._max));
         }
-        
+
         /// <summary>
         /// creates a bounding box with bounds [maxFloat,maxFloat,maxFloat] to [-maxFloat, -maxFloat, -maxFloat]
         /// to be used for union loops
@@ -153,7 +153,7 @@ namespace Fovea.Renderer.VectorMath
                 new Point3(double.MaxValue, double.MaxValue, double.MaxValue),
                 new Point3(double.MinValue, double.MinValue, double.MinValue));
         }
-        
+
         /// <summary>
         /// from pbrt book. used for bin projection, given p as a primitive centroid and this as
         /// the centroid bounds of all primitives it scales offsets of primitive centroids from 0,0,0 to 1,1,1
@@ -164,7 +164,7 @@ namespace Fovea.Renderer.VectorMath
         {
             var o = p - _min;
             var ext = GetExtent();
-            
+
             // avoid division by zero
             return new Vec3(
                 ext.X > 0 ? o.X / ext.X : o.X,

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.VectorMath;
 

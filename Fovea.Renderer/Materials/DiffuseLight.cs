@@ -12,7 +12,7 @@ namespace Fovea.Renderer.Materials
         {
             _color = color;
         }
-        
+
         public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
         {
             return false;

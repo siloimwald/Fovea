@@ -7,8 +7,8 @@ namespace Fovea.Renderer.Primitives
     public class Sphere : IPrimitive
     {
         private readonly Point3 _center;
-        private readonly double _radius;
         private readonly IMaterial _material;
+        private readonly double _radius;
 
         public Sphere(Point3 center, double radius, IMaterial material)
         {
@@ -31,9 +31,11 @@ namespace Fovea.Renderer.Primitives
 
             hitRecord.TextureU = 0.5 + Atan2(outwardNormal.X, outwardNormal.Z) / (2 * PI);
             hitRecord.TextureV = outwardNormal.Y * 0.5 + 0.5;
-            
+
             return true;
         }
+
+        public BoundingBox GetBoundingBox(double t0, double t1) => SphereBox(_center, _radius);
 
         public static bool IntersectSphere(
             in Ray ray, in Point3 center, double radius,
@@ -61,13 +63,11 @@ namespace Fovea.Renderer.Primitives
             tRay = root;
             return true;
         }
-        
+
         public static BoundingBox SphereBox(Point3 center, double radius)
         {
             return new(center - new Vec3(radius, radius, radius),
                 center + new Vec3(radius, radius, radius));
         }
-        
-        public BoundingBox GetBoundingBox(double t0, double t1) => SphereBox(_center, _radius);
     }
 }

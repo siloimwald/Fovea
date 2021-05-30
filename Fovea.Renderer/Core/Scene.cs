@@ -10,5 +10,4 @@ namespace Fovea.Renderer.Core
         public RGBColor Background { get; set; } = new(0.7, 0.8, 1);
         public (int imageWidth, int ImageHeight) OutputSize { get; set; }
     }
-
 }

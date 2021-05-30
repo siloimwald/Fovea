@@ -9,7 +9,7 @@ namespace Fovea.Renderer.Mesh
     public class TriangleMesh
     {
         public List<Point3> Vertices { get; init; }
-        public List<(int f0,int f1,int f2)> Faces { get; init; }
+        public List<(int f0, int f1, int f2)> Faces { get; init; }
 
         /// <summary>
         /// creates single triangles for this mesh, that is don't reuse any vertices but instead
@@ -20,7 +20,7 @@ namespace Fovea.Renderer.Mesh
         /// <returns></returns>
         public List<IPrimitive> CreateSingleTriangles(IMaterial material)
         {
-            return 
+            return
                 Faces
                     .Select(face => new Triangle(Vertices[face.f0], Vertices[face.f1], Vertices[face.f2], material))
                     .ToList<IPrimitive>();

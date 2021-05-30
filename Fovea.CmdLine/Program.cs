@@ -1,5 +1,5 @@
-﻿using Fovea.Renderer.Core;
-using CommandLine;
+﻿using CommandLine;
+using Fovea.Renderer.Core;
 
 namespace Fovea.CmdLine
 {
@@ -17,7 +17,6 @@ namespace Fovea.CmdLine
                     var scene = DemoSceneCreator.MakeScene(DemoScenes.FinalSceneBookTwo, opts.ImageWidth);
                     renderer.Render(scene);
                 });
-            
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Linq;
 using Fovea.Renderer.VectorMath.Transforms;
-
 using static System.Math;
 
 namespace Fovea.Renderer.VectorMath
@@ -16,7 +15,7 @@ namespace Fovea.Renderer.VectorMath
 
         public Matrix4()
         {
-            _matrix = new double[4,4];
+            _matrix = new double[4, 4];
         }
 
         public static Matrix4 Identity()
@@ -52,7 +51,7 @@ namespace Fovea.Renderer.VectorMath
             var m = new Matrix4();
             for (var resRow = 0; resRow < 4; ++resRow)
             {
-                for (var resCol = 0 ; resCol < 4 ; ++resCol)
+                for (var resCol = 0; resCol < 4; ++resCol)
                 {
                     m._matrix[resRow, resCol] =
                         left._matrix[resRow, 0] * right._matrix[0, resCol] +
@@ -74,21 +73,21 @@ namespace Fovea.Renderer.VectorMath
                 v.X * m._matrix[2, 0] + v.Y * m._matrix[2, 1] + v.Z * m._matrix[2, 2]
             );
         }
-        
+
         // matrix times vector
         public static Point3 operator *(Matrix4 m, Point3 p)
         {
             return new(
-                p.PX * m._matrix[0, 0] + p.PY * m._matrix[0, 1] + p.PZ * m._matrix[0, 2] + m._matrix[0,3],
-                p.PX * m._matrix[1, 0] + p.PY * m._matrix[1, 1] + p.PZ * m._matrix[1, 2] + m._matrix[1,3],
-                p.PX * m._matrix[2, 0] + p.PY * m._matrix[2, 1] + p.PZ * m._matrix[2, 2] + m._matrix[2,3]
+                p.PX * m._matrix[0, 0] + p.PY * m._matrix[0, 1] + p.PZ * m._matrix[0, 2] + m._matrix[0, 3],
+                p.PX * m._matrix[1, 0] + p.PY * m._matrix[1, 1] + p.PZ * m._matrix[1, 2] + m._matrix[1, 3],
+                p.PX * m._matrix[2, 0] + p.PY * m._matrix[2, 1] + p.PZ * m._matrix[2, 2] + m._matrix[2, 3]
             );
         }
 
         public static Matrix4 GetRotation(double angle, Axis axis)
         {
             var m = Identity();
-            
+
             if (axis == Axis.X)
             {
                 m._matrix[1, 1] = Cos(angle);
@@ -126,7 +125,7 @@ namespace Fovea.Renderer.VectorMath
                              && Abs(_matrix[2, 2] - 1) < eps
                              && Abs(_matrix[3, 3] - 1) < eps;
             var restOk = Enumerable.Range(0, 4)
-                .SelectMany(rowIndex => 
+                .SelectMany(rowIndex =>
                     Enumerable.Range(0, 4)
                         .Select(columnIndex => (rowIndex, columnIndex)))
                 .Where(index => index.rowIndex != index.columnIndex)
@@ -134,7 +133,7 @@ namespace Fovea.Renderer.VectorMath
 
             return diagonalOk && restOk;
         }
-        
+
         public Vec3 TransformVectorTransposed(Vec3 normal)
         {
             return new(

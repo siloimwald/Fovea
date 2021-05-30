@@ -20,7 +20,7 @@ namespace Fovea.Tests
                 Assert.True(Abs(v.Z) <= 1);
             }
         }
-        
+
         [Fact]
         public void TestRandomUnitDisk()
         {
@@ -29,8 +29,8 @@ namespace Fovea.Tests
                 var (x, y) = Sampler.Instance.RandomOnUnitDisk();
                 Assert.True(x <= 1);
                 Assert.True(y <= 1);
-                Assert.True(x*x + y*y <= 1);
-            }    
+                Assert.True(x * x + y * y <= 1);
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Fovea.Renderer.Core
             IsFrontFace = Vec3.Dot(ray.Direction, outwardNormal) < 0;
             Normal = IsFrontFace ? outwardNormal : -outwardNormal;
         }
-        
+
         /// <summary>
         /// material at intersection
         /// </summary>
@@ -46,6 +46,7 @@ namespace Fovea.Renderer.Core
         /// u texture coordinate
         /// </summary>
         public double TextureU;
+
         /// <summary>
         /// v texture coordinate
         /// </summary>

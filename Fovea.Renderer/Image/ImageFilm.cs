@@ -49,7 +49,7 @@ namespace Fovea.Renderer.Image
             var imageAsByteArray = _imageBuffer.SelectMany(pixelColor => pixelColor.ToByteArray());
             File.WriteAllBytes(fileName, headerAsByteArray.Concat(imageAsByteArray).ToArray());
         }
-        
+
         public void Average(int numSamples)
         {
             var scale = 1.0 / numSamples; // average samples

@@ -9,7 +9,7 @@ namespace Fovea.Renderer.Materials.Texture
     public class ImageTexture : ITexture
     {
         private ImageFilm _imageBuffer;
-        
+
         public ImageTexture(string fileName)
         {
             try
@@ -19,7 +19,7 @@ namespace Fovea.Renderer.Materials.Texture
                 _imageBuffer = new ImageFilm(image.Width, image.Height);
                 for (var px = 0; px < image.Width; ++px)
                 {
-                    for (var py = 0 ; py < image.Height ; ++py)
+                    for (var py = 0; py < image.Height; ++py)
                     {
                         var c = image.GetPixel(px, py);
                         var rgb = new RGBColor(c.R / 255.0, c.G / 255.0, c.B / 255.0);
@@ -32,15 +32,13 @@ namespace Fovea.Renderer.Materials.Texture
             {
                 Console.WriteLine($"failed to read {fileName}");
             }
-            
-
         }
 
         public RGBColor Value(double u, double v, Point3 p)
         {
             if (_imageBuffer == null)
                 return new RGBColor(0, 1, 1);
-            
+
             var texU = Math.Clamp(u, 0.0, 1.0);
             var texV = Math.Clamp(v, 0.0, 1.0);
             var px = (int) (texU * (_imageBuffer.Width - 1));

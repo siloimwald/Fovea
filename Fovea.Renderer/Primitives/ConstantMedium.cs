@@ -9,16 +9,16 @@ namespace Fovea.Renderer.Primitives
     public class ConstantMedium : IPrimitive
     {
         private readonly IPrimitive _boundary;
-        private readonly double _negInvDensity;
         private readonly Isotropic _material;
-        
+        private readonly double _negInvDensity;
+
         public ConstantMedium(IPrimitive boundary, double density, ITexture color)
         {
             _negInvDensity = -1.0 / density;
             _boundary = boundary;
             _material = new Isotropic(color);
         }
-        
+
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var hr1 = new HitRecord();
@@ -49,7 +49,7 @@ namespace Fovea.Renderer.Primitives
             hitRecord.RayT = hr1.RayT + hitDistance / rayLength;
             hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
             hitRecord.Material = _material;
-            
+
             // front face/normal left unset, never used due to fixed material
 
             return true;

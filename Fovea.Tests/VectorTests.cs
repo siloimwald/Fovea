@@ -11,14 +11,14 @@ namespace Fovea.Tests
         {
             var v = new Vec3(2, -4, 1);
             var w = new Vec3(-2, 0f, 14);
-            Assert.Equal(new Vec3(0, -4, 15), v+w);
+            Assert.Equal(new Vec3(0, -4, 15), v + w);
         }
 
         [Fact]
         public void VectorScalarMultiplication()
         {
             var v = new Vec3(4, 1, -3);
-            Assert.Equal(new Vec3(2, 0.5f, -1.5f), v*0.5f);
+            Assert.Equal(new Vec3(2, 0.5f, -1.5f), v * 0.5f);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Fovea.Tests
         {
             var v = new Vec3(2.9f, -3.0f, 0);
             var w = new Vec3(2.9f, -6.5f, 2);
-            Assert.Equal(new Vec3(0, 3.5f, -2f), v-w);
+            Assert.Equal(new Vec3(0, 3.5f, -2f), v - w);
         }
 
         [Fact] // for sake of completeness
@@ -45,14 +45,14 @@ namespace Fovea.Tests
             var v = p1 - p0;
             var len0 = v.Length();
             Assert.Equal(v.LengthSquared(), len0 * len0, 3);
-            Assert.Equal(len0*2, (v+v).Length(), 3);
+            Assert.Equal(len0 * 2, (v + v).Length(), 3);
         }
 
         [Fact]
         public void DotWorks()
         {
             var v = new Vec3(14, 0, -20);
-            Assert.Equal(v.LengthSquared(), Vec3.Dot(v,v), 3);
+            Assert.Equal(v.LengthSquared(), Vec3.Dot(v, v), 3);
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace Fovea.Tests
             var v = new Vec3(-2, 1, 14);
             var r = Vec3.Reflect(v, n);
             // r and v have the same angle (dot product) to n, just with different signs
-            Assert.Equal(Abs(Vec3.Dot(r,n)), Abs(Vec3.Dot(v,n)), 3);
+            Assert.Equal(Abs(Vec3.Dot(r, n)), Abs(Vec3.Dot(v, n)), 3);
         }
     }
 }
