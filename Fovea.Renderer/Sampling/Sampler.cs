@@ -14,7 +14,8 @@ namespace Fovea.Renderer.Sampling
     public class Sampler
     {
         public static readonly Sampler Instance = new();
-        private readonly ThreadLocal<Random> _random = new(() => new Random());
+        // TODO: fixed seed while testing, remove this
+        private readonly ThreadLocal<Random> _random = new(() => new Random(0xAAFFEE));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double Random01() => _random.Value.NextDouble();
@@ -45,7 +46,25 @@ namespace Fovea.Renderer.Sampling
             return new Vec3(r * Cos(phi), r * Sin(phi), 1.0 - 2.0 * r2);
         }
 
+        /// <summary>
+        /// Sampling the hemisphere
+        /// p(direction) = cos(phi)/pi
+        /// </summary>
+        /// <returns></returns>
+        public Vec3 RandomCosineDirection()
+        {
+            var r1 = Random01();
+            var r2 = Random01();
+            var z = Sqrt(1 - r2);
+            var phi = 2 * Math.PI * r1;
+            var r2Sqrt = Sqrt(r2);
+            return new Vec3(Cos(phi) * r2Sqrt, Sin(phi) * r2Sqrt, z);
+        }
+        
         public RGBColor RandomColor(double min = 0.0, double max = 1.0)
+            => new(Random(min, max), Random(min, max), Random(min, max));
+
+        public Point3 RandomPoint(double min, double max)
             => new(Random(min, max), Random(min, max), Random(min, max));
     }
 }

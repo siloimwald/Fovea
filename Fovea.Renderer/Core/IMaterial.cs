@@ -14,9 +14,21 @@ namespace Fovea.Renderer.Core
         /// <returns>true if ScatterResult contents should be used (and are set)</returns>
         bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult);
 
+        /// <summary>
+        /// emitted color for this material, if any. defaults to black
+        /// </summary>
+        /// <param name="u">texture coordinate u</param>
+        /// <param name="v">texture coordinate v</param>
+        /// <param name="p">hit point on surface</param>
+        /// <returns></returns>
         RGBColor Emitted(double u, double v, Point3 p)
         {
-            return new RGBColor();
+            return new(); // black
+        }
+
+        double ScatterPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
+        {
+            return 0;
         }
     }
 }

@@ -9,5 +9,6 @@ namespace Fovea.Renderer.Core
     {
         public RGBColor Attenuation;
         public Ray OutgoingRay;
+        public double PdfValue;
     }
 }

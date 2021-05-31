@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
+using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core
 {
@@ -27,9 +28,34 @@ namespace Fovea.Renderer.Core
             if (!hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
                 return emitted;
 
+            // directly sampling light hardcoded variant
+            var pointOnLight = new Point3(Sampler.Instance.Random(213, 343), 554,
+                Sampler.Instance.Random(227, 332));
+            var dirToLight = pointOnLight - hitRecord.HitPoint;
+            var distanceSquared = dirToLight.LengthSquared();
+            dirToLight = Vec3.Normalize(dirToLight);
+
+            if (Vec3.Dot(dirToLight, hitRecord.Normal) < 0)
+                return emitted;
+
+            var lightArea = (343 - 213) * (332 - 227);
+            var lightCosine = Math.Abs(dirToLight.Y); // Dot(N, L)
+
+            if (lightCosine < 1e-6)
+                return emitted;
+
+            var pdfLightValue = distanceSquared / (lightCosine * lightArea);
+            var outRay = new Ray(hitRecord.HitPoint, dirToLight, ray.Time);
+            
+            // var pdfCorrection = 1.0 / scatterResult.PdfValue;
+            var pdfCorrection = 1.0 / pdfLightValue;
+            
             return emitted
                    + scatterResult.Attenuation
-                   * ColorRay(scatterResult.OutgoingRay, scene, depth - 1);
+                   // * hitRecord.Material.ScatterPDF(ray, hitRecord, scatterResult.OutgoingRay)
+                   * hitRecord.Material.ScatterPDF(ray, hitRecord, outRay)
+                   * ColorRay(outRay, scene, depth - 1) * pdfCorrection;
+                   // * ColorRay(scatterResult.OutgoingRay, scene, depth - 1) * pdfCorrection;
         }
 
         public void Render(Scene scene)

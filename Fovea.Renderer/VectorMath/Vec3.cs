@@ -72,6 +72,10 @@ namespace Fovea.Renderer.VectorMath
             }
         }
 
+        public static Vec3 UnitX = new(1, 0, 0);
+        public static Vec3 UnitY = new(0, 1, 0);
+        public static Vec3 UnitZ = new(0, 0, 1);
+
         #endregion
 
         public override string ToString() => $"[{X}, {Y}, {Z}]";
