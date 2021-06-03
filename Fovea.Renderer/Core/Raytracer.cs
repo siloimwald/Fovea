@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Fovea.Renderer.Image;
+using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 
@@ -19,43 +20,31 @@ namespace Fovea.Renderer.Core
                 return new RGBColor(0.0);
 
             var hitRecord = new HitRecord();
-
+            // nothing hit, yield background
             if (!scene.World.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
                 return scene.Background;
 
             var scatterResult = new ScatterResult();
-            var emitted = hitRecord.Material.Emitted(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
+            var emitted = hitRecord.Material.Emitted(ray, hitRecord);
+            // no scattering takes place or hit emitter, return emitted
             if (!hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
                 return emitted;
 
-            // directly sampling light hardcoded variant
-            var pointOnLight = new Point3(Sampler.Instance.Random(213, 343), 554,
-                Sampler.Instance.Random(227, 332));
-            var dirToLight = pointOnLight - hitRecord.HitPoint;
-            var distanceSquared = dirToLight.LengthSquared();
-            dirToLight = Vec3.Normalize(dirToLight);
-
-            if (Vec3.Dot(dirToLight, hitRecord.Normal) < 0)
-                return emitted;
-
-            var lightArea = (343 - 213) * (332 - 227);
-            var lightCosine = Math.Abs(dirToLight.Y); // Dot(N, L)
-
-            if (lightCosine < 1e-6)
-                return emitted;
-
-            var pdfLightValue = distanceSquared / (lightCosine * lightArea);
-            var outRay = new Ray(hitRecord.HitPoint, dirToLight, ray.Time);
+            if (scatterResult.IsSpecular)
+            {
+                return scatterResult.Attenuation * ColorRay(scatterResult.SpecularRay, scene, depth - 1);
+            }
             
-            // var pdfCorrection = 1.0 / scatterResult.PdfValue;
-            var pdfCorrection = 1.0 / pdfLightValue;
+            var lightPdf = new PrimitivePDF(scene.Lights, hitRecord.HitPoint);
+            var mixPdf = new MixturePDF(scatterResult.Pdf, lightPdf);
+            
+            var outRay = new Ray(hitRecord.HitPoint, mixPdf.Generate(), ray.Time);
+            var pdfCorrection = 1.0 / mixPdf.Evaluate(outRay.Direction);
             
             return emitted
                    + scatterResult.Attenuation
-                   // * hitRecord.Material.ScatterPDF(ray, hitRecord, scatterResult.OutgoingRay)
-                   * hitRecord.Material.ScatterPDF(ray, hitRecord, outRay)
+                   * hitRecord.Material.ScatteringPDF(ray, hitRecord, outRay)
                    * ColorRay(outRay, scene, depth - 1) * pdfCorrection;
-                   // * ColorRay(scatterResult.OutgoingRay, scene, depth - 1) * pdfCorrection;
         }
 
         public void Render(Scene scene)

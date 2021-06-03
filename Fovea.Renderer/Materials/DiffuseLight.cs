@@ -1,6 +1,5 @@
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Image;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Materials
 {
@@ -18,6 +17,9 @@ namespace Fovea.Renderer.Materials
             return false;
         }
 
-        public RGBColor Emitted(double u, double v, Point3 p) => _color.Value(u, v, p);
+        public RGBColor Emitted(in Ray ray, in HitRecord hitRecord) =>
+            hitRecord.IsFrontFace
+                ? _color.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint)
+                : new RGBColor();
     }
 }

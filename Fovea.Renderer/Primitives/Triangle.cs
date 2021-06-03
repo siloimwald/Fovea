@@ -27,24 +27,11 @@ namespace Fovea.Renderer.Primitives
 
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
-            var pVec = Vec3.Cross(ray.Direction, _edgeAC);
-            var det = Vec3.Dot(_edgeAB, pVec);
+            var t0 = 0.0;
 
-            if (Math.Abs(det) < 1e-4) // parallel to triangle plane
+            if (!TriangleIntersection(ray, _vertexA, _edgeAB, _edgeAC, tMin, tMax, ref t0))
                 return false;
-
-            var invDet = 1.0 / det;
-
-            var tVec = ray.Origin - _vertexA;
-            var u = Vec3.Dot(tVec, pVec) * invDet;
-            if (u is < 0.0f or > 1.0f) return false;
-            var qVec = Vec3.Cross(tVec, _edgeAB);
-            var v = Vec3.Dot(ray.Direction, qVec) * invDet;
-            if (v < 0.0f || v + u > 1.0f) return false;
-            var t0 = Vec3.Dot(qVec, _edgeAC) * invDet;
-
-            if (t0 < tMin || tMax < t0) return false;
-
+            
             hitRecord.RayT = t0;
             hitRecord.HitPoint = ray.PointsAt(t0);
             hitRecord.Material = _material;
@@ -53,6 +40,46 @@ namespace Fovea.Renderer.Primitives
             return true; // hit at t0
         }
 
+        /// <summary>
+        /// triangle intersection, refactored out for reuse in mesh triangle
+        /// </summary>
+        /// <param name="ray">incoming ray</param>
+        /// <param name="vertexA">vertex A of triangle</param>
+        /// <param name="edgeAB">edge a to vertex b</param>
+        /// <param name="edgeAC">edge a to vertex c</param>
+        /// <param name="tMin">ray min t</param>
+        /// <param name="tMax">ray max t</param>
+        /// <param name="tRay">potential intersection at t</param>
+        /// <returns>true if triangle is hit, tRay is set</returns>
+        public static bool TriangleIntersection(in Ray ray,
+                                                in Point3 vertexA,
+                                                in Vec3 edgeAB,
+                                                in Vec3 edgeAC,
+                                                double tMin,
+                                                double tMax,
+                                                ref double tRay)
+        {
+            var pVec = Vec3.Cross(ray.Direction, edgeAC);
+            var det = Vec3.Dot(edgeAB, pVec);
+
+            if (Math.Abs(det) < 1e-4) // parallel to triangle plane
+                return false;
+
+            var invDet = 1.0 / det;
+
+            var tVec = ray.Origin - vertexA;
+            var u = Vec3.Dot(tVec, pVec) * invDet;
+            if (u is < 0.0f or > 1.0f) return false;
+            var qVec = Vec3.Cross(tVec, edgeAB);
+            var v = Vec3.Dot(ray.Direction, qVec) * invDet;
+            if (v < 0.0f || v + u > 1.0f) return false;
+            var t0 = Vec3.Dot(qVec, edgeAC) * invDet;
+
+            if (t0 < tMin || tMax < t0) return false;
+            tRay = t0;
+            return true;
+        }
+        
         public BoundingBox GetBoundingBox(double t0, double t1)
         {
             var vb = _vertexA + _edgeAB;

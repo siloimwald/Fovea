@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives
@@ -29,6 +30,9 @@ namespace Fovea.Renderer.Primitives
             return hitSomething;
         }
 
+        public IPrimitive this[int index] => _primitives[index];
+        
+        
         public BoundingBox GetBoundingBox(double t0, double t1)
         {
             return
@@ -38,5 +42,17 @@ namespace Fovea.Renderer.Primitives
         }
 
         public void Add(IPrimitive p) => _primitives.Add(p);
+
+        public double PdfValue(Point3 origin, Vec3 direction)
+        {
+            var weight = 1.0 / _primitives.Count;
+            return _primitives.Sum(p => weight * p.PdfValue(origin, direction));
+        }
+
+        public Vec3 RandomDirection(Point3 origin)
+        {
+            var pIndex = Sampler.Instance.RandomInt(0, _primitives.Count);
+            return _primitives[pIndex].RandomDirection(origin);
+        }
     }
 }

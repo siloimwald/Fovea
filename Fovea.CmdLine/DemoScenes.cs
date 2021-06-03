@@ -145,9 +145,16 @@ namespace Fovea.CmdLine
 
             var prims = new List<IPrimitive>();
 
-            // light source
-            prims.AddRange(QuadProducer.Produce(213,343, 227,332,554, Axis.Y).CreateSingleTriangles(light));
+            // var lightSource =
+            //     new PrimitiveList(QuadProducer.Produce(213, 343, 227, 332, 554, Axis.Y)
+            //         .CreateMeshTriangles(light, flipNormals:true)); 
+            //
 
+            var lightSource = new XZRect(213, 343, 227, 332, 554, light);
+            
+            prims.Add(lightSource);
+            // prims.Add(lightSource[1]);
+            
             // spot lights
             // prims.Add(new Disk(new Point3(140, 554, 140), new Vec3(0, -1, 0), 40, light));
             // prims.Add(new Disk(new Point3(415, 554, 140), new Vec3(0, -1, 0), 40, light));
@@ -167,16 +174,19 @@ namespace Fovea.CmdLine
             // don't use instancing here, rather transform stuff directly
             var leftBox = BoxProducer.Produce(0, 165, 0, 330, 0, 165)
                 .ApplyTransform(new Transformation().Rotate(15, Axis.Y).Translate(265, 0, 295).GetMatrix())
+                // .CreateSingleTriangles(new Metal(0.8, 0.85, 0.88, 0));
                 .CreateSingleTriangles(white);
             // var leftBoxSmoke = new ConstantMedium(new PrimitiveList(leftBox), 0.01, new RGBColor(0, 0, 0));
             prims.AddRange(leftBox);
 
-            var rightBox = BoxProducer.Produce(0, 165, 0, 165, 0, 165)
-                .ApplyTransform(new Transformation().Rotate(-18, Axis.Y).Translate(130, 0, 65).GetMatrix())
-                .CreateSingleTriangles(white);
-            // var rightBoxSmoke = new ConstantMedium(new PrimitiveList(rightBox), 0.01, new RGBColor(1, 1, 1));
-            prims.AddRange(rightBox);
+            // var rightBox = BoxProducer.Produce(0, 165, 0, 165, 0, 165)
+            //     .ApplyTransform(new Transformation().Rotate(-18, Axis.Y).Translate(130, 0, 65).GetMatrix())
+            //     .CreateSingleTriangles(white);
+            // prims.AddRange(rightBox);
 
+            var glassSphere = new Sphere(new Point3(190, 90, 190), 90, new Dielectric(1.5));
+            prims.Add(glassSphere);
+            
             var orientation = new Orientation
             {
                 LookFrom = new Point3(278, 278, -800),
@@ -190,7 +200,8 @@ namespace Fovea.CmdLine
             {
                 World = new BVHTree(prims),
                 Camera = cam,
-                Background = new RGBColor()
+                Background = new RGBColor(),
+                Lights = new PrimitiveList(new List<IPrimitive> { glassSphere, lightSource })
             };
         }
 

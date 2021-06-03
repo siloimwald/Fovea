@@ -1,4 +1,5 @@
 using Fovea.Renderer.Image;
+using Fovea.Renderer.Sampling;
 
 namespace Fovea.Renderer.Core
 {
@@ -8,7 +9,8 @@ namespace Fovea.Renderer.Core
     public struct ScatterResult
     {
         public RGBColor Attenuation;
-        public Ray OutgoingRay;
-        public double PdfValue;
+        public bool IsSpecular;
+        public Ray SpecularRay;
+        public IPDF Pdf;
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
@@ -22,20 +21,15 @@ namespace Fovea.Renderer.Materials
 
         public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
         {
-            var onb = new OrthoNormalBasis(hitRecord.Normal);
-            // note: no need to normalize this, book does
-            var scatterDirection = onb.Local(Sampler.Instance.RandomCosineDirection());;
+            scatterResult.IsSpecular = false;
             scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
-            scatterResult.OutgoingRay = new Ray(hitRecord.HitPoint, scatterDirection, rayIn.Time);
-            scatterResult.PdfValue = Vec3.Dot(onb.WAxis, scatterDirection) / Math.PI;
+            scatterResult.Pdf = new CosinePDF(new OrthoNormalBasis(hitRecord.Normal));
             return true;
         }
 
-        public double ScatterPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
+        public double ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
         {
-            // book version used to normalize scatteredRay, but we already do that in Scatter itself. Safe to assume
-            // we only ever call this on the same material in succession?
-            var cosine = Vec3.Dot(hitRecord.Normal, scatteredRay.Direction);
+            var cosine = Vec3.Dot(hitRecord.Normal, Vec3.Normalize(scatteredRay.Direction));
             return cosine < 0 ? 0 : cosine / Math.PI;
         }
     }

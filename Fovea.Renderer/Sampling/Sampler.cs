@@ -47,7 +47,7 @@ namespace Fovea.Renderer.Sampling
         }
 
         /// <summary>
-        /// Sampling the hemisphere
+        /// Sampling the hemisphere (isn't that the same as on unit sphere?)
         /// p(direction) = cos(phi)/pi
         /// </summary>
         /// <returns></returns>

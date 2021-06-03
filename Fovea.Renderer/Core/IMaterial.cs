@@ -17,16 +17,15 @@ namespace Fovea.Renderer.Core
         /// <summary>
         /// emitted color for this material, if any. defaults to black
         /// </summary>
-        /// <param name="u">texture coordinate u</param>
-        /// <param name="v">texture coordinate v</param>
-        /// <param name="p">hit point on surface</param>
+        /// <param name="ray">incoming ray</param>
+        /// <param name="hitRecord">intersection parameters</param>
         /// <returns></returns>
-        RGBColor Emitted(double u, double v, Point3 p)
+        RGBColor Emitted(in Ray ray, in HitRecord hitRecord)
         {
             return new(); // black
         }
 
-        double ScatterPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
+        double ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
         {
             return 0;
         }

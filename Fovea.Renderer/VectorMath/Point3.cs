@@ -57,6 +57,14 @@ namespace Fovea.Renderer.VectorMath
         public static Vec3 operator -(Point3 left, Point3 right)
             => new(left.PX - right.PX, left.PY - right.PY, left.PZ - right.PZ);
 
+        // point times scalar, used for interpolating, i.e. barycentric coordinates on triangles
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point3 operator *(Point3 p, double scalar)
+            => new(p.PX * scalar, p.PY * scalar, p.PZ * scalar);
+
+        // same as above. this is the point where having Vec3 and Point3 separate falls apart :)
+        public static Point3 operator +(Point3 left, Point3 right)
+            => new(left.PX + right.PX, left.PY + right.PY, left.PZ + right.PZ);
         #endregion
 
         public static Point3 Max(Point3 left, Point3 right)
