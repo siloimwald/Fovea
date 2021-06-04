@@ -141,25 +141,28 @@ namespace Fovea.CmdLine
             var red = new Lambertian(0.65, 0.05, 0.05);
             var white = new Lambertian(0.73, 0.73, 0.73);
             var green = new Lambertian(0.12, 0.45, 0.15);
-            var light = new DiffuseLight(new RGBColor(15, 15, 15));
+            var light = new DiffuseLight(new RGBColor(5, 5, 5));
 
             var prims = new List<IPrimitive>();
-
+            
+            // rectangular light source
             // var lightSource =
             //     new PrimitiveList(QuadProducer.Produce(213, 343, 227, 332, 554, Axis.Y)
             //         .CreateMeshTriangles(light, flipNormals:true)); 
-            //
-
-            var lightSource = new XZRect(213, 343, 227, 332, 554, light);
-            
-            prims.Add(lightSource);
-            // prims.Add(lightSource[1]);
+            // prims.Add(lightSource);
             
             // spot lights
-            // prims.Add(new Disk(new Point3(140, 554, 140), new Vec3(0, -1, 0), 40, light));
-            // prims.Add(new Disk(new Point3(415, 554, 140), new Vec3(0, -1, 0), 40, light));
-            // prims.Add(new Disk(new Point3(140, 554, 415), new Vec3(0, -1, 0), 40, light));
-            // prims.Add(new Disk(new Point3(415, 554, 415), new Vec3(0, -1, 0), 40, light));
+            var spotLights = new List<IPrimitive>
+            {
+                new Disk(new Point3(140, 554, 140), new Vec3(0, -1, 0), 40, light),
+                new Disk(new Point3(415, 554, 140), new Vec3(0, -1, 0), 40, light),
+                // new Disk(new Point3(140, 554, 415), new Vec3(0, -1, 0), 40, light),
+                // new Disk(new Point3(415, 554, 415), new Vec3(0, -1, 0), 40, light),
+                new Disk(new Point3(1, 415, 278), new Vec3(1, 0, 0), 40, light),
+                new Disk(new Point3(554, 415, 278), new Vec3(-1, 0, 0), 40, light)
+            };
+            prims.AddRange(spotLights);
+            var lightSources = new PrimitiveList(spotLights);
 
             // wall in the back
             prims.AddRange(QuadProducer.Produce(0, 555, 0, 555, 555, Axis.Z).CreateSingleTriangles(white));
@@ -186,6 +189,7 @@ namespace Fovea.CmdLine
 
             var glassSphere = new Sphere(new Point3(190, 90, 190), 90, new Dielectric(1.5));
             prims.Add(glassSphere);
+            lightSources.Add(glassSphere);
             
             var orientation = new Orientation
             {
@@ -201,7 +205,7 @@ namespace Fovea.CmdLine
                 World = new BVHTree(prims),
                 Camera = cam,
                 Background = new RGBColor(),
-                Lights = new PrimitiveList(new List<IPrimitive> { glassSphere, lightSource })
+                Lights = lightSources
             };
         }
 

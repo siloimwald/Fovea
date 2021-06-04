@@ -1,5 +1,6 @@
 using System;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives
@@ -51,6 +52,31 @@ namespace Fovea.Renderer.Primitives
             // this is very conservative...
             return new(_center - new Vec3(_radius, _radius, _radius),
                 _center + new Vec3(_radius, _radius, _radius));
+        }
+
+        public Vec3 RandomDirection(Point3 origin)
+        {
+            // this seems to work. x and y seem straightforward, for z no idea why this works :)
+            // i would have guessed it should be Length, not Squared, or the distance to the origin or something like that
+            var (px, py) = Sampler.Instance.RandomOnUnitDisk();
+            px *= _radius;
+            py *= _radius;
+            var dir = _center - origin;
+            var z = dir.LengthSquared(); 
+            return new OrthoNormalBasis(dir).Local(px, py, z);
+        }
+
+        public double PdfValue(Point3 origin, Vec3 direction)
+        {
+            var hr = new HitRecord();
+            if (!Hit(new Ray(origin, direction), 1e-4, double.PositiveInfinity, ref hr))
+                return 0;
+
+            var area = _radius * _radius * Math.PI;
+            var distanceSquared = (hr.HitPoint - origin).LengthSquared();
+            var cosine = Math.Abs(Vec3.Dot(direction, hr.Normal) / direction.Length());
+            var pdfVal = distanceSquared / (cosine * area);
+            return pdfVal;
         }
     }
 }

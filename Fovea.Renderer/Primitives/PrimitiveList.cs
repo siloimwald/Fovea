@@ -15,6 +15,11 @@ namespace Fovea.Renderer.Primitives
             _primitives = prims;
         }
 
+        public PrimitiveList()
+        {
+            _primitives = new List<IPrimitive>();
+        }
+        
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var hitSomething = false;
