@@ -51,6 +51,13 @@ namespace Fovea.Renderer.Mesh
                 Faces = new List<(int f0, int f1, int f2)>
                 {
                     (2, 1, 0), (3, 2, 0)
+                },
+                Texture = new List<(double texU, double texV)>
+                {
+                    (0,0),
+                    (1,0),
+                    (1,1),
+                    (0,1)
                 }
             };
         }

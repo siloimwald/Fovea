@@ -6,7 +6,6 @@ namespace Fovea.Renderer.Primitives
 {
     /// <summary>
     /// first draft for triangle, as a stand-alone object for now.
-    /// might want to have a mesh version later to reuse vertices and materials...
     /// </summary>
     public class Triangle : IPrimitive
     {
@@ -29,7 +28,7 @@ namespace Fovea.Renderer.Primitives
         {
             var t0 = 0.0;
 
-            if (!TriangleIntersection(ray, _vertexA, _edgeAB, _edgeAC, tMin, tMax, ref t0))
+            if (!TriangleIntersection(ray, _vertexA, _edgeAB, _edgeAC, tMin, tMax, ref t0).HasValue)
                 return false;
             
             hitRecord.RayT = t0;
@@ -50,8 +49,8 @@ namespace Fovea.Renderer.Primitives
         /// <param name="tMin">ray min t</param>
         /// <param name="tMax">ray max t</param>
         /// <param name="tRay">potential intersection at t</param>
-        /// <returns>true if triangle is hit, tRay is set</returns>
-        public static bool TriangleIntersection(in Ray ray,
+        /// <returns>barycentric coordinates triple if hit, null otherwise</returns>
+        public static (double u, double v, double w)? TriangleIntersection(in Ray ray,
                                                 in Point3 vertexA,
                                                 in Vec3 edgeAB,
                                                 in Vec3 edgeAC,
@@ -63,21 +62,21 @@ namespace Fovea.Renderer.Primitives
             var det = Vec3.Dot(edgeAB, pVec);
 
             if (Math.Abs(det) < 1e-4) // parallel to triangle plane
-                return false;
+                return null;
 
             var invDet = 1.0 / det;
 
             var tVec = ray.Origin - vertexA;
             var u = Vec3.Dot(tVec, pVec) * invDet;
-            if (u is < 0.0f or > 1.0f) return false;
+            if (u is < 0.0f or > 1.0f) return null;
             var qVec = Vec3.Cross(tVec, edgeAB);
             var v = Vec3.Dot(ray.Direction, qVec) * invDet;
-            if (v < 0.0f || v + u > 1.0f) return false;
+            if (v < 0.0f || v + u > 1.0f) return null;
             var t0 = Vec3.Dot(qVec, edgeAC) * invDet;
 
-            if (t0 < tMin || tMax < t0) return false;
+            if (t0 < tMin || tMax < t0) return null;
             tRay = t0;
-            return true;
+            return (u, v, 1.0 - (u + v));
         }
         
         public BoundingBox GetBoundingBox(double t0, double t1)
