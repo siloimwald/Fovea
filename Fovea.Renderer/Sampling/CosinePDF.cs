@@ -14,7 +14,7 @@ namespace Fovea.Renderer.Sampling
         
         public double Evaluate(Vec3 direction)
         {
-            var cosine = Vec3.Dot(direction, _orthoNormalBasis.WAxis);
+            var cosine = Vec3.Dot(Vec3.Normalize(direction), _orthoNormalBasis.WAxis);
             return cosine < 0 ? 0 : cosine / Math.PI;
         }
 
