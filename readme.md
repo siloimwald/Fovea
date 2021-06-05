@@ -22,15 +22,19 @@ Fancy picture time
 
 Teapot mesh with interpolated normals. The whole scene is enclosed with a sphere with a forest
 scene texture used for lighting. 
+
 ![mesh_forest](https://github.com/siloimwald/Fovea/blob/main/Results/mesh_forest.png)
 
 Cylinder Demo with some textures
+
 ![cylinders](https://github.com/siloimwald/Fovea/blob/main/Results/cylinders.png)
 
 the final image of book 3
+
 ![book3 result](https://github.com/siloimwald/Fovea/blob/main/Results/book3_final_1500spp.png)
 
 the final image of book 2
+
 ![book2 result](https://github.com/siloimwald/Fovea/blob/main/Results/book2_final_10k.png)
 
 
