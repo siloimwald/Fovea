@@ -4,7 +4,7 @@ using Fovea.Renderer.Sampling;
 namespace Fovea.Renderer.Core
 {
     /// <summary>
-    /// result of material interaction, we'll see how good this one plays out
+    /// result of material interaction
     /// </summary>
     public struct ScatterResult
     {

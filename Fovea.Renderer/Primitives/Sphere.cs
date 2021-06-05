@@ -73,7 +73,7 @@ namespace Fovea.Renderer.Primitives
 
         public double PdfValue(Point3 origin, Vec3 direction)
         {
-            HitRecord hr = new HitRecord();
+            var hr = new HitRecord();
             if (!Hit(new Ray(origin, direction), 1e-4, double.PositiveInfinity, ref hr))
                 return 0;
 

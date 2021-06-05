@@ -1,6 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Mesh;
@@ -26,7 +24,6 @@ namespace Fovea.Renderer.Primitives
             var (va, vb, vc) = (_mesh.Vertices[f0], _mesh.Vertices[f1], _mesh.Vertices[f2]);
             var t0 = 0.0;
 
-
             var barycentricCoords = Triangle.TriangleIntersection(ray, va, vb - va, vc - va, tMin, tMax, ref t0);
             if (!barycentricCoords.HasValue)
                 return false;
@@ -49,7 +46,6 @@ namespace Fovea.Renderer.Primitives
             {
                 hitRecord.SetFaceNormal(ray, _mesh.Normals[_faceIndex]);    
             }
-            
 
             if (_mesh.Texture == null) return true; // hit at t0
             

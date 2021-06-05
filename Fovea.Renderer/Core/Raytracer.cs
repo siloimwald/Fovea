@@ -113,7 +113,7 @@ namespace Fovea.Renderer.Core
                     if (taskNum != 0) continue;
 
                     var percent = pixelDone / (double) totalPixels * 100.0;
-                    Console.Write($"\r{percent:#.00}% done  ");
+                    Console.Write($"\r{percent:000.0}% done  ");
                 }
             }
 

@@ -36,7 +36,7 @@ namespace Fovea.Renderer.Materials
         }
 
         // Schlick's approximation
-        private double Reflectance(double cosine, double refIdx)
+        private static double Reflectance(double cosine, double refIdx)
         {
             var r0 = (1.0 - refIdx) / (1.0 + refIdx);
             r0 *= r0;

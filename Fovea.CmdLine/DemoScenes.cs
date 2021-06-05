@@ -346,19 +346,18 @@ namespace Fovea.CmdLine
             var metallic = new Metal(0.8, 0.85, 0.88, 0.3);
             var prims = new List<IPrimitive>();
             
-            prims.AddRange(QuadProducer.Produce(-5, 1, -1, 5, -.4, Axis.Y)
+            prims.AddRange(QuadProducer.Produce(-1, 1, -1, 1, -.4, Axis.Y)
                 .CreateMeshTriangles(groundMaterial, true));
             
             var mesh = ObjReader.ReadObjFile(@"assets\teapot.obj", true);
-
-            var env = new FlipFace(
-                new Sphere(new Point3(), 50, new Lambertian(new ImageTexture(@"Assets\beach.jpg"))));
-            // prims.Add(env);
             
-            var diffuseLight = new DiffuseLight(new RGBColor(5, 5, 6));
-            var lightSource = new PrimitiveList(QuadProducer.Produce(-3, 3, -3, 3, 5, Axis.Y)
-                .CreateMeshTriangles(diffuseLight, true));
-            prims.Add(lightSource);
+            var env = new FlipFace(
+                new Sphere(new Point3(), 10, new Lambertian(new ImageTexture(@"Assets\forest.jpg"))));
+            
+            // var diffuseLight = new DiffuseLight(new RGBColor(5, 5, 6));
+            // var lightSource = new PrimitiveList(QuadProducer.Produce(-3, 3, -3, 3, 5, Axis.Y)
+            //     .CreateMeshTriangles(diffuseLight, true));
+            // prims.Add(lightSource);
             prims.AddRange(mesh.CreateMeshTriangles(metallic, false, true));
 
             // Camera
@@ -376,7 +375,7 @@ namespace Fovea.CmdLine
                 World = new BVHTree(prims),
                 Camera = cam,
                 Background = new RGBColor(),
-                Lights = lightSource,
+                // Lights = lightSource,
                 Environment = env
             };
         }

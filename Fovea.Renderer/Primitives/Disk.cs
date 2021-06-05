@@ -49,7 +49,6 @@ namespace Fovea.Renderer.Primitives
 
         public BoundingBox GetBoundingBox(double t0, double t1)
         {
-            // this is very conservative...
             return new(_center - new Vec3(_radius, _radius, _radius),
                 _center + new Vec3(_radius, _radius, _radius));
         }
