@@ -18,6 +18,14 @@ In addition to the books
 - instead of the whole xy/xz/.. rect stuff, i've added sort of factory methods to produce
 quads/boxes from triangles. i.e. the cornell box is actually all triangles except for the sphere.
 
+Compile and run:
+Should probably compile and run fine with any recent dotnet core or the normal .NET Framework. I've used .NET 5.
+The command line executable accepts two parameters:
+- -s samples
+- -w image width (the height is derived from the aspect ratio)
+- the output file is fixed as "output.ppm"
+- i.e. run something like `dotnet run -p Fovea.CmdLine -c Release -- -s 10 -w 800`
+
 Fancy picture time
 
 Teapot mesh with interpolated normals. The whole scene is enclosed with a sphere with a forest
