@@ -16,7 +16,7 @@ namespace Fovea.Renderer.Sampling
         public static readonly Sampler Instance = new();
 
         // TODO: fixed seed while testing, remove this
-        private readonly ThreadLocal<Random> _random = new(() => new Random(0xAAFFEE));
+        private readonly ThreadLocal<Random> _random = new(() => new Random());
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double Random01()
