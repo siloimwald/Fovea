@@ -18,7 +18,7 @@ namespace Fovea.Renderer.Primitives
                 return false;
 
             hitRecord.IsFrontFace = !hitRecord.IsFrontFace;
-            
+
             return true;
         }
 

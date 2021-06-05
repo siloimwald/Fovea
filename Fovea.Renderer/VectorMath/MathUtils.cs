@@ -5,11 +5,12 @@ namespace Fovea.Renderer.VectorMath
 {
     public static class MathUtils
     {
-        public static double DegToRad(double degree) => degree * Math.PI / 180.0;
+        public static double DegToRad(double degree)
+        {
+            return degree * Math.PI / 180.0;
+        }
 
-        /// <summary>
-        /// general quadratics solver, from pbrt book with claimed higher numerical stability
-        /// </summary>
+        /// <summary>general quadratics solver, from pbrt book with claimed higher numerical stability</summary>
         /// <returns>true if there was at least one solution</returns>
         public static bool SolveQuadratic(double a, double b, double c, ref double t0, ref double t1)
         {

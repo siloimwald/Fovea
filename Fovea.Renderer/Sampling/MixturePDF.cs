@@ -12,7 +12,7 @@ namespace Fovea.Renderer.Sampling
             _left = left;
             _right = right;
         }
-        
+
         public double Evaluate(Vec3 direction)
         {
             return 0.5 * _left.Evaluate(direction) + 0.5 * _right.Evaluate(direction);

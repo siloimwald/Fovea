@@ -17,7 +17,7 @@ namespace Fovea.Renderer.Materials
 
         public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
         {
-            var ratio = hitRecord.IsFrontFace ? (1.0 / _ior) : _ior;
+            var ratio = hitRecord.IsFrontFace ? 1.0 / _ior : _ior;
             var unitDirection = Vec3.Normalize(rayIn.Direction);
 
             var cosTheta = Min(Vec3.Dot(-unitDirection, hitRecord.Normal), 1.0);

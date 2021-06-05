@@ -4,13 +4,13 @@ using System.Linq;
 namespace Fovea.Renderer.VectorMath.Transforms
 {
     /// <summary>
-    /// a simple transformation approach. Keep a list of all individual transformation
-    /// steps around. Each of these is easy to invert and easy to compute the matrix for.
-    /// to invert the whole matrix, apply the inverse individual transformations in reverse
+    ///     a simple transformation approach. Keep a list of all individual transformation steps around. Each of these is
+    ///     easy to invert and easy to compute the matrix for. to invert the whole matrix, apply the inverse individual
+    ///     transformations in reverse
     /// </summary>
     public class Transformation
     {
-        private List<ISimpleTransform> _transforms = new();
+        private readonly List<ISimpleTransform> _transforms = new();
 
         public Transformation Translate(double tx, double ty, double tz)
         {
@@ -18,7 +18,10 @@ namespace Fovea.Renderer.VectorMath.Transforms
             return this;
         }
 
-        public Transformation Translate(Vec3 tVec) => Translate(tVec.X, tVec.Y, tVec.Z);
+        public Transformation Translate(Vec3 tVec)
+        {
+            return Translate(tVec.X, tVec.Y, tVec.Z);
+        }
 
         public Transformation Scale(double sx, double sy, double sz)
         {
@@ -26,7 +29,10 @@ namespace Fovea.Renderer.VectorMath.Transforms
             return this;
         }
 
-        public Transformation Scale(Vec3 sVec) => this.Scale(sVec.X, sVec.Y, sVec.Z);
+        public Transformation Scale(Vec3 sVec)
+        {
+            return Scale(sVec.X, sVec.Y, sVec.Z);
+        }
 
         public Transformation Rotate(double angle, Axis axis)
         {

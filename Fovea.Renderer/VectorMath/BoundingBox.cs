@@ -6,26 +6,20 @@ using Fovea.Renderer.Core;
 namespace Fovea.Renderer.VectorMath
 {
     /// <summary>
-    /// axis aligned bounding box defined by min/max points along the principal axes.
-    /// Taken from one of my previous renderer implementations
+    ///     axis aligned bounding box defined by min/max points along the principal axes. Taken from one of my previous
+    ///     renderer implementations
     /// </summary>
     public class BoundingBox
     {
-        private const byte ShuffleMask = ((3 << 4) | (2 << 2) | 1);
+        private const byte ShuffleMask = (3 << 4) | (2 << 2) | 1;
 
-        /// <summary>
-        /// maximal extent of this bounding box
-        /// </summary>
+        /// <summary>maximal extent of this bounding box</summary>
         private readonly Point3 _max;
 
-        /// <summary>
-        /// minimal extent of this bounding box
-        /// </summary>
+        /// <summary>minimal extent of this bounding box</summary>
         private readonly Point3 _min;
 
-        /// <summary>
-        /// create a new bounding box with the given min/max. Those are assumed to be correctly ordered already.
-        /// </summary>
+        /// <summary>create a new bounding box with the given min/max. Those are assumed to be correctly ordered already.</summary>
         /// <param name="min">min. points along all dimensions</param>
         /// <param name="max">max. points along all dimensions</param>
         public BoundingBox(Point3 min, Point3 max)
@@ -34,19 +28,18 @@ namespace Fovea.Renderer.VectorMath
             _max = max;
         }
 
-        /// <summary>
-        /// box center
-        /// </summary>
+        /// <summary>box center</summary>
         public Point3 GetCentroid()
         {
             return _min + GetExtent() * 0.5;
         }
 
-        public Vec3 GetExtent() => _max - _min;
+        public Vec3 GetExtent()
+        {
+            return _max - _min;
+        }
 
-        /// <summary>
-        /// compute the volume of bounding box
-        /// </summary>
+        /// <summary>compute the volume of bounding box</summary>
         /// <returns></returns>
         public double GetVolume()
         {
@@ -54,9 +47,7 @@ namespace Fovea.Renderer.VectorMath
             return ext.X * ext.Y * ext.Z;
         }
 
-        /// <summary>
-        /// area of bounding box
-        /// </summary>
+        /// <summary>area of bounding box</summary>
         /// <returns>area of this bounding box</returns>
         public double GetArea()
         {
@@ -64,9 +55,7 @@ namespace Fovea.Renderer.VectorMath
             return 2.0 * (ext.X * ext.Y + ext.Y * ext.Z + ext.Z * ext.X);
         }
 
-        /// <summary>
-        /// test whether the given ray intersects this bounding box
-        /// </summary>
+        /// <summary>test whether the given ray intersects this bounding box</summary>
         /// <param name="ray">ray to test against</param>
         /// <param name="tMin">existing min of ray interval</param>
         /// <param name="tMax">existing max of ray interval</param>
@@ -120,18 +109,16 @@ namespace Fovea.Renderer.VectorMath
             return gTMax >= gTMin && gTMax > 0;
         }
 
-        /// <summary>
-        /// unite two bounding boxes by computing the minimal box that fully contains both input parameters
-        /// </summary>
+        /// <summary>unite two bounding boxes by computing the minimal box that fully contains both input parameters</summary>
         /// <param name="boxA">bounding box object</param>
         /// <param name="boxB">bounding box object</param>
         /// <returns>Box = boxA U boxB </returns>
         public static BoundingBox Union(BoundingBox boxA, BoundingBox boxB)
-            => new(Point3.Min(boxA._min, boxB._min), Point3.Max(boxA._max, boxB._max));
+        {
+            return new(Point3.Min(boxA._min, boxB._min), Point3.Max(boxA._max, boxB._max));
+        }
 
-        /// <summary>
-        /// compute the intersection of two bounding boxes
-        /// </summary>
+        /// <summary>compute the intersection of two bounding boxes</summary>
         /// <param name="boxA">bounding box object</param>
         /// <param name="boxB">bounding box object</param>
         /// <returns>box = boxA n BoxB</returns>
@@ -143,8 +130,8 @@ namespace Fovea.Renderer.VectorMath
         }
 
         /// <summary>
-        /// creates a bounding box with bounds [maxFloat,maxFloat,maxFloat] to [-maxFloat, -maxFloat, -maxFloat]
-        /// to be used for union loops
+        ///     creates a bounding box with bounds [maxFloat,maxFloat,maxFloat] to [-maxFloat, -maxFloat, -maxFloat] to be
+        ///     used for union loops
         /// </summary>
         /// <returns>inverted, maximal empty bounding box :)</returns>
         public static BoundingBox CreateMaxEmptyBox()
@@ -155,8 +142,8 @@ namespace Fovea.Renderer.VectorMath
         }
 
         /// <summary>
-        /// from pbrt book. used for bin projection, given p as a primitive centroid and this as
-        /// the centroid bounds of all primitives it scales offsets of primitive centroids from 0,0,0 to 1,1,1
+        ///     from pbrt book. used for bin projection, given p as a primitive centroid and this as the centroid bounds of
+        ///     all primitives it scales offsets of primitive centroids from 0,0,0 to 1,1,1
         /// </summary>
         /// <param name="p">centroid of primitive box</param>
         /// <returns></returns>

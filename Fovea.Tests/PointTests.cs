@@ -11,7 +11,7 @@ namespace Fovea.Tests
             var p = new Point3(3, 9, -3);
             var v = new Vec3(2, -3, 10);
             Assert.Equal(new Point3(5, 6, 7), p + v);
-            Assert.Equal(p, (p + v) - v);
+            Assert.Equal(p, p + v - v);
         }
 
         [Fact]

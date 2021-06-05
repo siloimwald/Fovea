@@ -5,9 +5,8 @@ using Fovea.Renderer.VectorMath.Transforms;
 namespace Fovea.Renderer.Primitives
 {
     /// <summary>
-    /// primitive instancing.
-    /// Compared to the book, this is the more general approach, but also much more costly.
-    /// two full matrices and a bunch of matrix times vector/point each time we intersect
+    ///     primitive instancing. Compared to the book, this is the more general approach, but also much more costly. two
+    ///     full matrices and a bunch of matrix times vector/point each time we intersect
     /// </summary>
     public class Instance : IPrimitive
     {

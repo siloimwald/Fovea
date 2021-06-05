@@ -3,9 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Fovea.Renderer.Image;
-using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Sampling;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core
 {
@@ -23,15 +21,17 @@ namespace Fovea.Renderer.Core
             // nothing hit, yield background
             if (!scene.World.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
             {
-                if (scene.Environment != null && scene.Environment.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
+                if (scene.Environment != null &&
+                    scene.Environment.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
                 {
                     var envScatter = new ScatterResult();
                     if (hitRecord.Material.Scatter(ray, hitRecord, ref envScatter))
                         return envScatter.Attenuation;
                 }
+
                 return scene.Background;
             }
-                
+
 
             var scatterResult = new ScatterResult();
             var emitted = hitRecord.Material.Emitted(ray, hitRecord);
@@ -40,10 +40,8 @@ namespace Fovea.Renderer.Core
                 return emitted;
 
             if (scatterResult.IsSpecular)
-            {
                 return scatterResult.Attenuation * ColorRay(scatterResult.SpecularRay, scene, depth - 1);
-            }
-            
+
             // attempt at being compatible with the previous book scenes
             if (scene.Lights == null)
             {
@@ -51,13 +49,12 @@ namespace Fovea.Renderer.Core
                 return emitted
                        + scatterResult.Attenuation
                        * hitRecord.Material.ScatteringPDF(ray, hitRecord, outRay)
-                       * ColorRay(outRay, scene, depth - 1) * (1.0/scatterResult.Pdf.Evaluate(outRay.Direction));
+                       * ColorRay(outRay, scene, depth - 1) * (1.0 / scatterResult.Pdf.Evaluate(outRay.Direction));
             }
             else
             {
                 var lightPdf = new PrimitivePDF(scene.Lights, hitRecord.HitPoint);
                 var mixPdf = new MixturePDF(scatterResult.Pdf, lightPdf);
-
                 var outRay = new Ray(hitRecord.HitPoint, mixPdf.Generate(), ray.Time);
                 var pdfCorrection = 1.0 / mixPdf.Evaluate(outRay.Direction);
 

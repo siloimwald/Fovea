@@ -5,10 +5,7 @@ namespace Fovea.Renderer.Mesh
 {
     public static class QuadProducer
     {
-        /// <summary>
-        /// create mesh for a quad with sd0-ed0, sd1-ed1 at the given d3 position
-        /// on some axis 
-        /// </summary>
+        /// <summary>create mesh for a quad with sd0-ed0, sd1-ed1 at the given d3 position on some axis</summary>
         /// <returns></returns>
         public static TriangleMesh Produce(
             double minDim1,
@@ -54,10 +51,10 @@ namespace Fovea.Renderer.Mesh
                 },
                 Texture = new List<(double texU, double texV)>
                 {
-                    (0,0),
-                    (1,0),
-                    (1,1),
-                    (0,1)
+                    (0, 0),
+                    (1, 0),
+                    (1, 1),
+                    (0, 1)
                 }
             };
         }

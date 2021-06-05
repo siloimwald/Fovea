@@ -3,8 +3,8 @@
 namespace Fovea.Renderer.Core
 {
     /// <summary>
-    /// a ray in 3d space starting at some origin and pointing at some direction.
-    /// This is way too big for a struct by any guidelines, but is allocated all over the place many many times
+    ///     a ray in 3d space starting at some origin and pointing at some direction. This is way too big for a struct by
+    ///     any guidelines, but is allocated all over the place many many times
     /// </summary>
     public readonly struct Ray
     {
@@ -21,12 +21,12 @@ namespace Fovea.Renderer.Core
             InverseDirection = new Vec3(1.0 / Direction.X, 1.0 / Direction.Y, 1.0 / Direction.Z);
         }
 
-        /// <summary>
-        /// returns the point where this is ray is pointing to for a given
-        /// ray parameter t
-        /// </summary>
+        /// <summary>returns the point where this is ray is pointing to for a given ray parameter t</summary>
         /// <param name="t">ray parameter</param>
         /// <returns></returns>
-        public Point3 PointsAt(double t) => Origin + Direction * t;
+        public Point3 PointsAt(double t)
+        {
+            return Origin + Direction * t;
+        }
     }
 }

@@ -2,19 +2,13 @@
 
 namespace Fovea.Renderer.Core.BVH
 {
-    /// <summary>
-    /// bin/bucket used during binned SAH construction of BVH Tree
-    /// </summary>
+    /// <summary>bin/bucket used during binned SAH construction of BVH Tree</summary>
     public struct SAHBucket
     {
-        /// <summary>
-        /// bounds of this bucket
-        /// </summary>
+        /// <summary>bounds of this bucket</summary>
         public BoundingBox Bounds;
 
-        /// <summary>
-        /// primitive in this bucket
-        /// </summary>
+        /// <summary>primitive in this bucket</summary>
         public int PrimitiveCount;
 
         // while iterating over the whole scene along one axis, keep track of other information

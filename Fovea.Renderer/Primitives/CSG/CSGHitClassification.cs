@@ -1,23 +1,15 @@
 namespace Fovea.Renderer.Primitives.CSG
 {
-    /// <summary>
-    /// ray object interaction 
-    /// </summary>
+    /// <summary>ray object interaction</summary>
     public enum CSGHitClassification
     {
-        /// <summary>
-        /// ray origin outside
-        /// </summary>
+        /// <summary>ray origin outside</summary>
         Enter,
 
-        /// <summary>
-        /// ray origin inside
-        /// </summary>
+        /// <summary>ray origin inside</summary>
         Exit,
 
-        /// <summary>
-        /// no hit
-        /// </summary>
+        /// <summary>no hit</summary>
         Miss
     }
 }

@@ -4,11 +4,9 @@ using Fovea.Renderer.VectorMath;
 namespace Fovea.Renderer.Primitives.CSG
 {
     /// <summary>
-    /// from Andrew Kensler's Paper
-    /// "Ray Tracing CSG Objects Using Single Hit Intersections"
-    /// last received at http://xrt.wdfiles.com/local--files/doc%3Acsg/CSG.pdf
-    /// A or Left and B or Right refer to the two primitives involved
-    /// in a csg set operation, i.e. A n B or Left n Right
+    ///     from Andrew Kensler's Paper "Ray Tracing CSG Objects Using Single Hit Intersections" last received at
+    ///     http://xrt.wdfiles.com/local--files/doc%3Acsg/CSG.pdf A or Left and B or Right refer to the two primitives involved
+    ///     in a csg set operation, i.e. A n B or Left n Right
     /// </summary>
     public class CSGPrimitive : IPrimitive
     {
@@ -41,10 +39,7 @@ namespace Fovea.Renderer.Primitives.CSG
             {
                 action = ApplyActionTable(stateLeft, stateRight);
 
-                if (action.HasFlag(CSGLoopAction.ReturnMiss))
-                {
-                    return false;
-                }
+                if (action.HasFlag(CSGLoopAction.ReturnMiss)) return false;
 
                 // NOTE: checking for <= and >= in both directions, otherwise
                 // this breaks as an infinite loop for triangles which are in the same
@@ -52,22 +47,18 @@ namespace Fovea.Renderer.Primitives.CSG
                 // This might yield Enter, Enter for both, which breaks ReturnXIfFarther for Intersection
 
                 if (action.HasFlag(CSGLoopAction.ReturnA)
-                    || (action.HasFlag(CSGLoopAction.ReturnAIfCloser) && hrLeft.RayT <= hrRight.RayT)
-                    || (action.HasFlag(CSGLoopAction.ReturnAIfFarther) && hrLeft.RayT >= hrRight.RayT))
+                    || action.HasFlag(CSGLoopAction.ReturnAIfCloser) && hrLeft.RayT <= hrRight.RayT
+                    || action.HasFlag(CSGLoopAction.ReturnAIfFarther) && hrLeft.RayT >= hrRight.RayT)
                 {
                     hitRecord = hrLeft;
                     return true;
                 }
 
                 if (action.HasFlag(CSGLoopAction.ReturnB)
-                    || (action.HasFlag(CSGLoopAction.ReturnBIfCloser) && hrRight.RayT <= hrLeft.RayT)
-                    || (action.HasFlag(CSGLoopAction.ReturnBIfFarther) && hrRight.RayT >= hrLeft.RayT))
+                    || action.HasFlag(CSGLoopAction.ReturnBIfCloser) && hrRight.RayT <= hrLeft.RayT
+                    || action.HasFlag(CSGLoopAction.ReturnBIfFarther) && hrRight.RayT >= hrLeft.RayT)
                 {
-                    if (action.HasFlag(CSGLoopAction.FlipB))
-                    {
-                        // or toggle IsFrontFace? still not sure...
-                        hrRight.Normal = -hrRight.Normal;
-                    }
+                    if (action.HasFlag(CSGLoopAction.FlipB)) hrRight.IsFrontFace = !hrRight.IsFrontFace;
 
                     hitRecord = hrRight;
                     return true;
@@ -158,7 +149,7 @@ namespace Fovea.Renderer.Primitives.CSG
                 if (left == CSGHitClassification.Enter && right == CSGHitClassification.Enter)
                     return CSGLoopAction.ReturnAIfCloser | CSGLoopAction.AdvanceBAndLoop;
 
-                if (left == CSGHitClassification.Enter & right == CSGHitClassification.Exit)
+                if ((left == CSGHitClassification.Enter) & (right == CSGHitClassification.Exit))
                     return CSGLoopAction.ReturnAIfFarther | CSGLoopAction.AdvanceAAndLoop;
 
                 if (left == CSGHitClassification.Exit && right == CSGHitClassification.Enter)

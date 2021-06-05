@@ -1,5 +1,4 @@
 using Fovea.Renderer.Core;
-using Fovea.Renderer.Sampling;
 
 namespace Fovea.Renderer.Materials
 {

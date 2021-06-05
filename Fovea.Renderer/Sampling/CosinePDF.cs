@@ -11,7 +11,7 @@ namespace Fovea.Renderer.Sampling
         {
             _orthoNormalBasis = orthoNormalBasis;
         }
-        
+
         public double Evaluate(Vec3 direction)
         {
             var cosine = Vec3.Dot(Vec3.Normalize(direction), _orthoNormalBasis.WAxis);

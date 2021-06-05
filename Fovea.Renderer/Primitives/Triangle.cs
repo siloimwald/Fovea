@@ -4,9 +4,7 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives
 {
-    /// <summary>
-    /// first draft for triangle, as a stand-alone object for now.
-    /// </summary>
+    /// <summary>first draft for triangle, as a stand-alone object for now.</summary>
     public class Triangle : IPrimitive
     {
         private readonly Vec3 _edgeAB;
@@ -30,7 +28,7 @@ namespace Fovea.Renderer.Primitives
 
             if (!TriangleIntersection(ray, _vertexA, _edgeAB, _edgeAC, tMin, tMax, ref t0).HasValue)
                 return false;
-            
+
             hitRecord.RayT = t0;
             hitRecord.HitPoint = ray.PointsAt(t0);
             hitRecord.Material = _material;
@@ -39,9 +37,16 @@ namespace Fovea.Renderer.Primitives
             return true; // hit at t0
         }
 
-        /// <summary>
-        /// triangle intersection, refactored out for reuse in mesh triangle
-        /// </summary>
+        public BoundingBox GetBoundingBox(double t0, double t1)
+        {
+            var vb = _vertexA + _edgeAB;
+            var vc = _vertexA + _edgeAC;
+            var min = Point3.Min(Point3.Min(_vertexA, vb), vc);
+            var max = Point3.Max(Point3.Max(_vertexA, vb), vc);
+            return new BoundingBox(min, max);
+        }
+
+        /// <summary>triangle intersection, refactored out for reuse in mesh triangle</summary>
         /// <param name="ray">incoming ray</param>
         /// <param name="vertexA">vertex A of triangle</param>
         /// <param name="edgeAB">edge a to vertex b</param>
@@ -51,12 +56,12 @@ namespace Fovea.Renderer.Primitives
         /// <param name="tRay">potential intersection at t</param>
         /// <returns>barycentric coordinates triple if hit, null otherwise</returns>
         public static (double u, double v, double w)? TriangleIntersection(in Ray ray,
-                                                in Point3 vertexA,
-                                                in Vec3 edgeAB,
-                                                in Vec3 edgeAC,
-                                                double tMin,
-                                                double tMax,
-                                                ref double tRay)
+            in Point3 vertexA,
+            in Vec3 edgeAB,
+            in Vec3 edgeAC,
+            double tMin,
+            double tMax,
+            ref double tRay)
         {
             var pVec = Vec3.Cross(ray.Direction, edgeAC);
             var det = Vec3.Dot(edgeAB, pVec);
@@ -77,15 +82,6 @@ namespace Fovea.Renderer.Primitives
             if (t0 < tMin || tMax < t0) return null;
             tRay = t0;
             return (u, v, 1.0 - (u + v));
-        }
-        
-        public BoundingBox GetBoundingBox(double t0, double t1)
-        {
-            var vb = _vertexA + _edgeAB;
-            var vc = _vertexA + _edgeAC;
-            var min = Point3.Min(Point3.Min(_vertexA, vb), vc);
-            var max = Point3.Max(Point3.Max(_vertexA, vb), vc);
-            return new BoundingBox(min, max);
         }
     }
 }

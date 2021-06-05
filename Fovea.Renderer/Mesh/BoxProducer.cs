@@ -3,14 +3,10 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Mesh
 {
-    /// <summary>
-    /// static factory for a box made of triangles
-    /// </summary>
+    /// <summary>static factory for a box made of triangles</summary>
     public static class BoxProducer
     {
-        /// <summary>
-        /// produce a mesh for a box with the given extents
-        /// </summary>
+        /// <summary>produce a mesh for a box with the given extents</summary>
         /// <returns></returns>
         public static TriangleMesh Produce(double xMin, double xMax, double yMin, double yMax, double zMin, double zMax)
         {
@@ -29,7 +25,7 @@ namespace Fovea.Renderer.Mesh
                 new(xMin, yMin, zMax),
                 new(xMax, yMin, zMax),
                 new(xMax, yMax, zMax),
-                new(xMin, yMax, zMax),
+                new(xMin, yMax, zMax)
             };
 
             // winding order here should be fine now, (vb-va) x (vc-va) = outward normal

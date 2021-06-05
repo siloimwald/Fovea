@@ -6,8 +6,8 @@ using Fovea.Renderer.VectorMath;
 namespace Fovea.Renderer.Materials.Texture
 {
     /// <summary>
-    /// perlin noise from 'ray tracing the next week'. No idea how this all works in detail, but it
-    /// does produce nice looking stuff ;)
+    ///     perlin noise from 'ray tracing the next week'. No idea how this all works in detail, but it does produce nice
+    ///     looking stuff ;)
     /// </summary>
     public class Perlin
     {
@@ -51,19 +51,13 @@ namespace Fovea.Renderer.Materials.Texture
             var c = new Vec3[2, 2, 2];
 
             for (var di = 0; di < 2; ++di)
-            {
-                for (var dj = 0; dj < 2; dj++)
-                {
-                    for (var dk = 0; dk < 2; dk++)
-                    {
-                        c[di, dj, dk] = _randomVectors[
-                            _permutationX[(i + di) & 255] ^
-                            _permutationY[(j + dj) & 255] ^
-                            _permutationZ[(k + dk) & 255]
-                        ];
-                    }
-                }
-            }
+            for (var dj = 0; dj < 2; dj++)
+            for (var dk = 0; dk < 2; dk++)
+                c[di, dj, dk] = _randomVectors[
+                    _permutationX[(i + di) & 255] ^
+                    _permutationY[(j + dj) & 255] ^
+                    _permutationZ[(k + dk) & 255]
+                ];
 
             return TriLinearInterpolate(c, u, v, w);
         }
@@ -106,18 +100,14 @@ namespace Fovea.Renderer.Materials.Texture
             var ww = w * w * (3 - 2 * w);
 
             for (var i = 0; i < 2; ++i)
+            for (var j = 0; j < 2; ++j)
+            for (var k = 0; k < 2; ++k)
             {
-                for (var j = 0; j < 2; ++j)
-                {
-                    for (var k = 0; k < 2; ++k)
-                    {
-                        var weight = new Vec3(u - i, v - j, w - k);
-                        result += (i * uu + (1 - i) * (1 - u)) *
-                                  (j * vv + (1 - j) * (1 - v)) *
-                                  (k * ww + (1 - k) * (1 - w)) *
-                                  Vec3.Dot(c[i, j, k], weight);
-                    }
-                }
+                var weight = new Vec3(u - i, v - j, w - k);
+                result += (i * uu + (1 - i) * (1 - u)) *
+                          (j * vv + (1 - j) * (1 - v)) *
+                          (k * ww + (1 - k) * (1 - w)) *
+                          Vec3.Dot(c[i, j, k], weight);
             }
 
             return result;

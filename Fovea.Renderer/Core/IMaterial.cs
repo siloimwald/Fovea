@@ -1,22 +1,17 @@
 using Fovea.Renderer.Image;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core
 {
     public interface IMaterial
     {
-        /// <summary>
-        /// determine result for material interaction, if any
-        /// </summary>
+        /// <summary>determine result for material interaction, if any</summary>
         /// <param name="rayIn">incoming ray</param>
         /// <param name="hitRecord">record with all the important intersection bits</param>
         /// <param name="scatterResult">result of interaction</param>
         /// <returns>true if ScatterResult contents should be used (and are set)</returns>
         bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult);
 
-        /// <summary>
-        /// emitted color for this material, if any. defaults to black
-        /// </summary>
+        /// <summary>emitted color for this material, if any. defaults to black</summary>
         /// <param name="ray">incoming ray</param>
         /// <param name="hitRecord">intersection parameters</param>
         /// <returns></returns>

@@ -3,9 +3,9 @@ using Fovea.Renderer.Core;
 
 namespace Fovea.CmdLine
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Parser.Default.ParseArguments<CommandLineArgs>(args)
                 .WithParsed(opts =>
@@ -14,7 +14,7 @@ namespace Fovea.CmdLine
                     {
                         NumSamples = opts.NumSamples
                     };
-                    var scene = DemoSceneCreator.MakeScene(DemoScenes.ObjFileTest, opts.ImageWidth);
+                    var scene = DemoSceneCreator.MakeScene(DemoScenes.CornellBox, opts.ImageWidth);
                     renderer.Render(scene);
                 });
         }

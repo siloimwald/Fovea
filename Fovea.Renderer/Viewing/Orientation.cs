@@ -2,9 +2,7 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Viewing
 {
-    /// <summary>
-    /// camera orientation
-    /// </summary>
+    /// <summary>camera orientation</summary>
     public class Orientation
     {
         public Point3 LookFrom { get; set; }

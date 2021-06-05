@@ -4,9 +4,7 @@ using static System.Math;
 
 namespace Fovea.Renderer.VectorMath
 {
-    /// <summary>
-    /// reinventing the wheel with a 4x4 matrix, keep it simple for now
-    /// </summary>
+    /// <summary>reinventing the wheel with a 4x4 matrix, keep it simple for now</summary>
     public class Matrix4
     {
         // go a with a heap allocated array for now... we probably but instantiate these
@@ -50,16 +48,12 @@ namespace Fovea.Renderer.VectorMath
         {
             var m = new Matrix4();
             for (var resRow = 0; resRow < 4; ++resRow)
-            {
-                for (var resCol = 0; resCol < 4; ++resCol)
-                {
-                    m._matrix[resRow, resCol] =
-                        left._matrix[resRow, 0] * right._matrix[0, resCol] +
-                        left._matrix[resRow, 1] * right._matrix[1, resCol] +
-                        left._matrix[resRow, 2] * right._matrix[2, resCol] +
-                        left._matrix[resRow, 3] * right._matrix[3, resCol];
-                }
-            }
+            for (var resCol = 0; resCol < 4; ++resCol)
+                m._matrix[resRow, resCol] =
+                    left._matrix[resRow, 0] * right._matrix[0, resCol] +
+                    left._matrix[resRow, 1] * right._matrix[1, resCol] +
+                    left._matrix[resRow, 2] * right._matrix[2, resCol] +
+                    left._matrix[resRow, 3] * right._matrix[3, resCol];
 
             return m;
         }
@@ -113,10 +107,7 @@ namespace Fovea.Renderer.VectorMath
             return m;
         }
 
-        /// <summary>
-        /// tests whether this instance is the identity matrix. pretty much only used
-        /// in unit tests
-        /// </summary>
+        /// <summary>tests whether this instance is the identity matrix. pretty much only used in unit tests</summary>
         /// <returns></returns>
         public bool IsIdentity()
         {

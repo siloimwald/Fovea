@@ -1,4 +1,3 @@
-using Fovea.Renderer.Materials;
 using Fovea.Renderer.Primitives;
 using Fovea.Renderer.VectorMath;
 using Xunit;

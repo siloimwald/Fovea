@@ -36,7 +36,34 @@ namespace Fovea.Renderer.Primitives
             return true;
         }
 
-        public BoundingBox GetBoundingBox(double t0, double t1) => SphereBox(_center, _radius);
+        public BoundingBox GetBoundingBox(double t0, double t1)
+        {
+            return SphereBox(_center, _radius);
+        }
+
+        public double PdfValue(Point3 origin, Vec3 direction)
+        {
+            var hr = new HitRecord();
+            if (!Hit(new Ray(origin, direction), 1e-4, double.PositiveInfinity, ref hr))
+                return 0;
+
+            var cosTheta = Sqrt(1.0 - _radius * _radius / (_center - origin).LengthSquared());
+            var solidAngle = 2.0 * PI * (1.0 - cosTheta);
+            return 1.0 / solidAngle;
+        }
+
+        public Vec3 RandomDirection(Point3 origin)
+        {
+            var dir = _center - origin;
+            var distanceSquared = dir.LengthSquared();
+            var r1 = Sampler.Instance.Random01();
+            var r2 = Sampler.Instance.Random01();
+            var z = 1.0 + r2 * (Sqrt(1.0 - _radius * _radius / distanceSquared) - 1.0);
+            var phi = 2.0 * PI * r1;
+            var x = Cos(phi) * Sqrt(1.0 - z * z);
+            var y = Sin(phi) * Sqrt(1.0 - z * z);
+            return new OrthoNormalBasis(dir).Local(x, y, z);
+        }
 
         public static bool IntersectSphere(
             in Ray ray, in Point3 center, double radius,
@@ -69,30 +96,6 @@ namespace Fovea.Renderer.Primitives
         {
             return new(center - new Vec3(radius, radius, radius),
                 center + new Vec3(radius, radius, radius));
-        }
-
-        public double PdfValue(Point3 origin, Vec3 direction)
-        {
-            var hr = new HitRecord();
-            if (!Hit(new Ray(origin, direction), 1e-4, double.PositiveInfinity, ref hr))
-                return 0;
-
-            var cosTheta = Sqrt(1.0 - _radius * _radius / (_center - origin).LengthSquared());
-            var solidAngle = 2.0 * PI * (1.0 - cosTheta);
-            return 1.0 / solidAngle;
-        }
-
-        public Vec3 RandomDirection(Point3 origin)
-        {
-            var dir = _center - origin;
-            var distanceSquared = dir.LengthSquared();
-            var r1 = Sampler.Instance.Random01();
-            var r2 = Sampler.Instance.Random01();
-            var z = 1.0 + r2 * (Sqrt(1.0 - _radius * _radius / distanceSquared) - 1.0);
-            var phi = 2.0 * PI * r1;
-            var x = Cos(phi) * Sqrt(1.0 - z * z);
-            var y = Sin(phi) * Sqrt(1.0 - z * z);
-            return new OrthoNormalBasis(dir).Local(x, y, z);
         }
     }
 }

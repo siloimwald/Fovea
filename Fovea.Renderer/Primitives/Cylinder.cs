@@ -68,9 +68,7 @@ namespace Fovea.Renderer.Primitives
             return new BoundingBox(min, max);
         }
 
-        /// <summary>
-        /// returns true if we hit either of the caps
-        /// </summary>
+        /// <summary>returns true if we hit either of the caps</summary>
         /// <param name="ray">ray</param>
         /// <param name="tMin">ray min param</param>
         /// <param name="tMax">ray max param</param>
@@ -85,10 +83,7 @@ namespace Fovea.Renderer.Primitives
             var t0 = (_zMin - ray.Origin.PZ) / ray.Direction.Z;
             var t1 = (_zMax - ray.Origin.PZ) / ray.Direction.Z;
 
-            if (t0 > t1)
-            {
-                MathUtils.Swap(ref t0, ref t1);
-            }
+            if (t0 > t1) MathUtils.Swap(ref t0, ref t1);
 
             tCap = t0;
             var hp = ray.PointsAt(tCap);
@@ -100,9 +95,7 @@ namespace Fovea.Renderer.Primitives
             return !(tCap < tMin) && !(tMax < tCap) && !(hp.PX * hp.PX + hp.PY * hp.PY > r2);
         }
 
-        /// <summary>
-        /// test ray against cylinder body
-        /// </summary>
+        /// <summary>test ray against cylinder body</summary>
         /// <param name="ray">incoming ray</param>
         /// <param name="tMin">min ray param</param>
         /// <param name="tMax">max ray param</param>

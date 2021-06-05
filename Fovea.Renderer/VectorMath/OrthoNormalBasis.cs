@@ -7,7 +7,7 @@ namespace Fovea.Renderer.VectorMath
         public readonly Vec3 UAxis;
         public readonly Vec3 VAxis;
         public readonly Vec3 WAxis;
-        
+
         public OrthoNormalBasis(Vec3 w)
         {
             WAxis = Vec3.Normalize(w);
@@ -16,7 +16,14 @@ namespace Fovea.Renderer.VectorMath
             UAxis = Vec3.Cross(WAxis, VAxis);
         }
 
-        public Vec3 Local(double a, double b, double c) => UAxis * a + VAxis * b + WAxis * c;
-        public Vec3 Local(Vec3 v) => UAxis * v.X + VAxis * v.Y + WAxis * v.Z;
+        public Vec3 Local(double a, double b, double c)
+        {
+            return UAxis * a + VAxis * b + WAxis * c;
+        }
+
+        public Vec3 Local(Vec3 v)
+        {
+            return UAxis * v.X + VAxis * v.Y + WAxis * v.Z;
+        }
     }
 }

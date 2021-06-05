@@ -6,30 +6,22 @@ using Fovea.Renderer.VectorMath;
 namespace Fovea.Renderer.Core.BVH
 {
     /// <summary>
-    /// BVH implementation from a previous fovea iteration. This is based on - as far as i can remember -
-    /// an implementation given in the PBRT book. It uses a sah cost based approach, but bins primitives
-    /// instead of doing a full evaluation
+    ///     BVH implementation from a previous fovea iteration. This is based on - as far as i can remember - an
+    ///     implementation given in the PBRT book. It uses a sah cost based approach, but bins primitives instead of doing a
+    ///     full evaluation
     /// </summary>
     public class BVHTree : IPrimitive
     {
-        /// <summary>
-        /// max recursion/tree depth
-        /// </summary>
+        /// <summary>max recursion/tree depth</summary>
         private const int MaxDepth = 32;
 
-        /// <summary>
-        /// buckets/bins to use during sah evaluation
-        /// </summary>
+        /// <summary>buckets/bins to use during sah evaluation</summary>
         private const int BucketCount = 128;
 
-        /// <summary>
-        /// create a leaf if a node's centroid bounds volume is below this value
-        /// </summary>
+        /// <summary>create a leaf if a node's centroid bounds volume is below this value</summary>
         private const double BoundsVolumeThreshold = 1e-4;
 
-        /// <summary>
-        /// minimal primitive count in a leaf node before stopping recursion
-        /// </summary>
+        /// <summary>minimal primitive count in a leaf node before stopping recursion</summary>
         private const int MinPrimCount = 2;
 
         private readonly BVHNode[] _nodes;
@@ -37,10 +29,7 @@ namespace Fovea.Renderer.Core.BVH
         private readonly List<IPrimitive> _primitives;
         private int _nodeIndex;
 
-        /// <summary>
-        /// build a bvh structure for the given primitives using 'sah binning' as a splitting
-        /// strategy
-        /// </summary>
+        /// <summary>build a bvh structure for the given primitives using 'sah binning' as a splitting strategy</summary>
         /// <param name="primitives">list of scene primitives</param>
         /// <param name="time0">ray time parameter lower bound</param>
         /// <param name="time1">ray time parameter upper bound</param>
@@ -140,9 +129,7 @@ namespace Fovea.Renderer.Core.BVH
             return _nodes[0]?.Box; // root node box
         }
 
-        /// <summary>
-        /// compute the best split position for the current node
-        /// </summary>
+        /// <summary>compute the best split position for the current node</summary>
         /// <param name="centroidBounds">centroid bounds of current node</param>
         /// <param name="totalArea">area of that node</param>
         /// <param name="left">left index into primitive array</param>
@@ -165,13 +152,11 @@ namespace Fovea.Renderer.Core.BVH
                 // prepare bins/buckets for this dimension
                 var buckets = new SAHBucket[BucketCount];
                 for (var b = 0; b < buckets.Length; ++b)
-                {
                     buckets[b] = new SAHBucket
                     {
                         Bounds = BoundingBox.CreateMaxEmptyBox(),
                         PrimitiveCount = 0
                     };
-                }
 
                 // project primitives into their bucket
                 for (var p = left; p < right; ++p)
@@ -198,7 +183,7 @@ namespace Fovea.Renderer.Core.BVH
                     rightSweepBox = BoundingBox.Union(rightSweepBox, buckets[b].Bounds);
                     var rightArea = rightSweepBox.GetArea();
                     buckets[b].RightCount = buckets[b].PrimitiveCount +
-                                            ((b < BucketCount - 1) ? buckets[b + 1].RightCount : 0);
+                                            (b < BucketCount - 1 ? buckets[b + 1].RightCount : 0);
 
                     var costs = ComputeSAH(totalArea, buckets[b].LeftArea, buckets[b].LeftCount,
                         rightArea, buckets[b].RightCount);
@@ -213,9 +198,7 @@ namespace Fovea.Renderer.Core.BVH
             return (bestAxis, bestBucket, bestCosts);
         }
 
-        /// <summary>
-        /// build a bvh structure for the given node
-        /// </summary>
+        /// <summary>build a bvh structure for the given node</summary>
         /// <param name="nodeBox">bounding box of node to work on</param>
         /// <param name="left">left index into primitive array</param>
         /// <param name="right">right index into primitive array</param>
@@ -307,9 +290,7 @@ namespace Fovea.Renderer.Core.BVH
         }
 
 
-        /// <summary>
-        /// project a bounding box into one of the sah bins/buckets
-        /// </summary>
+        /// <summary>project a bounding box into one of the sah bins/buckets</summary>
         /// <param name="boxCentroid">bounding box centroid'</param>
         /// <param name="centroidBounds">centroid bounds of current node</param>
         /// <param name="axis">axis we're working on</param>
@@ -321,9 +302,7 @@ namespace Fovea.Renderer.Core.BVH
             return b;
         }
 
-        /// <summary>
-        /// compute the surface area heuristic costs scheme for the propose split
-        /// </summary>
+        /// <summary>compute the surface area heuristic costs scheme for the propose split</summary>
         /// <param name="totalArea">area of parent node</param>
         /// <param name="leftArea">area left of split</param>
         /// <param name="leftPrimitiveCount">primitive count in left part of split</param>

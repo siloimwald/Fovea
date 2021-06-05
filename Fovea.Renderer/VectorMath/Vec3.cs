@@ -4,27 +4,21 @@ using static System.Math;
 
 namespace Fovea.Renderer.VectorMath
 {
-    /// <summary>
-    /// 3D Vector
-    /// </summary>
+    /// <summary>3D Vector</summary>
     public readonly struct Vec3 : IEquatable<Vec3>
     {
         public readonly double X;
         public readonly double Y;
         public readonly double Z;
 
-        /// <summary>
-        /// creates a new 3D vector with all components initialized to the same value
-        /// </summary>
+        /// <summary>creates a new 3D vector with all components initialized to the same value</summary>
         /// <param name="s">scalar value to be used for all components</param>
         public Vec3(double s = 0.0)
         {
             X = Y = Z = s;
         }
 
-        /// <summary>
-        /// creates a new 3D vector with the given components 
-        /// </summary>
+        /// <summary>creates a new 3D vector with the given components</summary>
         /// <param name="x">x component</param>
         /// <param name="y">y component</param>
         /// <param name="z">z component</param>
@@ -40,22 +34,30 @@ namespace Fovea.Renderer.VectorMath
         // vector plus vector
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator +(Vec3 left, Vec3 right)
-            => new(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
+        {
+            return new(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
+        }
 
         // vector minus vector
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator -(Vec3 left, Vec3 right)
-            => new(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
+        {
+            return new(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
+        }
 
         // scalar multiplication
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator *(Vec3 vec, double scalar)
-            => new(vec.X * scalar, vec.Y * scalar, vec.Z * scalar);
+        {
+            return new(vec.X * scalar, vec.Y * scalar, vec.Z * scalar);
+        }
 
         // unary minus
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 operator -(Vec3 v)
-            => new(-v.X, -v.Y, -v.Z);
+        {
+            return new(-v.X, -v.Y, -v.Z);
+        }
 
         public double this[int index]
         {
@@ -78,39 +80,42 @@ namespace Fovea.Renderer.VectorMath
 
         #endregion
 
-        public override string ToString() => $"[{X}, {Y}, {Z}]";
+        public override string ToString()
+        {
+            return $"[{X}, {Y}, {Z}]";
+        }
 
-        /// <summary>
-        /// length or magnitude of vector
-        /// </summary>
+        /// <summary>length or magnitude of vector</summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public double Length() => Sqrt(X * X + Y * Y + Z * Z);
+        public double Length()
+        {
+            return Sqrt(X * X + Y * Y + Z * Z);
+        }
 
-        /// <summary>
-        /// squared length of vector
-        /// </summary>
+        /// <summary>squared length of vector</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public double LengthSquared() => X * X + Y * Y + Z * Z;
+        public double LengthSquared()
+        {
+            return X * X + Y * Y + Z * Z;
+        }
 
-        /// <summary>
-        /// test whether this vector is close to the zero vector
-        /// </summary>
+        /// <summary>test whether this vector is close to the zero vector</summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsNearZero()
-            => Abs(X) < 1e-8 && Abs(Y) < 1e-8 && Abs(Z) < 1e-8;
+        {
+            return Abs(X) < 1e-8 && Abs(Y) < 1e-8 && Abs(Z) < 1e-8;
+        }
 
-        /// <summary>
-        /// dot product of both vectors
-        /// </summary>
+        /// <summary>dot product of both vectors</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Dot(Vec3 left, Vec3 right)
-            => left.X * right.X + left.Y * right.Y + left.Z * right.Z;
+        {
+            return left.X * right.X + left.Y * right.Y + left.Z * right.Z;
+        }
 
-        /// <summary>
-        /// returns the vector normalized, with length 1
-        /// </summary>
+        /// <summary>returns the vector normalized, with length 1</summary>
         /// <param name="v">3d vector</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -120,9 +125,7 @@ namespace Fovea.Renderer.VectorMath
             return new Vec3(v.X * oneOverLen, v.Y * oneOverLen, v.Z * oneOverLen);
         }
 
-        /// <summary>
-        /// cross product
-        /// </summary>
+        /// <summary>cross product</summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vec3 Cross(Vec3 left, Vec3 right)
@@ -132,9 +135,7 @@ namespace Fovea.Renderer.VectorMath
                 left.X * right.Y - left.Y * right.X);
         }
 
-        /// <summary>
-        /// compute outgoing direction for a vector reflected across normal n
-        /// </summary>
+        /// <summary>compute outgoing direction for a vector reflected across normal n</summary>
         /// <param name="w">incoming vector</param>
         /// <param name="n">surface normal</param>
         /// <returns></returns>
@@ -144,10 +145,7 @@ namespace Fovea.Renderer.VectorMath
             return w - n * Dot(w, n) * 2.0;
         }
 
-        /// <summary>
-        /// refract incoming direction at surface normal with
-        /// the given refraction index
-        /// </summary>
+        /// <summary>refract incoming direction at surface normal with the given refraction index</summary>
         /// <param name="uv">incoming direction</param>
         /// <param name="normal">surface normal at intersection</param>
         /// <param name="etaIOverEtaN">eta i / eta n (refraction indices)</param>
@@ -164,10 +162,29 @@ namespace Fovea.Renderer.VectorMath
         // IEquatable, almost exclusively used for unit tests. mostly to have
         // the 'fuzzy' equality
 
-        public bool Equals(Vec3 other) => (this - other).Length() < 1e-8;
-        public override bool Equals(object obj) => obj is Vec3 other && Equals(other);
-        public override int GetHashCode() => HashCode.Combine(X, Y, Z);
-        public static bool operator ==(Vec3 left, Vec3 right) => left.Equals(right);
-        public static bool operator !=(Vec3 left, Vec3 right) => !(left == right);
+        public bool Equals(Vec3 other)
+        {
+            return (this - other).Length() < 1e-8;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Vec3 other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y, Z);
+        }
+
+        public static bool operator ==(Vec3 left, Vec3 right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Vec3 left, Vec3 right)
+        {
+            return !(left == right);
+        }
     }
 }

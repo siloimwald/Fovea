@@ -8,7 +8,7 @@ namespace Fovea.Renderer.Materials.Texture
 {
     public class ImageTexture : ITexture
     {
-        private ImageFilm _imageBuffer;
+        private readonly ImageFilm _imageBuffer;
 
         public ImageTexture(string fileName)
         {
@@ -18,14 +18,12 @@ namespace Fovea.Renderer.Materials.Texture
                 using var image = new Bitmap(stream);
                 _imageBuffer = new ImageFilm(image.Width, image.Height);
                 for (var px = 0; px < image.Width; ++px)
+                for (var py = 0; py < image.Height; ++py)
                 {
-                    for (var py = 0; py < image.Height; ++py)
-                    {
-                        var c = image.GetPixel(px, py);
-                        var rgb = new RGBColor(c.R / 255.0, c.G / 255.0, c.B / 255.0);
-                        // flip y
-                        _imageBuffer[(px, image.Height - py - 1)] = rgb;
-                    }
+                    var c = image.GetPixel(px, py);
+                    var rgb = new RGBColor(c.R / 255.0, c.G / 255.0, c.B / 255.0);
+                    // flip y
+                    _imageBuffer[(px, image.Height - py - 1)] = rgb;
                 }
             }
             catch

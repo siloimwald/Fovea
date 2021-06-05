@@ -5,15 +5,15 @@ namespace Fovea.Renderer.Sampling
 {
     public class PrimitivePDF : IPDF
     {
-        private readonly IPrimitive _primitive;
         private readonly Point3 _origin;
+        private readonly IPrimitive _primitive;
 
         public PrimitivePDF(IPrimitive primitive, Point3 origin)
         {
             _primitive = primitive;
             _origin = origin;
         }
-        
+
         public double Evaluate(Vec3 direction)
         {
             return _primitive.PdfValue(_origin, direction);

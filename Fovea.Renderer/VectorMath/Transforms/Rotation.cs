@@ -12,7 +12,14 @@ namespace Fovea.Renderer.VectorMath.Transforms
             Axis = axis;
         }
 
-        public Matrix4 GetMatrix() => Matrix4.GetRotation(Angle, Axis);
-        public Matrix4 GetInverseMatrix() => Matrix4.GetRotation(-Angle, Axis);
+        public Matrix4 GetMatrix()
+        {
+            return Matrix4.GetRotation(Angle, Axis);
+        }
+
+        public Matrix4 GetInverseMatrix()
+        {
+            return Matrix4.GetRotation(-Angle, Axis);
+        }
     }
 }

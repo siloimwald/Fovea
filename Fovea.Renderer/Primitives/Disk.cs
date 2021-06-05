@@ -61,7 +61,7 @@ namespace Fovea.Renderer.Primitives
             px *= _radius;
             py *= _radius;
             var dir = _center - origin;
-            var z = dir.LengthSquared(); 
+            var z = dir.LengthSquared();
             return new OrthoNormalBasis(dir).Local(px, py, z);
         }
 

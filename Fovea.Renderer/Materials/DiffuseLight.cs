@@ -17,9 +17,11 @@ namespace Fovea.Renderer.Materials
             return false;
         }
 
-        public RGBColor Emitted(in Ray ray, in HitRecord hitRecord) =>
-            hitRecord.IsFrontFace
+        public RGBColor Emitted(in Ray ray, in HitRecord hitRecord)
+        {
+            return hitRecord.IsFrontFace
                 ? _color.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint)
                 : new RGBColor();
+        }
     }
 }

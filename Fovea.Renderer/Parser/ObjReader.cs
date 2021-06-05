@@ -9,10 +9,8 @@ using Fovea.Renderer.VectorMath;
 namespace Fovea.Renderer.Parser
 {
     /// <summary>
-    /// basic wavefront obj reading support.
-    /// For now this ignores groups, normals and texture coordinates
-    /// everything within the file is assumed to be one single mesh.
-    /// vertex indices are assumed to be not relative
+    ///     basic wavefront obj reading support. For now this ignores groups, normals and texture coordinates everything
+    ///     within the file is assumed to be one single mesh. vertex indices are assumed to be not relative
     /// </summary>
     public static class ObjReader
     {
@@ -41,9 +39,7 @@ namespace Fovea.Renderer.Parser
                                 {
                                     if (double.TryParse(p, NumberStyles.Float, CultureInfo.InvariantCulture,
                                         out var number))
-                                    {
                                         return number;
-                                    }
 
                                     return (double?) null;
                                 })

@@ -19,25 +19,21 @@ namespace Fovea.Renderer.Primitives
         {
             _primitives = new List<IPrimitive>();
         }
-        
+
+        public IPrimitive this[int index] => _primitives[index];
+
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var hitSomething = false;
             hitRecord.RayT = tMax;
             for (var p = 0; p < _primitives.Count; ++p)
-            {
                 if (_primitives[p].Hit(ray, tMin, hitRecord.RayT, ref hitRecord))
-                {
                     hitSomething = true;
-                }
-            }
 
             return hitSomething;
         }
 
-        public IPrimitive this[int index] => _primitives[index];
-        
-        
+
         public BoundingBox GetBoundingBox(double t0, double t1)
         {
             return
@@ -45,8 +41,6 @@ namespace Fovea.Renderer.Primitives
                     .Select(p => p.GetBoundingBox(t0, t1))
                     .Aggregate(BoundingBox.CreateMaxEmptyBox(), BoundingBox.Union);
         }
-
-        public void Add(IPrimitive p) => _primitives.Add(p);
 
         public double PdfValue(Point3 origin, Vec3 direction)
         {
@@ -58,6 +52,11 @@ namespace Fovea.Renderer.Primitives
         {
             var pIndex = Sampler.Instance.RandomInt(0, _primitives.Count);
             return _primitives[pIndex].RandomDirection(origin);
+        }
+
+        public void Add(IPrimitive p)
+        {
+            _primitives.Add(p);
         }
     }
 }

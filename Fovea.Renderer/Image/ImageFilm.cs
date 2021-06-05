@@ -5,16 +5,12 @@ using System.Text;
 
 namespace Fovea.Renderer.Image
 {
-    /// <summary>
-    /// abstraction for a image buffer/image file. support for saving to ppm format
-    /// </summary>
+    /// <summary>abstraction for a image buffer/image file. support for saving to ppm format</summary>
     public class ImageFilm
     {
         private readonly RGBColor[] _imageBuffer;
 
-        /// <summary>
-        /// create a new image film with a given dimension
-        /// </summary>
+        /// <summary>create a new image film with a given dimension</summary>
         /// <param name="width">image width</param>
         /// <param name="height">image height</param>
         /// <exception cref="ArgumentException">invalid size values provided</exception>
@@ -37,9 +33,7 @@ namespace Fovea.Renderer.Image
             set => _imageBuffer[Width * pixelPos.py + pixelPos.px] = value;
         }
 
-        /// <summary>
-        /// saves the image buffer to the given file name in ppm format
-        /// </summary>
+        /// <summary>saves the image buffer to the given file name in ppm format</summary>
         /// <param name="fileName">name of output file</param>
         public void SaveAs(string fileName)
         {

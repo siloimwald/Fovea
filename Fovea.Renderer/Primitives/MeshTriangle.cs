@@ -9,15 +9,15 @@ namespace Fovea.Renderer.Primitives
 {
     public class MeshTriangle : IPrimitive
     {
-        private readonly TriangleMesh _mesh;
         private readonly int _faceIndex;
+        private readonly TriangleMesh _mesh;
 
         public MeshTriangle(TriangleMesh mesh, int faceIndex)
         {
             _mesh = mesh;
             _faceIndex = faceIndex;
         }
-        
+
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var (f0, f1, f2) = _mesh.Faces[_faceIndex];
@@ -29,7 +29,7 @@ namespace Fovea.Renderer.Primitives
                 return false;
 
             var (u, v, w) = barycentricCoords.Value;
-            
+
             hitRecord.RayT = t0;
             hitRecord.HitPoint = ray.PointsAt(t0);
             hitRecord.Material = _mesh.Material;
@@ -44,14 +44,14 @@ namespace Fovea.Renderer.Primitives
             }
             else
             {
-                hitRecord.SetFaceNormal(ray, _mesh.Normals[_faceIndex]);    
+                hitRecord.SetFaceNormal(ray, _mesh.Normals[_faceIndex]);
             }
 
             if (_mesh.Texture == null) return true; // hit at t0
-            
+
             hitRecord.TextureU = _mesh.Texture[f0].texU * w + _mesh.Texture[f1].texU * u + _mesh.Texture[f2].texU * v;
             hitRecord.TextureV = _mesh.Texture[f0].texV * w + _mesh.Texture[f1].texV * u + _mesh.Texture[f2].texV * v;
-            
+
             return true; // hit at t0
         }
 
@@ -79,7 +79,7 @@ namespace Fovea.Renderer.Primitives
             var pdfVal = distanceSquared / (cosine * area);
             return pdfVal;
         }
-        
+
         public Vec3 RandomDirection(Point3 origin)
         {
             var r1 = Math.Sqrt(Sampler.Instance.Random01());

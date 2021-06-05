@@ -5,17 +5,15 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives
 {
-    /// <summary>
-    /// for comparison against our homebrew stuff
-    /// </summary>
+    /// <summary>for comparison against our homebrew stuff</summary>
     public class XZRect : IPrimitive
     {
+        private readonly double _k;
+        private readonly IMaterial _material;
         private readonly double _x0;
         private readonly double _x1;
         private readonly double _z0;
         private readonly double _z1;
-        private readonly double _k;
-        private readonly IMaterial _material;
 
         public XZRect(double x0, double x1, double z0, double z1, double k, IMaterial material)
         {
@@ -26,7 +24,7 @@ namespace Fovea.Renderer.Primitives
             _k = k;
             _material = material;
         }
-        
+
         public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
         {
             var t = (_k - ray.Origin.PY) / ray.Direction.Y;
