@@ -18,10 +18,10 @@ namespace Fovea.Renderer.Primitives
             _material = material;
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var root = 0.0;
-            if (!IntersectSphere(ray, _center, _radius, tMin, tMax, ref root))
+            if (!IntersectSphere(ray, _center, _radius, rayInterval, ref root))
                 return false;
 
             hitRecord.RayT = root;
@@ -44,7 +44,7 @@ namespace Fovea.Renderer.Primitives
         public double PdfValue(Point3 origin, Vec3 direction)
         {
             var hr = new HitRecord();
-            if (!Hit(new Ray(origin, direction), 1e-4, double.PositiveInfinity, ref hr))
+            if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hr))
                 return 0;
 
             var cosTheta = Sqrt(1.0 - _radius * _radius / (_center - origin).LengthSquared());
@@ -67,7 +67,7 @@ namespace Fovea.Renderer.Primitives
 
         public static bool IntersectSphere(
             in Ray ray, in Point3 center, double radius,
-            double tMin, double tMax, ref double tRay)
+            in Interval rayInterval, ref double tRay)
         {
             var oc = ray.Origin - center;
             var a = ray.Direction.LengthSquared();
@@ -81,10 +81,10 @@ namespace Fovea.Renderer.Primitives
             var discSqrt = Sqrt(disc);
 
             var root = (-h - discSqrt) / a;
-            if (root < tMin || tMax < root) // check the other one if this is outside our range
+            if (!rayInterval.Contains(root)) // check the other one if this is outside our range
             {
                 root = (-h + discSqrt) / a;
-                if (root < tMin || tMax < root)
+                if (!rayInterval.Contains(root))
                     return false;
             }
 

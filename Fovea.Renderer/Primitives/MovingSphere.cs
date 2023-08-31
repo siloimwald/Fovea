@@ -24,11 +24,11 @@ namespace Fovea.Renderer.Primitives
             _material = material;
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var center = CenterAtTime(ray.Time);
             var root = 0.0;
-            if (!Sphere.IntersectSphere(ray, center, _radius, tMin, tMax, ref root))
+            if (!Sphere.IntersectSphere(ray, center, _radius, rayInterval, ref root))
                 return false;
 
             hitRecord.RayT = root;

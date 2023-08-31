@@ -18,13 +18,13 @@ namespace Fovea.Renderer.Primitives
             _faceIndex = faceIndex;
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var (f0, f1, f2) = _mesh.Faces[_faceIndex];
             var (va, vb, vc) = (_mesh.Vertices[f0], _mesh.Vertices[f1], _mesh.Vertices[f2]);
             var t0 = 0.0;
 
-            var barycentricCoords = Triangle.TriangleIntersection(ray, va, vb - va, vc - va, tMin, tMax, ref t0);
+            var barycentricCoords = Triangle.TriangleIntersection(ray, va, vb - va, vc - va, rayInterval, ref t0);
             if (!barycentricCoords.HasValue)
                 return false;
 
@@ -68,7 +68,7 @@ namespace Fovea.Renderer.Primitives
         public double PdfValue(Point3 origin, Vec3 direction)
         {
             var hitRecord = new HitRecord();
-            if (!Hit(new Ray(origin, direction), 1e-4, double.PositiveInfinity, ref hitRecord))
+            if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hitRecord))
                 return 0.0;
             GetVertices(out var va, out var vb, out var vc);
             var edgeAB = vb - va;

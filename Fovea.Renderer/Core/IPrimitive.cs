@@ -6,11 +6,10 @@ namespace Fovea.Renderer.Core
     {
         /// <summary>test ray against primitive for intersection</summary>
         /// <param name="ray">ray</param>
-        /// <param name="tMin">min ray interval parameter</param>
-        /// <param name="tMax">max ray interval parameter, i.e. closest intersection yet</param>
+        /// <param name="rayInterval">ray interval parameter</param>
         /// <param name="hitRecord">keep track of intersection information</param>
         /// <returns></returns>
-        bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord);
+        bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord);
 
         /// <summary>retrieve bounding box for primitive</summary>
         /// <param name="t0">ray time parameter lower bound</param>

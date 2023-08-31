@@ -88,7 +88,7 @@ namespace Fovea.Renderer.Core.BVH
                 $"Inner Nodes {inner}, Leaf nodes {leafCount}, max leaf size {maxLeafSize}, total node count {_nodes.Length}");
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             Span<int> nodeStack = stackalloc int[MaxDepth * 2];
 
@@ -96,7 +96,7 @@ namespace Fovea.Renderer.Core.BVH
             nodeStack[pointer++] = 0;
 
             var hit = false;
-            hitRecord.RayT = tMax;
+            hitRecord.RayT = rayInterval.Max;
 
             while (pointer > 0)
             {
@@ -110,7 +110,9 @@ namespace Fovea.Renderer.Core.BVH
                 {
                     for (var p = node.OtherNodeFirstPrim; p < node.OtherNodeFirstPrim + node.Count; ++p)
                     {
-                        if (!_primitives[p].Hit(ray, tMin, hitRecord.RayT, ref hitRecord)) continue;
+                        // rayInterval = rayInterval with { Max = hitRecord.RayT };
+                        if (!_primitives[p].Hit(ray, rayInterval with { Max = hitRecord.RayT }, ref hitRecord)) continue;
+                        // if (!_primitives[p].Hit(ray, new Interval(tMin, hitRecord.RayT), ref hitRecord)) continue;
                         hit = true;
                     }
                 }

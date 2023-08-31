@@ -25,10 +25,10 @@ namespace Fovea.Renderer.Primitives
             _material = material;
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var t = (_k - ray.Origin.PY) / ray.Direction.Y;
-            if (t < tMin || t > tMax)
+            if (!rayInterval.Contains(t))
                 return false;
 
             var x = ray.Origin.PX + t * ray.Direction.X;
@@ -48,7 +48,7 @@ namespace Fovea.Renderer.Primitives
         public double PdfValue(Point3 origin, Vec3 direction)
         {
             var hr = new HitRecord();
-            if (!Hit(new Ray(origin, direction), 1e-4, double.PositiveInfinity, ref hr))
+            if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hr))
                 return 0;
 
             var area = (_x1 - _x0) * (_z1 - _z0);

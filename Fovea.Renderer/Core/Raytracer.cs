@@ -19,10 +19,10 @@ namespace Fovea.Renderer.Core
 
             var hitRecord = new HitRecord();
             // nothing hit, yield background
-            if (!scene.World.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
+            if (!scene.World.Hit(ray, Interval.HalfOpenWithOffset(), ref hitRecord))
             {
                 if (scene.Environment != null &&
-                    scene.Environment.Hit(ray, 1e-4, double.PositiveInfinity, ref hitRecord))
+                    scene.Environment.Hit(ray, Interval.HalfOpenWithOffset(), ref hitRecord))
                 {
                     var envScatter = new ScatterResult();
                     if (hitRecord.Material.Scatter(ray, hitRecord, ref envScatter))

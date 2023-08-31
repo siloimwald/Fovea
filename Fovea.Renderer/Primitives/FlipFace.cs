@@ -12,9 +12,9 @@ namespace Fovea.Renderer.Primitives
             _prim = prim;
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
-            if (!_prim.Hit(ray, tMin, tMax, ref hitRecord))
+            if (!_prim.Hit(ray, rayInterval, ref hitRecord))
                 return false;
 
             hitRecord.IsFrontFace = !hitRecord.IsFrontFace;

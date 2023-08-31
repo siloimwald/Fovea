@@ -19,13 +19,13 @@ namespace Fovea.Renderer.Primitives
             _material = material;
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             // get better cap hit, if any
             var tCap = 0.0;
-            var hitCap = TestCapHit(ray, tMin, tMax, ref tCap);
+            var hitCap = TestCapHit(ray, rayInterval, ref tCap);
             var tBody = 0.0;
-            var hitBody = TestBodyHit(ray, tMin, tMax, ref tBody);
+            var hitBody = TestBodyHit(ray, rayInterval, ref tBody);
 
             if (!hitBody && !hitCap)
                 return false;
@@ -70,11 +70,10 @@ namespace Fovea.Renderer.Primitives
 
         /// <summary>returns true if we hit either of the caps</summary>
         /// <param name="ray">ray</param>
-        /// <param name="tMin">ray min param</param>
-        /// <param name="tMax">ray max param</param>
+        /// <param name="rayInterval">ray interval</param>
         /// <param name="tCap">reference to better cap hit</param>
         /// <returns></returns>
-        private bool TestCapHit(in Ray ray, double tMin, double tMax, ref double tCap)
+        private bool TestCapHit(in Ray ray, in Interval rayInterval, ref double tCap)
         {
             // parallel to plane
             if (Math.Abs(ray.Direction.Z) < 1e-6)
@@ -88,20 +87,19 @@ namespace Fovea.Renderer.Primitives
             tCap = t0;
             var hp = ray.PointsAt(tCap);
             var r2 = _radius * _radius;
-            if (!(tCap < tMin) && !(tMax < tCap) && !(hp.PX * hp.PX + hp.PY * hp.PY > r2)) return true;
+            if (rayInterval.Contains(tCap) && !(hp.PX * hp.PX + hp.PY * hp.PY > r2)) return true;
             tCap = t1;
             hp = ray.PointsAt(tCap);
 
-            return !(tCap < tMin) && !(tMax < tCap) && !(hp.PX * hp.PX + hp.PY * hp.PY > r2);
+            return rayInterval.Contains(tCap) && !(hp.PX * hp.PX + hp.PY * hp.PY > r2);
         }
 
         /// <summary>test ray against cylinder body</summary>
         /// <param name="ray">incoming ray</param>
-        /// <param name="tMin">min ray param</param>
-        /// <param name="tMax">max ray param</param>
+        /// <param name="rayInterval">ray interval</param>
         /// <param name="tBody">potential closest body hit</param>
         /// <returns></returns>
-        private bool TestBodyHit(in Ray ray, double tMin, double tMax, ref double tBody)
+        private bool TestBodyHit(in Ray ray, in Interval rayInterval, ref double tBody)
         {
             var a = ray.Direction.X * ray.Direction.X + ray.Direction.Y * ray.Direction.Y;
             var b = 2.0 * (ray.Direction.X * ray.Origin.PX + ray.Direction.Y * ray.Origin.PY);
@@ -114,11 +112,11 @@ namespace Fovea.Renderer.Primitives
             tBody = t0;
             // test against ray interval and clip
             var hpz = ray.Origin.PZ + tBody * ray.Direction.Z;
-            if (tBody < tMin || tMax < tBody || hpz < _zMin || hpz > _zMax)
+            if (!rayInterval.Contains(tBody) || hpz < _zMin || hpz > _zMax)
             {
                 tBody = t1;
                 hpz = ray.Origin.PZ + tBody * ray.Direction.Z;
-                if (tBody < tMin || tMax < tBody || hpz < _zMin || hpz > _zMax)
+                if (!rayInterval.Contains(tBody) || hpz < _zMin || hpz > _zMax)
                     return false;
             }
 

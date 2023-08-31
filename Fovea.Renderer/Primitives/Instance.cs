@@ -26,11 +26,11 @@ namespace Fovea.Renderer.Primitives
         {
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var transformedRay = new Ray(_inverseTransform * ray.Origin,
                 _inverseTransform * ray.Direction);
-            if (!_instance.Hit(transformedRay, tMin, tMax, ref hitRecord))
+            if (!_instance.Hit(transformedRay, rayInterval, ref hitRecord))
                 return false;
 
             hitRecord.HitPoint = _transform * hitRecord.HitPoint;

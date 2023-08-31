@@ -17,7 +17,7 @@ namespace Fovea.Tests
             var rayFromPosZ = new Ray(new Point3(0, 0, 2), new Vec3(0, 0, -1));
             var hitRecord = new HitRecord();
 
-            var hasHit = cyl.Hit(rayFromPosZ, 1e-4, 1e12, ref hitRecord);
+            var hasHit = cyl.Hit(rayFromPosZ, new Interval(1e-4, 1e12), ref hitRecord);
             Assert.True(hasHit);
             Assert.Equal(new Point3(0, 0, 1), hitRecord.HitPoint);
             Assert.Equal(1.0, hitRecord.RayT, 3); // from z=2 to z=1 at bottom cap
@@ -27,7 +27,7 @@ namespace Fovea.Tests
             // other side
             var rayFromNegZ = new Ray(new Point3(0, 0, -2), new Vec3(0, 0, 1));
             hitRecord = new HitRecord();
-            hasHit = cyl.Hit(rayFromNegZ, 1e-4, 1e12, ref hitRecord);
+            hasHit = cyl.Hit(rayFromNegZ, new Interval(1e-4, 1e12), ref hitRecord);
 
             Assert.True(hasHit);
             Assert.Equal(new Point3(0, 0, -1), hitRecord.HitPoint);
@@ -46,7 +46,7 @@ namespace Fovea.Tests
             var rayToNegZ = new Ray(new Point3(), new Vec3(0, 0, -1));
             var hitRecord = new HitRecord();
 
-            var hasHit = cyl.Hit(rayToNegZ, 1e-4, 1e12, ref hitRecord);
+            var hasHit = cyl.Hit(rayToNegZ, new Interval(1e-4, 1e12), ref hitRecord);
             Assert.True(hasHit);
             Assert.Equal(new Point3(0, 0, -1), hitRecord.HitPoint);
             Assert.Equal(1.0, hitRecord.RayT, 3); // from z=2 to z=1 at bottom cap
@@ -57,7 +57,7 @@ namespace Fovea.Tests
             var rayToPosZ = new Ray(new Point3(), new Vec3(0, 0, 1));
             hitRecord = new HitRecord();
 
-            hasHit = cyl.Hit(rayToPosZ, 1e-4, 1e12, ref hitRecord);
+            hasHit = cyl.Hit(rayToPosZ, new Interval(1e-4, 1e12), ref hitRecord);
             Assert.True(hasHit);
             Assert.Equal(new Point3(0, 0, 1), hitRecord.HitPoint);
             Assert.Equal(1.0, hitRecord.RayT, 3); // from z=2 to z=1 at bottom cap
@@ -74,7 +74,7 @@ namespace Fovea.Tests
             // half way on the pos z side from -2
             var rayFromMinusX = new Ray(new Point3(-2, 0, 0.5), new Vec3(1, 0, 0));
             var hitRecord = new HitRecord();
-            var hasHit = cyl.Hit(rayFromMinusX, 1e-4, 1e12, ref hitRecord);
+            var hasHit = cyl.Hit(rayFromMinusX, new Interval(1e-4, 1e12), ref hitRecord);
 
             Assert.True(hasHit);
             Assert.Equal(new Point3(-1, 0, 0.5), hitRecord.HitPoint);
@@ -84,7 +84,7 @@ namespace Fovea.Tests
 
             var rayFromPosY = new Ray(new Point3(0, 2, -0.5), new Vec3(0, -1, 0));
             hitRecord = new HitRecord();
-            hasHit = cyl.Hit(rayFromPosY, 1e-4, 1e12, ref hitRecord);
+            hasHit = cyl.Hit(rayFromPosY, new Interval(1e-4, 1e12), ref hitRecord);
             Assert.True(hasHit);
             Assert.Equal(new Point3(0, 1, -0.5), hitRecord.HitPoint);
             Assert.Equal(1.0, hitRecord.RayT, 3);
@@ -100,7 +100,7 @@ namespace Fovea.Tests
 
             var rayFromPosZ = new Ray(new Point3(0, 0, 0.5), new Vec3(1, 0, 0));
             var hitRecord = new HitRecord();
-            var hasHit = cyl.Hit(rayFromPosZ, 1e-4, 1e12, ref hitRecord);
+            var hasHit = cyl.Hit(rayFromPosZ, new Interval(1e-4, 1e12), ref hitRecord);
 
             Assert.True(hasHit);
             Assert.Equal(new Point3(1, 0, 0.5), hitRecord.HitPoint);
@@ -110,7 +110,7 @@ namespace Fovea.Tests
 
             var rayFromPosY = new Ray(new Point3(0, 0, -0.5), new Vec3(0, -1, 0));
             hitRecord = new HitRecord();
-            hasHit = cyl.Hit(rayFromPosY, 1e-4, 1e12, ref hitRecord);
+            hasHit = cyl.Hit(rayFromPosY, new Interval(1e-4, 1e12), ref hitRecord);
             Assert.True(hasHit);
             Assert.Equal(new Point3(0, -1, -0.5), hitRecord.HitPoint);
             Assert.Equal(1.0, hitRecord.RayT, 3);

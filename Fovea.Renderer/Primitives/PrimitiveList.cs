@@ -22,12 +22,12 @@ namespace Fovea.Renderer.Primitives
 
         public IPrimitive this[int index] => _primitives[index];
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var hitSomething = false;
-            hitRecord.RayT = tMax;
+            hitRecord.RayT = rayInterval.Max;
             for (var p = 0; p < _primitives.Count; ++p)
-                if (_primitives[p].Hit(ray, tMin, hitRecord.RayT, ref hitRecord))
+                if (_primitives[p].Hit(ray, rayInterval with { Max = hitRecord.RayT }, ref hitRecord))
                     hitSomething = true;
 
             return hitSomething;

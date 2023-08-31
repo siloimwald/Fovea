@@ -19,19 +19,19 @@ namespace Fovea.Renderer.Primitives
             _material = new Isotropic(color);
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var hr1 = new HitRecord();
             var hr2 = new HitRecord();
 
-            if (!_boundary.Hit(ray, double.NegativeInfinity, double.PositiveInfinity, ref hr1))
+            if (!_boundary.Hit(ray, Interval.Everything(), ref hr1))
                 return false;
 
-            if (!_boundary.Hit(ray, hr1.RayT + 0.001, double.PositiveInfinity, ref hr2))
+            if (!_boundary.Hit(ray, Interval.HalfOpenWithOffset() with { Min = hr1.RayT + 0.001}, ref hr2))
                 return false;
 
-            hr1.RayT = Math.Max(hr1.RayT, tMin);
-            hr2.RayT = Math.Min(hr2.RayT, tMax);
+            hr1.RayT = Math.Max(hr1.RayT, rayInterval.Min);
+            hr2.RayT = Math.Min(hr2.RayT, rayInterval.Max);
 
             if (hr1.RayT >= hr2.RayT)
                 return false;

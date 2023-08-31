@@ -22,11 +22,11 @@ namespace Fovea.Renderer.Primitives
             _material = material;
         }
 
-        public bool Hit(in Ray ray, double tMin, double tMax, ref HitRecord hitRecord)
+        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var t0 = 0.0;
 
-            if (!TriangleIntersection(ray, _vertexA, _edgeAB, _edgeAC, tMin, tMax, ref t0).HasValue)
+            if (!TriangleIntersection(ray, _vertexA, _edgeAB, _edgeAC, rayInterval, ref t0).HasValue)
                 return false;
 
             hitRecord.RayT = t0;
@@ -46,21 +46,21 @@ namespace Fovea.Renderer.Primitives
             return new BoundingBox(min, max);
         }
 
-        /// <summary>triangle intersection, refactored out for reuse in mesh triangle</summary>
+        /// <summary>
+        /// triangle intersection, refactored out for reuse in mesh triangle
+        /// </summary>
         /// <param name="ray">incoming ray</param>
         /// <param name="vertexA">vertex A of triangle</param>
         /// <param name="edgeAB">edge a to vertex b</param>
         /// <param name="edgeAC">edge a to vertex c</param>
-        /// <param name="tMin">ray min t</param>
-        /// <param name="tMax">ray max t</param>
+        /// <param name="rayInterval">ray interval</param>
         /// <param name="tRay">potential intersection at t</param>
         /// <returns>barycentric coordinates triple if hit, null otherwise</returns>
         public static (double u, double v, double w)? TriangleIntersection(in Ray ray,
             in Point3 vertexA,
             in Vec3 edgeAB,
             in Vec3 edgeAC,
-            double tMin,
-            double tMax,
+            in Interval rayInterval,
             ref double tRay)
         {
             var pVec = Vec3.Cross(ray.Direction, edgeAC);
@@ -79,7 +79,8 @@ namespace Fovea.Renderer.Primitives
             if (v < 0.0f || v + u > 1.0f) return null;
             var t0 = Vec3.Dot(qVec, edgeAC) * invDet;
 
-            if (t0 < tMin || tMax < t0) return null;
+            // if (t0 < tMin || tMax < t0) return null;
+            if (!rayInterval.Contains(t0)) return null;
             tRay = t0;
             return (u, v, 1.0 - (u + v));
         }
