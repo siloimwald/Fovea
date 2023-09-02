@@ -1,9 +1,9 @@
-﻿using System;
+﻿using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace Fovea.Renderer.Core;
 
-public record Interval
+public struct Interval
 {
     /// <summary>
     /// the left bound/min value of this interval
@@ -40,7 +40,7 @@ public record Interval
     /// </summary>
     /// <param name="t">double test value</param>
     /// <returns>true if t is contained within the interval</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining), Pure]
     public bool Contains(double t)
     {
         return Min <= t && t <= Max;
@@ -53,7 +53,7 @@ public record Interval
     /// </summary>
     /// <param name="t">double test value</param>
     /// <returns>true if t is within the interval and not exactly on either boundary</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining), Pure]
     public bool Surrounds(double t)
     {
         return Min < t && t < Max;
