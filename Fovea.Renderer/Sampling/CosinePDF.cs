@@ -5,22 +5,23 @@ namespace Fovea.Renderer.Sampling
 {
     public class CosinePDF : IPDF
     {
-        private readonly OrthoNormalBasis _orthoNormalBasis;
+        private readonly OrthonormalBasis _orthonormalBasis;
 
-        public CosinePDF(OrthoNormalBasis orthoNormalBasis)
+        public CosinePDF(OrthonormalBasis orthonormalBasis)
         {
-            _orthoNormalBasis = orthoNormalBasis;
+            _orthonormalBasis = orthonormalBasis;
         }
 
-        public double Evaluate(Vec3 direction)
+        public float Evaluate(Vector3 direction)
         {
-            var cosine = Vec3.Dot(Vec3.Normalize(direction), _orthoNormalBasis.WAxis);
-            return cosine < 0 ? 0 : cosine / Math.PI;
+            var cosine = Vector3.Dot(Vector3.Normalize(direction), _orthonormalBasis.WAxis);
+            return cosine < 0 ? 0 : cosine / MathF.PI;
         }
 
-        public Vec3 Generate()
+        public Vector3 Generate()
         {
-            return _orthoNormalBasis.Local(Sampler.Instance.RandomCosineDirection());
+            
+            return _orthonormalBasis.Local(Sampler.Instance.RandomCosineDirection().AsVector3());
         }
     }
 }

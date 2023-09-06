@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
+using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core
 {
@@ -45,18 +46,18 @@ namespace Fovea.Renderer.Core
             // attempt at being compatible with the previous book scenes
             if (scene.Lights == null)
             {
-                var outRay = new Ray(hitRecord.HitPoint, scatterResult.Pdf.Generate());
+                var outRay = new Ray(hitRecord.HitPoint, scatterResult.Pdf.Generate().AsVec3());
                 return emitted
                        + scatterResult.Attenuation
                        * hitRecord.Material.ScatteringPDF(ray, hitRecord, outRay)
-                       * ColorRay(outRay, scene, depth - 1) * (1.0 / scatterResult.Pdf.Evaluate(outRay.Direction));
+                       * ColorRay(outRay, scene, depth - 1) * (1.0 / scatterResult.Pdf.Evaluate(outRay.Direction.AsVector3()));
             }
             else
             {
-                var lightPdf = new PrimitivePDF(scene.Lights, hitRecord.HitPoint);
+                var lightPdf = new PrimitivePDF(scene.Lights, hitRecord.HitPoint.AsVector3());
                 var mixPdf = new MixturePDF(scatterResult.Pdf, lightPdf);
-                var outRay = new Ray(hitRecord.HitPoint, mixPdf.Generate(), ray.Time);
-                var pdfCorrection = 1.0 / mixPdf.Evaluate(outRay.Direction);
+                var outRay = new Ray(hitRecord.HitPoint, mixPdf.Generate().AsVec3(), ray.Time);
+                var pdfCorrection = 1.0 / mixPdf.Evaluate(outRay.Direction.AsVector3());
 
                 return emitted
                        + scatterResult.Attenuation

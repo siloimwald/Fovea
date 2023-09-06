@@ -41,20 +41,20 @@ namespace Fovea.Renderer.Primitives
             return SphereBox(_center, _radius);
         }
 
-        public double PdfValue(Point3 origin, Vec3 direction)
+        public float PdfValue(Vector3 origin, Vector3 direction)
         {
             var hr = new HitRecord();
             if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hr))
                 return 0;
 
-            var cosTheta = Sqrt(1.0 - _radius * _radius / (_center - origin).LengthSquared());
+            var cosTheta = Sqrt(1.0 - _radius * _radius / (_center - origin.AsPoint3()).LengthSquared());
             var solidAngle = 2.0 * PI * (1.0 - cosTheta);
-            return 1.0 / solidAngle;
+            return (float)(1.0 / solidAngle);
         }
 
-        public Vec3 RandomDirection(Point3 origin)
+        public Vector3 RandomDirection(Vector3 origin)
         {
-            var dir = _center - origin;
+            var dir = _center.AsVector3() - origin;
             var distanceSquared = dir.LengthSquared();
             var r1 = Sampler.Instance.Random01();
             var r2 = Sampler.Instance.Random01();
@@ -62,7 +62,7 @@ namespace Fovea.Renderer.Primitives
             var phi = 2.0 * PI * r1;
             var x = Cos(phi) * Sqrt(1.0 - z * z);
             var y = Sin(phi) * Sqrt(1.0 - z * z);
-            return new OrthoNormalBasis(dir).Local(x, y, z);
+            return new OrthonormalBasis(dir).Local(x, y, z);
         }
 
         public static bool IntersectSphere(

@@ -13,12 +13,12 @@ namespace Fovea.Renderer.Sampling
             _right = right;
         }
 
-        public double Evaluate(Vec3 direction)
+        public float Evaluate(Vector3 direction)
         {
-            return 0.5 * _left.Evaluate(direction) + 0.5 * _right.Evaluate(direction);
+            return 0.5f * _left.Evaluate(direction) + 0.5f * _right.Evaluate(direction);
         }
 
-        public Vec3 Generate()
+        public Vector3 Generate()
         {
             return Sampler.Instance.Random01() < 0.5 ? _left.Generate() : _right.Generate();
         }

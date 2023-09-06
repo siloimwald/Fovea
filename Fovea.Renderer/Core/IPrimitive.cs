@@ -21,7 +21,7 @@ namespace Fovea.Renderer.Core
         /// <param name="origin">point looking from</param>
         /// <param name="direction">direction towards geometry</param>
         /// <returns></returns>
-        double PdfValue(Point3 origin, Vec3 direction)
+        float PdfValue(Vector3 origin, Vector3 direction)
         {
             return 0;
         }
@@ -29,9 +29,9 @@ namespace Fovea.Renderer.Core
         /// <summary>generate a random direction towards the surface of the geometry</summary>
         /// <param name="origin">the point we're looking from</param>
         /// <returns></returns>
-        Vec3 RandomDirection(Point3 origin)
+        Vector3 RandomDirection(Vector3 origin)
         {
-            return Vec3.UnitX;
+            return Vector3.UnitX;
         }
     }
 }

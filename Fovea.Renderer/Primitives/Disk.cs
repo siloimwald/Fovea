@@ -53,29 +53,29 @@ namespace Fovea.Renderer.Primitives
                 _center + new Vec3(_radius, _radius, _radius));
         }
 
-        public Vec3 RandomDirection(Point3 origin)
+        public Vector3 RandomDirection(Vector3 origin)
         {
             // this seems to work. x and y seem straightforward, for z no idea why this works :)
             // i would have guessed it should be Length, not Squared, or the distance to the origin or something like that
             var (px, py) = Sampler.Instance.RandomOnUnitDisk();
             px *= _radius;
             py *= _radius;
-            var dir = _center - origin;
+            var dir = _center - origin.AsPoint3();
             var z = dir.LengthSquared();
-            return new OrthoNormalBasis(dir).Local(px, py, z);
+            return new OrthonormalBasis(dir.AsVector3()).Local(px, py, z); // TODO: meh.
         }
 
-        public double PdfValue(Point3 origin, Vec3 direction)
+        public float PdfValue(Vector3 origin, Vector3 direction)
         {
             var hr = new HitRecord();
-            if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hr))
+            if (!Hit(new Ray(origin.AsPoint3(), direction.AsVec3()), Interval.HalfOpenWithOffset(), ref hr))
                 return 0;
 
             var area = _radius * _radius * Math.PI;
-            var distanceSquared = (hr.HitPoint - origin).LengthSquared();
-            var cosine = Math.Abs(Vec3.Dot(direction, hr.Normal) / direction.Length());
+            var distanceSquared = (hr.HitPoint - origin.AsPoint3()).LengthSquared();
+            var cosine = Math.Abs(Vec3.Dot(direction.AsVec3(), hr.Normal) / direction.Length());
             var pdfVal = distanceSquared / (cosine * area);
-            return pdfVal;
+            return (float)pdfVal;
         }
     }
 }

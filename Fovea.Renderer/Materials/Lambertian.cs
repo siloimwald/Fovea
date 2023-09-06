@@ -23,7 +23,7 @@ namespace Fovea.Renderer.Materials
         {
             scatterResult.IsSpecular = false;
             scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
-            scatterResult.Pdf = new CosinePDF(new OrthoNormalBasis(hitRecord.Normal));
+            scatterResult.Pdf = new CosinePDF(new OrthonormalBasis(hitRecord.Normal.AsVector3()));
             return true;
         }
 

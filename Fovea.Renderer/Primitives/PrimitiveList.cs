@@ -42,13 +42,13 @@ namespace Fovea.Renderer.Primitives
                     .Aggregate(BoundingBox.CreateMaxEmptyBox(), BoundingBox.Union);
         }
 
-        public double PdfValue(Point3 origin, Vec3 direction)
+        public float PdfValue(Vector3 origin, Vector3 direction)
         {
-            var weight = 1.0 / _primitives.Count;
+            var weight = 1.0f / _primitives.Count;
             return _primitives.Sum(p => weight * p.PdfValue(origin, direction));
         }
 
-        public Vec3 RandomDirection(Point3 origin)
+        public Vector3 RandomDirection(Vector3 origin)
         {
             var pIndex = Sampler.Instance.RandomInt(0, _primitives.Count);
             return _primitives[pIndex].RandomDirection(origin);

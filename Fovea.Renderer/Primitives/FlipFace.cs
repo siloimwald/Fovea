@@ -27,12 +27,12 @@ namespace Fovea.Renderer.Primitives
             return _prim.GetBoundingBox(t0, t1);
         }
 
-        public double PdfValue(Point3 origin, Vec3 direction)
+        public float PdfValue(Vector3 origin, Vector3 direction)
         {
             return _prim.PdfValue(origin, direction);
         }
 
-        public Vec3 RandomDirection(Point3 origin)
+        public Vector3 RandomDirection(Vector3 origin)
         {
             return _prim.RandomDirection(origin);
         }

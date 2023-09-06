@@ -4,6 +4,30 @@ using static System.Math;
 
 namespace Fovea.Renderer.VectorMath
 {
+
+    public static class Vector3Extensions
+    {
+        public static Vec3 AsVec3(this Vector3 v)
+        {
+            return new Vec3(v.X, v.Y, v.Z);
+        }
+
+        public static Vector3 AsVector3(this Vec3 v)
+        {
+            return new Vector3((float)v.X, (float)v.Y, (float)v.Z);
+        }
+        
+        public static Vector3 AsVector3(this Point3 p)
+        {
+            return new Vector3((float)p.PX, (float)p.PY, (float)p.PZ);
+        }
+
+        public static Point3 AsPoint3(this Vector3 v)
+        {
+            return new Point3(v.X, v.Y, v.Z);
+        }
+    }
+    
     /// <summary>3D Vector</summary>
     public readonly struct Vec3 : IEquatable<Vec3>
     {
@@ -17,7 +41,7 @@ namespace Fovea.Renderer.VectorMath
         {
             X = Y = Z = s;
         }
-
+        
         /// <summary>creates a new 3D vector with the given components</summary>
         /// <param name="x">x component</param>
         /// <param name="y">y component</param>

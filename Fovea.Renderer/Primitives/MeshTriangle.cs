@@ -65,22 +65,22 @@ namespace Fovea.Renderer.Primitives
             );
         }
 
-        public double PdfValue(Point3 origin, Vec3 direction)
+        public float PdfValue(Vector3 origin, Vector3 direction)
         {
             var hitRecord = new HitRecord();
             if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hitRecord))
-                return 0.0;
+                return 0.0f;
             GetVertices(out var va, out var vb, out var vc);
             var edgeAB = vb - va;
             var edgeAC = vc - va;
             var area = 0.5 * Vec3.Cross(edgeAB, edgeAC).Length();
-            var distanceSquared = (hitRecord.HitPoint - origin).LengthSquared();
-            var cosine = Math.Abs(Vec3.Dot(direction, hitRecord.Normal) / direction.Length());
+            var distanceSquared = (hitRecord.HitPoint - origin.AsPoint3()).LengthSquared();
+            var cosine = Math.Abs(Vec3.Dot(direction.AsVec3(), hitRecord.Normal) / direction.Length());
             var pdfVal = distanceSquared / (cosine * area);
-            return pdfVal;
+            return (float)pdfVal;
         }
 
-        public Vec3 RandomDirection(Point3 origin)
+        public Vector3 RandomDirection(Vector3 origin)
         {
             var r1 = Math.Sqrt(Sampler.Instance.Random01());
             var r2 = Sampler.Instance.Random01();
@@ -89,7 +89,7 @@ namespace Fovea.Renderer.Primitives
             var v = r1 * (1.0 - r2);
             var u = r2 * r1;
             var p = va * w + vb * u + vc * v;
-            return p - origin;
+            return p.AsVector3() - origin;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
