@@ -33,7 +33,7 @@ namespace Fovea.Renderer.Core.BVH
         /// <param name="primitives">list of scene primitives</param>
         /// <param name="time0">ray time parameter lower bound</param>
         /// <param name="time1">ray time parameter upper bound</param>
-        public BVHTree(List<IPrimitive> primitives, double time0 = 0, double time1 = 1)
+        public BVHTree(List<IPrimitive> primitives, float time0 = 0, float time1 = 1)
         {
             _nodes = new BVHNode[2 * primitives.Count - 1];
             var primitiveBoxes = new List<BoundingBox>(primitives.Count);
@@ -126,7 +126,7 @@ namespace Fovea.Renderer.Core.BVH
             return hit;
         }
 
-        public BoundingBox GetBoundingBox(double t0, double t1)
+        public BoundingBox GetBoundingBox(float t0, float t1)
         {
             return _nodes[0]?.Box; // root node box
         }
@@ -216,11 +216,11 @@ namespace Fovea.Renderer.Core.BVH
             else
             {
                 // compute centroid bounds for current node box
-                var (centroidMin, centroidMax) = (new Point3(double.MaxValue), new Point3(double.MinValue));
+                var (centroidMin, centroidMax) = (new Vector3(float.MaxValue), new Vector3(float.MinValue));
                 for (var p = left; p < right; ++p)
                 {
-                    centroidMin = Point3.Min(centroidMin, primitiveBoxes[p].GetCentroid());
-                    centroidMax = Point3.Max(centroidMax, primitiveBoxes[p].GetCentroid());
+                    centroidMin = Vector3.Min(centroidMin, primitiveBoxes[p].GetCentroid());
+                    centroidMax = Vector3.Max(centroidMax, primitiveBoxes[p].GetCentroid());
                 }
 
                 var centroidBounds = new BoundingBox(centroidMin, centroidMax);
@@ -297,7 +297,7 @@ namespace Fovea.Renderer.Core.BVH
         /// <param name="centroidBounds">centroid bounds of current node</param>
         /// <param name="axis">axis we're working on</param>
         /// <returns>int [0..BucketCount-1]</returns>
-        private static int GetBinProjection(Point3 boxCentroid, BoundingBox centroidBounds, int axis)
+        private static int GetBinProjection(Vector3 boxCentroid, BoundingBox centroidBounds, int axis)
         {
             var b = (int) (BucketCount * centroidBounds.Offset(boxCentroid)[axis]);
             if (b == BucketCount) b--;

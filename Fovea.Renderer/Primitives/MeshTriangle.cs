@@ -55,13 +55,13 @@ namespace Fovea.Renderer.Primitives
             return true; // hit at t0
         }
 
-        public BoundingBox GetBoundingBox(double t0, double t1)
+        public BoundingBox GetBoundingBox(float t0, float t1)
         {
             var (f0, f1, f2) = _mesh.Faces[_faceIndex];
             var (va, vb, vc) = (_mesh.Vertices[f0], _mesh.Vertices[f1], _mesh.Vertices[f2]);
             return new BoundingBox(
-                Point3.Min(va, Point3.Min(vb, vc)),
-                Point3.Max(va, Point3.Max(vb, vc))
+                Vector3.Min(va.AsVector3(), Vector3.Min(vb.AsVector3(), vc.AsVector3())),
+                Vector3.Max(va.AsVector3(), Vector3.Max(vb.AsVector3(), vc.AsVector3()))
             );
         }
 

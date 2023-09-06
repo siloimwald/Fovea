@@ -34,7 +34,7 @@ namespace Fovea.Renderer.Primitives
         }
 
 
-        public BoundingBox GetBoundingBox(double t0, double t1)
+        public BoundingBox GetBoundingBox(float t0, float t1)
         {
             return
                 _primitives

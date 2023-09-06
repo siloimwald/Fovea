@@ -84,10 +84,10 @@ namespace Fovea.Renderer.Parser
                 {
                     // this yells SIMD at you
                     var (min, max) = vertices.Aggregate(
-                        (currentMin: new Point3(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity),
-                            currentMax: new Point3(double.NegativeInfinity, double.NegativeInfinity,
-                                double.NegativeInfinity)),
-                        (acc, p) => (Point3.Min(acc.currentMin, p), Point3.Max(acc.currentMax, p)));
+                        (currentMin: new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity),
+                            currentMax: new Vector3(float.NegativeInfinity, float.NegativeInfinity,
+                                float.NegativeInfinity)),
+                        (acc, p) => (Vector3.Min(acc.currentMin, p.AsVector3()), Vector3.Max(acc.currentMax, p.AsVector3())));
 
                     Console.WriteLine($"bounds {min} {max}");
 
@@ -99,11 +99,11 @@ namespace Fovea.Renderer.Parser
                     // use the longest side as scale factor, this keeps ratios intact
                     var s = Math.Max(scale.X, Math.Max(scale.Y, scale.Z));
 
-                    scale = new Vec3(2.0 / s, 2.0 / s, 2.0 / s);
+                    scale = new Vector3(2.0f / s, 2.0f / s, 2.0f / s);
 
                     vertices = vertices.Select(v =>
                     {
-                        var inOrigin = v - translate;
+                        var inOrigin = v - translate.AsPoint3();
                         return new Point3(inOrigin.X * scale.X, inOrigin.Y * scale.Y, inOrigin.Z * scale.Z);
                     }).ToList();
                 }

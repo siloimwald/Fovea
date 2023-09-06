@@ -15,7 +15,7 @@ namespace Fovea.Renderer.Core
         /// <param name="t0">ray time parameter lower bound</param>
         /// <param name="t1">ray time parameter upper bound</param>
         /// <returns></returns>
-        BoundingBox GetBoundingBox(double t0, double t1);
+        BoundingBox GetBoundingBox(float t0, float t1);
 
         /// <summary>pdf evaluated for the given direction</summary>
         /// <param name="origin">point looking from</param>

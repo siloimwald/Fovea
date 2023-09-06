@@ -36,9 +36,9 @@ namespace Fovea.Renderer.Primitives
             return true;
         }
 
-        public BoundingBox GetBoundingBox(double t0, double t1)
+        public BoundingBox GetBoundingBox(float t0, float t1)
         {
-            return SphereBox(_center, _radius);
+            return SphereBox(_center.AsVector3(), (float)_radius);
         }
 
         public float PdfValue(Vector3 origin, Vector3 direction)
@@ -92,10 +92,10 @@ namespace Fovea.Renderer.Primitives
             return true;
         }
 
-        public static BoundingBox SphereBox(Point3 center, double radius)
+        public static BoundingBox SphereBox(Vector3 center, float radius)
         {
-            return new(center - new Vec3(radius, radius, radius),
-                center + new Vec3(radius, radius, radius));
+            return new(center - new Vector3(radius, radius, radius),
+                center + new Vector3(radius, radius, radius));
         }
     }
 }

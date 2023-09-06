@@ -22,7 +22,7 @@ namespace Fovea.Renderer.Primitives
             return true;
         }
 
-        public BoundingBox GetBoundingBox(double t0, double t1)
+        public BoundingBox GetBoundingBox(float t0, float t1)
         {
             return _prim.GetBoundingBox(t0, t1);
         }

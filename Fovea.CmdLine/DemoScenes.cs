@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
 using Fovea.Renderer.Image;
@@ -75,8 +76,8 @@ namespace Fovea.CmdLine
             prims.AddRange(lightSource);
 
             // moving sphere top left
-            var center1 = new Point3(400, 400, 200);
-            prims.Add(new MovingSphere(center1, 0, center1 + new Vec3(30, 0, 0), 1, 50,
+            var center1 = new Vector3(400, 400, 200);
+            prims.Add(new MovingSphere(center1, 0, center1 + new Vector3(30, 0, 0), 1, 50,
                 new Lambertian(0.7, 0.3, 0.1)));
 
             // glass sphere
@@ -310,7 +311,7 @@ namespace Fovea.CmdLine
             for (var a = 0; a < 360; a += 15)
             {
                 var m = new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0, 0.05));
-                var cyl = new Cylinder(-1, 1, 0.3, m);
+                var cyl = new Cylinder(-1, 1, 0.3f, m);
                 var tr = new Transformation()
                     .Rotate(-90 + a, Axis.X)
                     .Translate(0, 5, -5)
@@ -399,23 +400,23 @@ namespace Fovea.CmdLine
                 };
             }
 
-            var offLimitsZone = new Point3(4, 0.2, 0);
+            var offLimitsZone = new Vector3(4, 0.2f, 0);
 
             prims.AddRange(Enumerable
                 .Range(-11, 22)
                 .SelectMany(a => Enumerable.Range(-11, 22).Select(b => (a, b)))
                 .Select(tpl =>
-                    new Point3(
-                        tpl.a + 0.9 * Sampler.Instance.Random01(),
-                        0.2,
-                        tpl.b + 0.9 * Sampler.Instance.Random01()))
-                .Where(center => (center - offLimitsZone).Length() > 0.9)
-                .Select<Point3, IPrimitive>(center =>
+                    new Vector3(
+                        tpl.a + 0.9f * (float)Sampler.Instance.Random01(),
+                        0.2f,
+                        tpl.b + 0.9f * (float)Sampler.Instance.Random01()))
+                .Where(center => (center - offLimitsZone).Length() > 0.9f)
+                .Select<Vector3, IPrimitive>(center =>
                 {
                     var mat = RandomMaterial();
-                    if (mat is not Lambertian) return new Sphere(center, 0.2, RandomMaterial());
-                    var center2 = center + new Vec3(0, Sampler.Instance.Random(0, 0.5), 0);
-                    return new MovingSphere(center, 0, center2, 1, 0.2, mat);
+                    if (mat is not Lambertian) return new Sphere(center.AsPoint3(), 0.2, RandomMaterial());
+                    var center2 = center + new Vector3(0, (float)Sampler.Instance.Random(0, 0.5), 0);
+                    return new MovingSphere(center, 0, center2, 1, 0.2f, mat);
                 }));
 
             var orientation = new Orientation

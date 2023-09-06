@@ -7,11 +7,11 @@ namespace Fovea.Renderer.Primitives
     public class Cylinder : IPrimitive
     {
         private readonly IMaterial _material;
-        private readonly double _radius;
-        private readonly double _zMax;
-        private readonly double _zMin;
+        private readonly float _radius;
+        private readonly float _zMax;
+        private readonly float _zMin;
 
-        public Cylinder(double zMin, double zMax, double radius, IMaterial material)
+        public Cylinder(float zMin, float zMax, float radius, IMaterial material)
         {
             _zMin = Math.Min(zMin, zMax);
             _zMax = Math.Max(zMin, zMax);
@@ -61,10 +61,10 @@ namespace Fovea.Renderer.Primitives
             return true;
         }
 
-        public BoundingBox GetBoundingBox(double t0, double t1)
+        public BoundingBox GetBoundingBox(float t0, float t1)
         {
-            var min = new Point3(-_radius, -_radius, _zMin);
-            var max = new Point3(_radius, _radius, _zMax);
+            var min = new Vector3(-_radius, -_radius, _zMin);
+            var max = new Vector3(_radius, _radius, _zMax);
             return new BoundingBox(min, max);
         }
 

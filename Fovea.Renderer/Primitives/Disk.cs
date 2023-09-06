@@ -10,9 +10,9 @@ namespace Fovea.Renderer.Primitives
         private readonly Point3 _center;
         private readonly IMaterial _material;
         private readonly Vec3 _normal;
-        private readonly double _radius;
+        private readonly float _radius;
 
-        public Disk(Point3 center, Vec3 normal, double radius, IMaterial material)
+        public Disk(Point3 center, Vec3 normal, float radius, IMaterial material)
         {
             _center = center;
             _normal = Vec3.Normalize(normal);
@@ -47,10 +47,10 @@ namespace Fovea.Renderer.Primitives
             return true;
         }
 
-        public BoundingBox GetBoundingBox(double t0, double t1)
+        public BoundingBox GetBoundingBox(float t0, float t1)
         {
-            return new(_center - new Vec3(_radius, _radius, _radius),
-                _center + new Vec3(_radius, _radius, _radius));
+            return new(_center.AsVector3() - new Vector3(_radius, _radius, _radius),
+                _center.AsVector3() + new Vector3(_radius, _radius, _radius));
         }
 
         public Vector3 RandomDirection(Vector3 origin)
