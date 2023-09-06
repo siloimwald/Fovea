@@ -84,9 +84,7 @@ namespace Fovea.Renderer.Materials.Texture
             {
                 // randomly swap two indices
                 var target = Sampler.Instance.RandomInt(0, i);
-                var tmp = arr[i];
-                arr[i] = arr[target];
-                arr[target] = tmp;
+                (arr[i], arr[target]) = (arr[target], arr[i]);
             }
         }
 

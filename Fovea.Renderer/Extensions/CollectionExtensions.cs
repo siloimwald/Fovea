@@ -6,9 +6,7 @@ namespace Fovea.Renderer.Extensions
     {
         public static IList<T> SwapElements<T>(this IList<T> list, int left, int right)
         {
-            var temp = list[left];
-            list[left] = list[right];
-            list[right] = temp;
+            (list[left], list[right]) = (list[right], list[left]);
             return list;
         }
     }

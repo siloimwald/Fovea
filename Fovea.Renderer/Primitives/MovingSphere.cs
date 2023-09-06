@@ -33,7 +33,7 @@ namespace Fovea.Renderer.Primitives
 
             hitRecord.RayT = root;
             hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT).AsVector3();
-            var outwardNormal = (hitRecord.HitPoint - center) * (1.0f / (float)_radius);
+            var outwardNormal = (hitRecord.HitPoint - center) * (1.0f / _radius);
             hitRecord.SetFaceNormal(ray, outwardNormal.AsVec3());
             hitRecord.Material = _material;
 

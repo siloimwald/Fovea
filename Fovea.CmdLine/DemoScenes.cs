@@ -30,7 +30,7 @@ namespace Fovea.CmdLine
 
     public static class DemoSceneCreator
     {
-        private const double DefaultAspectRatio = 16.0 / 9.0;
+        private const float DefaultAspectRatio = 16.0f / 9.0f;
 
         public static Scene MakeScene(DemoScenes sceneId, int imageWidth)
         {
@@ -116,12 +116,12 @@ namespace Fovea.CmdLine
 
             var orientation = new Orientation
             {
-                LookFrom = new Point3(478, 278, -600),
-                LookAt = new Point3(278, 278, 0),
-                UpDirection = new Vec3(0, 1, 0)
+                LookFrom = new Vector3(478, 278, -600),
+                LookAt = new Vector3(278, 278, 0),
+                UpDirection = new Vector3(0, 1, 0)
             };
 
-            var cam = new PerspectiveCamera(orientation, 1, 40.0f, 0, 10.0, 0, 1);
+            var cam = new PerspectiveCamera(orientation, 1, 40.0f, 0, 10.0f, 0, 1);
 
             return new Scene
             {
@@ -189,12 +189,12 @@ namespace Fovea.CmdLine
 
             var orientation = new Orientation
             {
-                LookFrom = new Point3(278, 278, -800),
-                LookAt = new Point3(278, 278, 0),
-                UpDirection = new Vec3(0, 1, 0)
+                LookFrom = new Vector3(278, 278, -800),
+                LookAt = new Vector3(278, 278, 0),
+                UpDirection = new Vector3(0, 1, 0)
             };
 
-            var cam = new PerspectiveCamera(orientation, 1.0, 40.0f, 0, 10.0);
+            var cam = new PerspectiveCamera(orientation, 1.0f, 40.0f, 0, 10.0f);
 
             return new Scene
             {
@@ -228,13 +228,13 @@ namespace Fovea.CmdLine
             // Camera
             var orientation = new Orientation
             {
-                LookFrom = new Point3(0, 2, 4),
-                LookAt = new Point3(0, 2, 0),
-                UpDirection = new Vec3(0, 1, 0)
+                LookFrom = new Vector3(0, 2, 4),
+                LookAt = new Vector3(0, 2, 0),
+                UpDirection = new Vector3(0, 1, 0)
             };
 
             var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 70.0f, .1, focusDist);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 70.0f, .1f, focusDist);
 
             return new Scene
             {
@@ -257,13 +257,13 @@ namespace Fovea.CmdLine
             // Camera
             var orientation = new Orientation
             {
-                LookFrom = new Point3(13, 2, 3),
-                LookAt = new Point3(0, 0, 0),
-                UpDirection = new Vec3(0, 1, 0)
+                LookFrom = new Vector3(13, 2, 3),
+                LookAt = new Vector3(0, 0, 0),
+                UpDirection = new Vector3(0, 1, 0)
             };
 
             var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0f, .1, focusDist);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0f, .1f, focusDist);
 
             return new Scene
             {
@@ -289,13 +289,13 @@ namespace Fovea.CmdLine
             // Camera
             var orientation = new Orientation
             {
-                LookFrom = new Point3(1, 5, 5),
-                LookAt = new Point3(0, 1, 0),
-                UpDirection = new Vec3(0, 0, -1)
+                LookFrom = new Vector3(1, 5, 5),
+                LookAt = new Vector3(0, 1, 0),
+                UpDirection = new Vector3(0, 0, -1)
             };
 
             var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 75.0f, .1, focusDist);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 75.0f, .1f, focusDist);
 
             return new Scene
             {
@@ -322,13 +322,13 @@ namespace Fovea.CmdLine
             // Camera
             var orientation = new Orientation
             {
-                LookFrom = new Point3(-3, 0, 4),
-                LookAt = new Point3(-2, 0, 0),
-                UpDirection = new Vec3(0, 1, 0)
+                LookFrom = new Vector3(-3, 0, 4),
+                LookAt = new Vector3(-2, 0, 0),
+                UpDirection = new Vector3(0, 1, 0)
             };
 
             var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 75.0f, .1, focusDist);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 75.0f, .1f, focusDist);
 
             return new Scene
             {
@@ -361,12 +361,12 @@ namespace Fovea.CmdLine
             // Camera
             var orientation = new Orientation
             {
-                LookFrom = new Point3(1, 0.5, -3),
-                LookAt = new Point3(0, 0.0, 0),
-                UpDirection = new Vec3(0, 1, 0)
+                LookFrom = new Vector3(1, 0.5f, -3),
+                LookAt = new Vector3(0, 0, 0),
+                UpDirection = new Vector3(0, 1, 0)
             };
             var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 28.0f, .1, focusDist);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 28.0f, .1f, focusDist);
 
             return new Scene
             {
@@ -421,12 +421,12 @@ namespace Fovea.CmdLine
 
             var orientation = new Orientation
             {
-                LookFrom = new Point3(13, 2, 3),
-                LookAt = new Point3(0, 0, 0),
-                UpDirection = new Vec3(0, 1, 0)
+                LookFrom = new Vector3(13, 2, 3),
+                LookAt = new Vector3(0, 0, 0),
+                UpDirection = new Vector3(0, 1, 0)
             };
 
-            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0, .1, 10.0, 0, 1);
+            var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 20.0f, .1f, 10.0f, 0, 1);
 
             return new Scene
             {

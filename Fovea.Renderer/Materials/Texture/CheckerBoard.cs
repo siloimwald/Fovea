@@ -1,4 +1,3 @@
-using System;
 using Fovea.Renderer.Image;
 using static System.MathF;
 

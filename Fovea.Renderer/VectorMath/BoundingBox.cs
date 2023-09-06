@@ -88,8 +88,8 @@ namespace Fovea.Renderer.VectorMath
             var invDir = Vector128.Create((float) ray.InverseDirection.X, (float) ray.InverseDirection.Y,
                 (float) ray.InverseDirection.Z, 0.0f);
             var org = Vector128.Create((float) ray.Origin.PX, (float) ray.Origin.PY, (float) ray.Origin.PZ, 0.0f);
-            var minVec = Vector128.Create((float) _min.X, (float) _min.Y, (float) _min.Z, 0.0f);
-            var maxVec = Vector128.Create((float) _max.X, (float) _max.Y, (float) _max.Z, 0.0f);
+            var minVec = Vector128.Create(_min.X, _min.Y, _min.Z, 0.0f);
+            var maxVec = Vector128.Create(_max.X, _max.Y, _max.Z, 0.0f);
 
             var t0 = Sse.Multiply(Sse.Subtract(minVec, org), invDir);
             var t1 = Sse.Multiply(Sse.Subtract(maxVec, org), invDir);

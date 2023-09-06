@@ -97,9 +97,13 @@ namespace Fovea.Renderer.Core
                         var color = new RGBColor();
                         for (var s = 0; s < NumSamples; ++s)
                         {
-                            var u = (px + Sampler.Instance.Random01()) / (imageWidth - 1);
-                            var v = (py + Sampler.Instance.Random01()) / (imageHeight - 1);
-                            var ray = scene.Camera.ShootRay(u, v);
+                            var r1 = Sampler.Instance.Random01();
+                            var r2 = Sampler.Instance.Random01();
+                            var u = r1 + px / ((double)imageWidth - 1);
+                            var v = r2 + py / ((double)imageHeight - 1);
+                            u = -1.0 + 2 * (u - r1);
+                            v = -1.0 + 2 * (v - r2);
+                            var ray = scene.Camera.ShootRay((float)u, (float)v);
                             color += ColorRay(ray, scene, MaxDepth);
                         }
 

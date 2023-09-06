@@ -1,5 +1,3 @@
-using Fovea.Renderer.VectorMath;
-
 namespace Fovea.Renderer.Sampling
 {
     public class MixturePDF : IPDF

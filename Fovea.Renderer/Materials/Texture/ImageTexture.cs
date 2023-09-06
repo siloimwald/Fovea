@@ -3,7 +3,6 @@ using System.Drawing;
 using System.IO;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.VectorMath;
-using static System.MathF;
 
 namespace Fovea.Renderer.Materials.Texture
 {

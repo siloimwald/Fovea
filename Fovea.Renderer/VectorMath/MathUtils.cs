@@ -36,9 +36,7 @@ namespace Fovea.Renderer.VectorMath
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Swap<T>(ref T left, ref T right)
         {
-            var tmp = left;
-            left = right;
-            right = tmp;
+            (left, right) = (right, left);
         }
     }
 }
