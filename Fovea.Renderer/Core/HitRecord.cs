@@ -6,7 +6,7 @@ namespace Fovea.Renderer.Core
     public struct HitRecord
     {
         /// <summary>point where we've hit the object</summary>
-        public Point3 HitPoint;
+        public Vector3 HitPoint;
 
         /// <summary>the ray parameter for the closest intersection</summary>
         public double RayT;

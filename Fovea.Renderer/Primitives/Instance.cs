@@ -33,7 +33,7 @@ namespace Fovea.Renderer.Primitives
             if (!_instance.Hit(transformedRay, rayInterval, ref hitRecord))
                 return false;
 
-            hitRecord.HitPoint = _transform * hitRecord.HitPoint;
+            hitRecord.HitPoint = (_transform * hitRecord.HitPoint.AsPoint3()).AsVector3(); // TODO: yikes.
             // normal needs the transposed of the inverse
             // if a scaling is involved we need to re-normalize
             var n = Vec3.Normalize(_inverseTransform.TransformVectorTransposed(hitRecord.Normal));

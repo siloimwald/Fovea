@@ -15,9 +15,9 @@ namespace Fovea.Renderer.Materials.Texture
             _perlin = new Perlin();
         }
 
-        public RGBColor Value(double u, double v, Point3 p)
+        public RGBColor Value(double u, double v, Vector3 p)
         {
-            var noise = 1 + Math.Sin(_scale * p.PZ + _perlin.Turbulence(p) * 10);
+            var noise = 1 + Math.Sin(_scale * p.Z + _perlin.Turbulence(p) * 10);
             return new RGBColor(1) * (float) (0.5 * noise);
         }
     }

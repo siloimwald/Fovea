@@ -52,7 +52,7 @@ namespace Fovea.Renderer.Image
             };
         }
 
-        public RGBColor Value(double u, double v, Point3 p)
+        public RGBColor Value(double u, double v, Vector3 p)
         {
             return this;
         }

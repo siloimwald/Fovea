@@ -31,7 +31,7 @@ namespace Fovea.Renderer.Primitives
             var (u, v, w) = barycentricCoords.Value;
 
             hitRecord.RayT = t0;
-            hitRecord.HitPoint = ray.PointsAt(t0);
+            hitRecord.HitPoint = ray.PointsAt(t0).AsVector3();
             hitRecord.Material = _mesh.Material;
 
             if (_mesh.HasVertexNormals)
@@ -74,7 +74,7 @@ namespace Fovea.Renderer.Primitives
             var edgeAB = vb - va;
             var edgeAC = vc - va;
             var area = 0.5 * Vec3.Cross(edgeAB, edgeAC).Length();
-            var distanceSquared = (hitRecord.HitPoint - origin.AsPoint3()).LengthSquared();
+            var distanceSquared = (hitRecord.HitPoint - origin).LengthSquared();
             var cosine = Math.Abs(Vec3.Dot(direction.AsVec3(), hitRecord.Normal) / direction.Length());
             var pdfVal = distanceSquared / (cosine * area);
             return (float)pdfVal;

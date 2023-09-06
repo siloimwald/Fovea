@@ -41,7 +41,7 @@ namespace Fovea.Renderer.Primitives
 
             hitRecord.RayT = tPlane;
             hitRecord.Material = _material;
-            hitRecord.HitPoint = hp;
+            hitRecord.HitPoint = hp.AsVector3();
             hitRecord.SetFaceNormal(ray, _normal);
 
             return true;
@@ -72,7 +72,7 @@ namespace Fovea.Renderer.Primitives
                 return 0;
 
             var area = _radius * _radius * Math.PI;
-            var distanceSquared = (hr.HitPoint - origin.AsPoint3()).LengthSquared();
+            var distanceSquared = (hr.HitPoint - origin).LengthSquared();
             var cosine = Math.Abs(Vec3.Dot(direction.AsVec3(), hr.Normal) / direction.Length());
             var pdfVal = distanceSquared / (cosine * area);
             return (float)pdfVal;

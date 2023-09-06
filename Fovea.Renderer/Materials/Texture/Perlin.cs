@@ -34,15 +34,15 @@ namespace Fovea.Renderer.Materials.Texture
             Permute(_permutationZ);
         }
 
-        private double Noise(Point3 p)
+        private double Noise(Vector3 p)
         {
-            var fpx = Math.Floor(p.PX);
-            var fpy = Math.Floor(p.PY);
-            var fpz = Math.Floor(p.PZ);
+            var fpx = Math.Floor(p.X);
+            var fpy = Math.Floor(p.Y);
+            var fpz = Math.Floor(p.Z);
 
-            var u = p.PX - fpx;
-            var v = p.PY - fpy;
-            var w = p.PZ - fpz;
+            var u = p.X - fpx;
+            var v = p.Y - fpy;
+            var w = p.Z - fpz;
 
             var i = (int) fpx;
             var j = (int) fpy;
@@ -62,7 +62,7 @@ namespace Fovea.Renderer.Materials.Texture
             return TriLinearInterpolate(c, u, v, w);
         }
 
-        public double Turbulence(Point3 p, int depth = 7)
+        public double Turbulence(Vector3 p, int depth = 7)
         {
             var result = 0.0;
             var weight = 1.0;
@@ -72,7 +72,7 @@ namespace Fovea.Renderer.Materials.Texture
             {
                 result += weight * Noise(p);
                 weight *= 0.5;
-                p = new Point3(p.PX * 2, p.PY * 2, p.PZ * 2);
+                p = new Vector3(p.X * 2, p.Y * 2, p.Z * 2);
             }
 
             return Math.Abs(result);

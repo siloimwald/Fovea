@@ -1,6 +1,6 @@
 using System;
 using Fovea.Renderer.Image;
-using Fovea.Renderer.VectorMath;
+using static System.MathF;
 
 namespace Fovea.Renderer.Materials.Texture
 {
@@ -17,9 +17,9 @@ namespace Fovea.Renderer.Materials.Texture
             _size = size;
         }
 
-        public RGBColor Value(double u, double v, Point3 p)
+        public RGBColor Value(double u, double v, Vector3 p)
         {
-            var sines = Math.Sin(_size * p.PX) * Math.Sin(_size * p.PY) * Math.Sin(_size * p.PZ);
+            var sines = Sin(_size * p.X) * Sin(_size * p.Y) * Sin(_size * p.Z);
             return sines < 0 ? _odd.Value(u, v, p) : _even.Value(u, v, p);
         }
     }

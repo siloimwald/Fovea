@@ -31,7 +31,7 @@ namespace Fovea.Renderer.Materials
             scatterResult.IsSpecular = true;
             scatterResult.Pdf = null;
             scatterResult.Attenuation = new RGBColor(1.0, 1.0, 1.0);
-            scatterResult.SpecularRay = new Ray(hitRecord.HitPoint, outDir, rayIn.Time);
+            scatterResult.SpecularRay = new Ray(hitRecord.HitPoint, outDir.AsVector3(), rayIn.Time);
             return true;
         }
 

@@ -47,7 +47,7 @@ namespace Fovea.Renderer.Primitives
                 return false;
 
             hitRecord.RayT = hr1.RayT + hitDistance / rayLength;
-            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
+            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT).AsVector3();
             hitRecord.Material = _material;
 
             // front face/normal left unset, never used due to fixed material

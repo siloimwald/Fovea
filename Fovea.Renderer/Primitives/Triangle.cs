@@ -30,7 +30,7 @@ namespace Fovea.Renderer.Primitives
                 return false;
 
             hitRecord.RayT = t0;
-            hitRecord.HitPoint = ray.PointsAt(t0);
+            hitRecord.HitPoint = ray.PointsAt(t0).AsVector3();
             hitRecord.Material = _material;
             hitRecord.SetFaceNormal(ray, _normal);
 

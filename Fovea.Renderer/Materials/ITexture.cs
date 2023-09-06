@@ -5,6 +5,6 @@ namespace Fovea.Renderer.Materials
 {
     public interface ITexture
     {
-        RGBColor Value(double u, double v, Point3 p);
+        RGBColor Value(double u, double v, Vector3 p);
     }
 }
