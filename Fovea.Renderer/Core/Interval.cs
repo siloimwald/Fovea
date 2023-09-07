@@ -8,20 +8,20 @@ public struct Interval
     /// <summary>
     /// the left bound/min value of this interval
     /// </summary>
-    public double Min;
+    public float Min;
     
     /// <summary>
     /// the right bound/max value of this interval
     /// </summary>
-    public double Max;
+    public float Max;
     
     /// <summary>
     /// creates an empty interval [+oo, -oo]
     /// </summary>
     public Interval()
     {
-        Min = double.PositiveInfinity;
-        Max = double.NegativeInfinity;
+        Min = float.PositiveInfinity;
+        Max = float.NegativeInfinity;
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ public struct Interval
     /// </summary>
     /// <param name="min">left/min bound of interval</param>
     /// <param name="max">right/max bound of interval</param>
-    public Interval(double min, double max)
+    public Interval(float min, float max)
     {
         Min = min;
         Max = max;
@@ -38,10 +38,10 @@ public struct Interval
     /// <summary>
     /// tests if this interval contains the value t, i.e. t \in [min, max]
     /// </summary>
-    /// <param name="t">double test value</param>
+    /// <param name="t">float test value</param>
     /// <returns>true if t is contained within the interval</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining), Pure]
-    public bool Contains(double t)
+    public bool Contains(float t)
     {
         return Min <= t && t <= Max;
     }
@@ -51,10 +51,10 @@ public struct Interval
     /// i.e. t \in ]min, max[
     /// boundaries
     /// </summary>
-    /// <param name="t">double test value</param>
+    /// <param name="t">float test value</param>
     /// <returns>true if t is within the interval and not exactly on either boundary</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining), Pure]
-    public bool Surrounds(double t)
+    public bool Surrounds(float t)
     {
         return Min < t && t < Max;
     }
@@ -66,7 +66,7 @@ public struct Interval
     /// <returns>the interval [e, +oo]</returns>
     public static Interval HalfOpenWithOffset()
     {
-        return new Interval(1e-4, double.PositiveInfinity);
+        return new Interval(1e-4f, float.PositiveInfinity);
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public struct Interval
     /// <returns></returns>
     public static Interval Everything()
     {
-        return new Interval(double.NegativeInfinity, double.PositiveInfinity);
+        return new Interval(float.NegativeInfinity, float.PositiveInfinity);
     }
     
 }

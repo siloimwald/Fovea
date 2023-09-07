@@ -32,7 +32,7 @@ namespace Fovea.Renderer.Primitives
         public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             
-            var inverseOrg = Vector3.Transform(ray.Origin.AsVector3(), _inverseTransform);
+            var inverseOrg = Vector3.Transform(ray.Origin, _inverseTransform);
             var inverseDir = Vector3.Transform(ray.Direction.AsVector3(), _inverseTransform);
             
             var transformedRay = new Ray(inverseOrg, inverseDir);

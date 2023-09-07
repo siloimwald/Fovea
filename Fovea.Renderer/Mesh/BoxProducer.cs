@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Mesh
 {

@@ -20,12 +20,12 @@ namespace Fovea.Renderer.Primitives
 
         public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
-            var root = 0.0;
+            var root = 0.0f;
             if (!IntersectSphere(ray, _center, _radius, rayInterval, ref root))
                 return false;
 
             hitRecord.RayT = root;
-            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT).AsVector3();
+            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
             var outwardNormal = (hitRecord.HitPoint - _center) * (1.0f / _radius);
             hitRecord.SetFaceNormal(ray, outwardNormal);
             hitRecord.Material = _material;
@@ -66,11 +66,11 @@ namespace Fovea.Renderer.Primitives
         }
 
         public static bool IntersectSphere(
-            in Ray ray, in Vector3 center, double radius,
-            in Interval rayInterval, ref double tRay)
+            in Ray ray, in Vector3 center, float radius,
+            in Interval rayInterval, ref float tRay)
         {
-            var oc = ray.Origin.AsVector3() - center;
-            var a = ray.Direction.LengthSquared();
+            var oc = ray.Origin - center;
+            var a = (float)ray.Direction.LengthSquared();
             var h = Vector3.Dot(oc, ray.Direction.AsVector3()); // b=2h
             var c = oc.LengthSquared() - radius * radius;
             var disc = (float)(h * h - a * c);

@@ -7,12 +7,12 @@ namespace Fovea.Renderer.Primitives
 {
     public class Disk : IPrimitive
     {
-        private readonly Point3 _center;
+        private readonly Vector3 _center;
         private readonly IMaterial _material;
         private readonly Vector3 _normal;
         private readonly float _radius;
 
-        public Disk(Point3 center, Vector3 normal, float radius, IMaterial material)
+        public Disk(Vector3 center, Vector3 normal, float radius, IMaterial material)
         {
             _center = center;
             _normal = Vector3.Normalize(normal);
@@ -28,7 +28,7 @@ namespace Fovea.Renderer.Primitives
             if (Math.Abs(denom) < 1e-6) // parallel 
                 return false;
 
-            var tPlane = Vector3.Dot(_center.AsVector3() - ray.Origin.AsVector3(), _normal) / denom;
+            var tPlane = Vector3.Dot(_center - ray.Origin, _normal) / denom;
 
             if (!rayInterval.Contains(tPlane))
                 return false;
@@ -41,7 +41,7 @@ namespace Fovea.Renderer.Primitives
 
             hitRecord.RayT = tPlane;
             hitRecord.Material = _material;
-            hitRecord.HitPoint = hp.AsVector3();
+            hitRecord.HitPoint = hp;
             hitRecord.SetFaceNormal(ray, _normal);
 
             return true;
@@ -49,8 +49,8 @@ namespace Fovea.Renderer.Primitives
 
         public BoundingBox GetBoundingBox(float t0, float t1)
         {
-            return new(_center.AsVector3() - new Vector3(_radius, _radius, _radius),
-                _center.AsVector3() + new Vector3(_radius, _radius, _radius));
+            return new(_center - new Vector3(_radius, _radius, _radius),
+                _center + new Vector3(_radius, _radius, _radius));
         }
 
         public Vector3 RandomDirection(Vector3 origin)
@@ -60,15 +60,15 @@ namespace Fovea.Renderer.Primitives
             var (px, py) = Sampler.Instance.RandomOnUnitDisk();
             px *= _radius;
             py *= _radius;
-            var dir = _center - origin.AsPoint3();
+            var dir = _center - origin;
             var z = dir.LengthSquared();
-            return new OrthonormalBasis(dir.AsVector3()).Local(px, py, z); // TODO: meh.
+            return new OrthonormalBasis(dir).Local(px, py, z); // TODO: meh.
         }
 
         public float PdfValue(Vector3 origin, Vector3 direction)
         {
             var hr = new HitRecord();
-            if (!Hit(new Ray(origin.AsPoint3(), direction.AsVec3()), Interval.HalfOpenWithOffset(), ref hr))
+            if (!Hit(new Ray(origin, direction.AsVec3()), Interval.HalfOpenWithOffset(), ref hr))
                 return 0;
 
             var area = _radius * _radius * Math.PI;

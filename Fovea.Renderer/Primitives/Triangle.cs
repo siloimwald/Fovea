@@ -24,13 +24,13 @@ namespace Fovea.Renderer.Primitives
 
         public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
-            var t0 = 0.0;
+            var t0 = 0.0f;
 
             if (!TriangleIntersection(ray, _vertexA, _edgeAB, _edgeAC, rayInterval, ref t0).HasValue)
                 return false;
 
             hitRecord.RayT = t0;
-            hitRecord.HitPoint = ray.PointsAt(t0).AsVector3();
+            hitRecord.HitPoint = ray.PointsAt(t0);
             hitRecord.Material = _material;
             hitRecord.SetFaceNormal(ray, _normal);
 
@@ -61,17 +61,17 @@ namespace Fovea.Renderer.Primitives
             in Vector3 edgeAB,
             in Vector3 edgeAC,
             in Interval rayInterval,
-            ref double tRay)
+            ref float tRay)
         {
             var pVec = Vector3.Cross(ray.Direction.AsVector3(), edgeAC);
             var det = Vector3.Dot(edgeAB, pVec);
 
-            if (Math.Abs(det) < 1e-4) // parallel to triangle plane
+            if (MathF.Abs(det) < 1e-4f) // parallel to triangle plane
                 return null;
 
-            var invDet = 1.0 / det;
+            var invDet = 1.0f / det;
 
-            var tVec = ray.Origin.AsVector3() - vertexA;
+            var tVec = ray.Origin - vertexA;
             var u = Vector3.Dot(tVec, pVec) * invDet;
             if (u is < 0.0f or > 1.0f) return null;
             var qVec = Vector3.Cross(tVec, edgeAB);
@@ -82,7 +82,7 @@ namespace Fovea.Renderer.Primitives
             // if (t0 < tMin || tMax < t0) return null;
             if (!rayInterval.Contains(t0)) return null;
             tRay = t0;
-            return ((float)u, (float)v, 1.0f - (float)(u + v));
+            return (u, v, 1.0f - (u + v));
         }
     }
 }

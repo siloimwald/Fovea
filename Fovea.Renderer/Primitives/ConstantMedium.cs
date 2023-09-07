@@ -10,11 +10,11 @@ namespace Fovea.Renderer.Primitives
     {
         private readonly IPrimitive _boundary;
         private readonly Isotropic _material;
-        private readonly double _negInvDensity;
+        private readonly float _negInvDensity;
 
-        public ConstantMedium(IPrimitive boundary, double density, ITexture color)
+        public ConstantMedium(IPrimitive boundary, float density, ITexture color)
         {
-            _negInvDensity = -1.0 / density;
+            _negInvDensity = -1.0f / density;
             _boundary = boundary;
             _material = new Isotropic(color);
         }
@@ -27,7 +27,7 @@ namespace Fovea.Renderer.Primitives
             if (!_boundary.Hit(ray, Interval.Everything(), ref hr1))
                 return false;
 
-            if (!_boundary.Hit(ray, Interval.HalfOpenWithOffset() with { Min = hr1.RayT + 0.001}, ref hr2))
+            if (!_boundary.Hit(ray, Interval.HalfOpenWithOffset() with { Min = hr1.RayT + 0.001f}, ref hr2))
                 return false;
 
             hr1.RayT = Math.Max(hr1.RayT, rayInterval.Min);
@@ -39,15 +39,15 @@ namespace Fovea.Renderer.Primitives
             if (hr1.RayT < 0)
                 hr1.RayT = 0;
 
-            var rayLength = ray.Direction.Length();
+            var rayLength = (float)ray.Direction.Length();
             var distanceInsideBoundary = (hr2.RayT - hr1.RayT) * rayLength;
-            var hitDistance = _negInvDensity * Math.Log(Sampler.Instance.Random01());
+            var hitDistance = _negInvDensity * MathF.Log((float)Sampler.Instance.Random01());
 
             if (hitDistance > distanceInsideBoundary)
                 return false;
 
             hitRecord.RayT = hr1.RayT + hitDistance / rayLength;
-            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT).AsVector3();
+            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
             hitRecord.Material = _material;
 
             // front face/normal left unset, never used due to fixed material

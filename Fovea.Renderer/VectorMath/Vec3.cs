@@ -17,15 +17,6 @@ namespace Fovea.Renderer.VectorMath
             return new Vector3((float)v.X, (float)v.Y, (float)v.Z);
         }
         
-        public static Vector3 AsVector3(this Point3 p)
-        {
-            return new Vector3((float)p.PX, (float)p.PY, (float)p.PZ);
-        }
-
-        public static Point3 AsPoint3(this Vector3 v)
-        {
-            return new Point3(v.X, v.Y, v.Z);
-        }
     }
     
     /// <summary>3D Vector</summary>

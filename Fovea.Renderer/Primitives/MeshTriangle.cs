@@ -22,7 +22,7 @@ namespace Fovea.Renderer.Primitives
         {
             var (f0, f1, f2) = _mesh.Faces[_faceIndex];
             var (va, vb, vc) = (_mesh.Vertices[f0], _mesh.Vertices[f1], _mesh.Vertices[f2]);
-            var t0 = 0.0;
+            var t0 = 0.0f;
 
             var barycentricCoords = Triangle.TriangleIntersection(ray, va, vb - va, vc - va, rayInterval, ref t0);
             if (!barycentricCoords.HasValue)
@@ -31,7 +31,7 @@ namespace Fovea.Renderer.Primitives
             var (u, v, w) = barycentricCoords.Value;
 
             hitRecord.RayT = t0;
-            hitRecord.HitPoint = ray.PointsAt(t0).AsVector3();
+            hitRecord.HitPoint = ray.PointsAt(t0);
             hitRecord.Material = _mesh.Material;
 
             if (_mesh.HasVertexNormals)

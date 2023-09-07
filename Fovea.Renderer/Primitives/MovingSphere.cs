@@ -27,12 +27,12 @@ namespace Fovea.Renderer.Primitives
         public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             var center = CenterAtTime((float)ray.Time);
-            var root = 0.0;
+            var root = 0.0f;
             if (!Sphere.IntersectSphere(ray, center, _radius, rayInterval, ref root))
                 return false;
 
             hitRecord.RayT = root;
-            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT).AsVector3();
+            hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
             var outwardNormal = (hitRecord.HitPoint - center) * (1.0f / _radius);
             hitRecord.SetFaceNormal(ray, outwardNormal);
             hitRecord.Material = _material;

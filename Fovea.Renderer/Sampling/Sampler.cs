@@ -70,9 +70,5 @@ namespace Fovea.Renderer.Sampling
             return new(Random(min, max), Random(min, max), Random(min, max));
         }
 
-        public Point3 RandomPoint(double min, double max)
-        {
-            return new(Random(min, max), Random(min, max), Random(min, max));
-        }
     }
 }

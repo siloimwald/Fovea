@@ -22,9 +22,9 @@ namespace Fovea.Renderer.Primitives
         public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             // get better cap hit, if any
-            var tCap = 0.0;
+            var tCap = 0.0f;
             var hitCap = TestCapHit(ray, rayInterval, ref tCap);
-            var tBody = 0.0;
+            var tBody = 0.0f;
             var hitBody = TestBodyHit(ray, rayInterval, ref tBody);
 
             if (!hitBody && !hitCap)
@@ -32,7 +32,7 @@ namespace Fovea.Renderer.Primitives
 
             if (hitBody && !hitCap || hitBody && tBody < tCap)
             {
-                var hitPoint = ray.PointsAt(tBody).AsVector3();
+                var hitPoint = ray.PointsAt(tBody);
                 var n = (hitPoint - new Vector3(0, 0, hitPoint.Z)) * (1.0f / _radius);
                 hitRecord.HitPoint = hitPoint;
                 hitRecord.Material = _material;
@@ -48,7 +48,7 @@ namespace Fovea.Renderer.Primitives
 
 
             // cap hit
-            hitRecord.HitPoint = ray.PointsAt(tCap).AsVector3();
+            hitRecord.HitPoint = ray.PointsAt(tCap);
             hitRecord.RayT = tCap;
             hitRecord.Material = _material;
 
@@ -73,25 +73,25 @@ namespace Fovea.Renderer.Primitives
         /// <param name="rayInterval">ray interval</param>
         /// <param name="tCap">reference to better cap hit</param>
         /// <returns></returns>
-        private bool TestCapHit(in Ray ray, in Interval rayInterval, ref double tCap)
+        private bool TestCapHit(in Ray ray, in Interval rayInterval, ref float tCap)
         {
             // parallel to plane
-            if (Math.Abs(ray.Direction.Z) < 1e-6)
+            if (MathF.Abs((float)ray.Direction.Z) < 1e-6f)
                 return false;
 
-            var t0 = (_zMin - ray.Origin.PZ) / ray.Direction.Z;
-            var t1 = (_zMax - ray.Origin.PZ) / ray.Direction.Z;
+            var t0 = (float)((_zMin - ray.Origin.Z) / ray.Direction.Z);
+            var t1 = (float)((_zMax - ray.Origin.Z) / ray.Direction.Z);
 
             if (t0 > t1) MathUtils.Swap(ref t0, ref t1);
 
             tCap = t0;
             var hp = ray.PointsAt(tCap);
             var r2 = _radius * _radius;
-            if (rayInterval.Contains(tCap) && !(hp.PX * hp.PX + hp.PY * hp.PY > r2)) return true;
+            if (rayInterval.Contains(tCap) && !(hp.X * hp.X + hp.Y * hp.Y > r2)) return true;
             tCap = t1;
             hp = ray.PointsAt(tCap);
 
-            return rayInterval.Contains(tCap) && !(hp.PX * hp.PX + hp.PY * hp.PY > r2);
+            return rayInterval.Contains(tCap) && !(hp.X * hp.X + hp.Y * hp.Y > r2);
         }
 
         /// <summary>test ray against cylinder body</summary>
@@ -99,23 +99,23 @@ namespace Fovea.Renderer.Primitives
         /// <param name="rayInterval">ray interval</param>
         /// <param name="tBody">potential closest body hit</param>
         /// <returns></returns>
-        private bool TestBodyHit(in Ray ray, in Interval rayInterval, ref double tBody)
+        private bool TestBodyHit(in Ray ray, in Interval rayInterval, ref float tBody)
         {
             var a = ray.Direction.X * ray.Direction.X + ray.Direction.Y * ray.Direction.Y;
-            var b = 2.0 * (ray.Direction.X * ray.Origin.PX + ray.Direction.Y * ray.Origin.PY);
-            var c = ray.Origin.PX * ray.Origin.PX + ray.Origin.PY * ray.Origin.PY - _radius * _radius;
+            var b = 2.0 * (ray.Direction.X * ray.Origin.X + ray.Direction.Y * ray.Origin.Y);
+            var c = ray.Origin.X * ray.Origin.X + ray.Origin.Y * ray.Origin.Y - _radius * _radius;
 
-            double t0 = 0.0, t1 = 0.0;
-            if (!MathUtils.SolveQuadratic(a, b, c, ref t0, ref t1))
+            float t0 = 0.0f, t1 = 0.0f;
+            if (!MathUtils.SolveQuadratic((float)a, (float)b,c, ref t0, ref t1))
                 return false;
 
             tBody = t0;
             // test against ray interval and clip
-            var hpz = ray.Origin.PZ + tBody * ray.Direction.Z;
+            var hpz = ray.Origin.Z + tBody * ray.Direction.Z;
             if (!rayInterval.Contains(tBody) || hpz < _zMin || hpz > _zMax)
             {
                 tBody = t1;
-                hpz = ray.Origin.PZ + tBody * ray.Direction.Z;
+                hpz = ray.Origin.Z + tBody * ray.Direction.Z;
                 if (!rayInterval.Contains(tBody) || hpz < _zMin || hpz > _zMax)
                     return false;
             }

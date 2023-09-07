@@ -62,20 +62,20 @@ namespace Fovea.Renderer.VectorMath
         /// <returns>true if ray intersects box</returns>
         public bool Intersect(in Ray ray, double tMin, double tMax)
         {
-            var tx1 = (_min.X - ray.Origin.PX) * ray.InverseDirection.X;
-            var tx2 = (_max.X - ray.Origin.PX) * ray.InverseDirection.X;
+            var tx1 = (_min.X - ray.Origin.X) * ray.InverseDirection.X;
+            var tx2 = (_max.X - ray.Origin.X) * ray.InverseDirection.X;
 
             tMin = Math.Max(tMin, Math.Min(tx1, tx2));
             tMax = Math.Min(tMax, Math.Max(tx1, tx2));
 
-            var ty1 = (_min.Y - ray.Origin.PY) * ray.InverseDirection.Y;
-            var ty2 = (_max.Y - ray.Origin.PY) * ray.InverseDirection.Y;
+            var ty1 = (_min.Y - ray.Origin.Y) * ray.InverseDirection.Y;
+            var ty2 = (_max.Y - ray.Origin.Y) * ray.InverseDirection.Y;
 
             tMin = Math.Max(tMin, Math.Min(ty1, ty2));
             tMax = Math.Min(tMax, Math.Max(ty1, ty2));
 
-            var tz1 = (_min.Z - ray.Origin.PZ) * ray.InverseDirection.Z;
-            var tz2 = (_max.Z - ray.Origin.PZ) * ray.InverseDirection.Z;
+            var tz1 = (_min.Z - ray.Origin.Z) * ray.InverseDirection.Z;
+            var tz2 = (_max.Z - ray.Origin.Z) * ray.InverseDirection.Z;
 
             tMin = Math.Max(tMin, Math.Min(tz1, tz2));
             tMax = Math.Min(tMax, Math.Max(tz1, tz2));
@@ -87,7 +87,7 @@ namespace Fovea.Renderer.VectorMath
         {
             var invDir = Vector128.Create((float) ray.InverseDirection.X, (float) ray.InverseDirection.Y,
                 (float) ray.InverseDirection.Z, 0.0f);
-            var org = Vector128.Create((float) ray.Origin.PX, (float) ray.Origin.PY, (float) ray.Origin.PZ, 0.0f);
+            var org = Vector128.Create(ray.Origin.X, ray.Origin.Y, ray.Origin.Z, 0.0f);
             var minVec = Vector128.Create(_min.X, _min.Y, _min.Z, 0.0f);
             var maxVec = Vector128.Create(_max.X, _max.Y, _max.Z, 0.0f);
 
