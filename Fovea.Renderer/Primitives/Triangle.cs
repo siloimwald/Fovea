@@ -10,7 +10,7 @@ namespace Fovea.Renderer.Primitives
         private readonly Vec3 _edgeAB;
         private readonly Vec3 _edgeAC;
         private readonly IMaterial _material;
-        private readonly Vec3 _normal; // precomputed geometric outward normal
+        private readonly Vector3 _normal; // precomputed geometric outward normal
         private readonly Point3 _vertexA;
 
         public Triangle(Point3 vertexA, Point3 vertexB, Point3 vertexC, IMaterial material)
@@ -18,7 +18,7 @@ namespace Fovea.Renderer.Primitives
             _vertexA = vertexA;
             _edgeAB = vertexB - vertexA;
             _edgeAC = vertexC - vertexA;
-            _normal = Vec3.Normalize(Vec3.Cross(_edgeAB, _edgeAC));
+            _normal = Vec3.Normalize(Vec3.Cross(_edgeAB, _edgeAC)).AsVector3();
             _material = material;
         }
 

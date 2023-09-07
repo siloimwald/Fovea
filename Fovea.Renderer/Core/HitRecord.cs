@@ -15,15 +15,15 @@ namespace Fovea.Renderer.Core
         ///     normal at intersection. the correction towards outward facing normal is done just before shading so this might
         ///     point into any direction prior to that
         /// </summary>
-        public Vec3 Normal;
+        public Vector3 Normal;
 
         /// <summary>whether we've hit the front face of the primitive (normal points towards ray)</summary>
         public bool IsFrontFace;
 
         /// <summary>ensure the normal points towards the ray and flip if necessary</summary>
-        public void SetFaceNormal(Ray ray, Vec3 outwardNormal)
+        public void SetFaceNormal(Ray ray, Vector3 outwardNormal)
         {
-            IsFrontFace = Vec3.Dot(ray.Direction, outwardNormal) < 0;
+            IsFrontFace = Vector3.Dot(ray.Direction.AsVector3(), outwardNormal) < 0;
             Normal = IsFrontFace ? outwardNormal : -outwardNormal;
         }
 

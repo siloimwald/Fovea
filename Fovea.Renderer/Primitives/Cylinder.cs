@@ -32,15 +32,15 @@ namespace Fovea.Renderer.Primitives
 
             if (hitBody && !hitCap || hitBody && tBody < tCap)
             {
-                var hitPoint = ray.PointsAt(tBody);
-                var n = (hitPoint - new Point3(0, 0, hitPoint.PZ)) * (1.0 / _radius);
-                hitRecord.HitPoint = hitPoint.AsVector3();
+                var hitPoint = ray.PointsAt(tBody).AsVector3();
+                var n = (hitPoint - new Vector3(0, 0, hitPoint.Z)) * (1.0f / _radius);
+                hitRecord.HitPoint = hitPoint;
                 hitRecord.Material = _material;
                 hitRecord.RayT = tBody;
 
                 var theta = Math.Atan2(n.X, n.Y);
                 hitRecord.TextureV = 0.5 + theta / (2 * Math.PI);
-                hitRecord.TextureU = (hitPoint.PZ - _zMin) / (_zMax - _zMin);
+                hitRecord.TextureU = (hitPoint.Z - _zMin) / (_zMax - _zMin);
 
                 hitRecord.SetFaceNormal(ray, n);
                 return true;
@@ -57,7 +57,7 @@ namespace Fovea.Renderer.Primitives
 
             // flip the normal accordingly
             var s = hitRecord.HitPoint.Z < 0 ? -1 : 1;
-            hitRecord.SetFaceNormal(ray, new Vec3(0, 0, s));
+            hitRecord.SetFaceNormal(ray, new Vector3(0, 0, s));
             return true;
         }
 

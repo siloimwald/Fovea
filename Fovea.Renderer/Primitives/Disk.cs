@@ -9,13 +9,13 @@ namespace Fovea.Renderer.Primitives
     {
         private readonly Point3 _center;
         private readonly IMaterial _material;
-        private readonly Vec3 _normal;
+        private readonly Vector3 _normal;
         private readonly float _radius;
 
-        public Disk(Point3 center, Vec3 normal, float radius, IMaterial material)
+        public Disk(Point3 center, Vector3 normal, float radius, IMaterial material)
         {
             _center = center;
-            _normal = Vec3.Normalize(normal);
+            _normal = Vector3.Normalize(normal);
             _radius = radius;
             _material = material;
         }
@@ -23,12 +23,12 @@ namespace Fovea.Renderer.Primitives
         public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             // intersect with plane disk is in, check radius afterwards
-            var denom = Vec3.Dot(_normal, ray.Direction);
+            var denom = Vector3.Dot(_normal, ray.Direction.AsVector3());
 
             if (Math.Abs(denom) < 1e-6) // parallel 
                 return false;
 
-            var tPlane = Vec3.Dot(_center - ray.Origin, _normal) / denom;
+            var tPlane = Vector3.Dot(_center.AsVector3() - ray.Origin.AsVector3(), _normal) / denom;
 
             if (!rayInterval.Contains(tPlane))
                 return false;
@@ -73,7 +73,7 @@ namespace Fovea.Renderer.Primitives
 
             var area = _radius * _radius * Math.PI;
             var distanceSquared = (hr.HitPoint - origin).LengthSquared();
-            var cosine = Math.Abs(Vec3.Dot(direction.AsVec3(), hr.Normal) / direction.Length());
+            var cosine = Math.Abs(Vector3.Dot(direction, hr.Normal) / direction.Length());
             var pdfVal = distanceSquared / (cosine * area);
             return (float)pdfVal;
         }

@@ -26,10 +26,12 @@ namespace Fovea.Renderer.Materials
             scatterResult.IsSpecular = true;
             scatterResult.Pdf = null;
             scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
-            var reflected = Vec3.Reflect(Vec3.Normalize(rayIn.Direction), hitRecord.Normal);
-            var dir = reflected + Sampler.Instance.RandomOnUnitSphere() * _fuzzy;
+
+            var reflected = Vector3.Reflect(Vector3.Normalize(rayIn.Direction.AsVector3()), hitRecord.Normal);
+            // var reflected = Vec3.Reflect(Vec3.Normalize(rayIn.Direction), hitRecord.Normal);
+            var dir = reflected + Sampler.Instance.RandomOnUnitSphere().AsVector3() * (float)_fuzzy;
             scatterResult.SpecularRay =
-                new Ray(hitRecord.HitPoint, dir.AsVector3(), rayIn.Time);
+                new Ray(hitRecord.HitPoint, dir, rayIn.Time);
             return true;
         }
     }

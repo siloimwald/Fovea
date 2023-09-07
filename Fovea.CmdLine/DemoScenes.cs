@@ -150,12 +150,12 @@ namespace Fovea.CmdLine
             // spot lights
             var spotLights = new List<IPrimitive>
             {
-                new Disk(new Point3(140, 554, 140), new Vec3(0, -1, 0), 40, light),
-                new Disk(new Point3(415, 554, 140), new Vec3(0, -1, 0), 40, light),
+                new Disk(new Point3(140, 554, 140), new Vector3(0, -1, 0), 40, light),
+                new Disk(new Point3(415, 554, 140), new Vector3(0, -1, 0), 40, light),
                 // new Disk(new Point3(140, 554, 415), new Vec3(0, -1, 0), 40, light),
                 // new Disk(new Point3(415, 554, 415), new Vec3(0, -1, 0), 40, light),
-                new Disk(new Point3(1, 415, 278), new Vec3(1, 0, 0), 40, light),
-                new Disk(new Point3(554, 415, 278), new Vec3(-1, 0, 0), 40, light)
+                new Disk(new Point3(1, 415, 278), new Vector3(1, 0, 0), 40, light),
+                new Disk(new Point3(554, 415, 278), new Vector3(-1, 0, 0), 40, light)
             };
             prims.AddRange(spotLights);
             var lightSources = new PrimitiveList(spotLights);
@@ -212,17 +212,17 @@ namespace Fovea.CmdLine
             var prims = new List<IPrimitive>
             {
                 new Sphere(new Point3(0, -1000, 0), 999, new Lambertian(0.3, 0.3, 0.3)),
-                new Disk(new Point3(-2, 2, 0), new Vec3(0, 0, 1), 1, mat),
-                new Disk(new Point3(0, 2, 0), new Vec3(0, 1, 1), 1, mat),
-                new Disk(new Point3(2, 2, 0), new Vec3(0, -1, 1), 1, mat),
+                new Disk(new Point3(-2, 2, 0), new Vector3(0, 0, 1), 1, mat),
+                new Disk(new Point3(0, 2, 0), new Vector3(0, 1, 1), 1, mat),
+                new Disk(new Point3(2, 2, 0), new Vector3(0, -1, 1), 1, mat),
 
-                new Disk(new Point3(-2, 4, 0), new Vec3(0, 1, 0), 1, mat),
-                new Disk(new Point3(0, 4, 0), new Vec3(0, 1, -1), 1, mat),
-                new Disk(new Point3(2, 4, 0), new Vec3(0, 0, -1), 1, mat),
+                new Disk(new Point3(-2, 4, 0), new Vector3(0, 1, 0), 1, mat),
+                new Disk(new Point3(0, 4, 0), new Vector3(0, 1, -1), 1, mat),
+                new Disk(new Point3(2, 4, 0), new Vector3(0, 0, -1), 1, mat),
 
-                new Disk(new Point3(-2, 0, 0), new Vec3(1, 1, 0), 1, mat),
-                new Disk(new Point3(0, 0, 0), new Vec3(0, 1, 0), 1, mat),
-                new Disk(new Point3(2, 0, 0), new Vec3(-1, 1, 0), 1, mat)
+                new Disk(new Point3(-2, 0, 0), new Vector3(1, 1, 0), 1, mat),
+                new Disk(new Point3(0, 0, 0), new Vector3(0, 1, 0), 1, mat),
+                new Disk(new Point3(2, 0, 0), new Vector3(-1, 1, 0), 1, mat)
             };
 
             // Camera

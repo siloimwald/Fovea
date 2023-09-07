@@ -40,11 +40,11 @@ namespace Fovea.Renderer.Primitives
                 var nb = _mesh.Normals[f1];
                 var nc = _mesh.Normals[f2];
                 var n = na * w + nb * u + nc * v;
-                hitRecord.SetFaceNormal(ray, n);
+                hitRecord.SetFaceNormal(ray, n.AsVector3());
             }
             else
             {
-                hitRecord.SetFaceNormal(ray, _mesh.Normals[_faceIndex]);
+                hitRecord.SetFaceNormal(ray, _mesh.Normals[_faceIndex].AsVector3());
             }
 
             if (_mesh.Texture == null) return true; // hit at t0
@@ -75,7 +75,7 @@ namespace Fovea.Renderer.Primitives
             var edgeAC = vc - va;
             var area = 0.5 * Vec3.Cross(edgeAB, edgeAC).Length();
             var distanceSquared = (hitRecord.HitPoint - origin).LengthSquared();
-            var cosine = Math.Abs(Vec3.Dot(direction.AsVec3(), hitRecord.Normal) / direction.Length());
+            var cosine = Math.Abs(Vec3.Dot(direction.AsVec3(), hitRecord.Normal.AsVec3()) / direction.Length());
             var pdfVal = distanceSquared / (cosine * area);
             return (float)pdfVal;
         }
