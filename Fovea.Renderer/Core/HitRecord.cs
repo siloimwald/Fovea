@@ -23,7 +23,7 @@ namespace Fovea.Renderer.Core
         /// <summary>ensure the normal points towards the ray and flip if necessary</summary>
         public void SetFaceNormal(Ray ray, Vector3 outwardNormal)
         {
-            IsFrontFace = Vector3.Dot(ray.Direction.AsVector3(), outwardNormal) < 0;
+            IsFrontFace = Vector3.Dot(ray.Direction, outwardNormal) < 0;
             Normal = IsFrontFace ? outwardNormal : -outwardNormal;
         }
 

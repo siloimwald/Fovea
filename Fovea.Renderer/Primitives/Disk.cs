@@ -23,7 +23,7 @@ namespace Fovea.Renderer.Primitives
         public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
             // intersect with plane disk is in, check radius afterwards
-            var denom = Vector3.Dot(_normal, ray.Direction.AsVector3());
+            var denom = Vector3.Dot(_normal, ray.Direction);
 
             if (Math.Abs(denom) < 1e-6) // parallel 
                 return false;
@@ -68,7 +68,7 @@ namespace Fovea.Renderer.Primitives
         public float PdfValue(Vector3 origin, Vector3 direction)
         {
             var hr = new HitRecord();
-            if (!Hit(new Ray(origin, direction.AsVec3()), Interval.HalfOpenWithOffset(), ref hr))
+            if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hr))
                 return 0;
 
             var area = _radius * _radius * Math.PI;

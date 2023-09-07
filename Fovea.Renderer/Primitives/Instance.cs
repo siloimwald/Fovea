@@ -33,7 +33,7 @@ namespace Fovea.Renderer.Primitives
         {
             
             var inverseOrg = Vector3.Transform(ray.Origin, _inverseTransform);
-            var inverseDir = Vector3.Transform(ray.Direction.AsVector3(), _inverseTransform);
+            var inverseDir = Vector3.Transform(ray.Direction, _inverseTransform);
             
             var transformedRay = new Ray(inverseOrg, inverseDir);
             

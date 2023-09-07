@@ -27,7 +27,7 @@ namespace Fovea.Renderer.Materials
             scatterResult.Pdf = null;
             scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
 
-            var reflected = Vector3.Reflect(Vector3.Normalize(rayIn.Direction.AsVector3()), hitRecord.Normal);
+            var reflected = Vector3.Reflect(Vector3.Normalize(rayIn.Direction), hitRecord.Normal);
             var dir = reflected + Sampler.Instance.RandomOnUnitSphere() * (float)_fuzzy;
             scatterResult.SpecularRay =
                 new Ray(hitRecord.HitPoint, dir, rayIn.Time);

@@ -63,7 +63,7 @@ namespace Fovea.Renderer.Primitives
             in Interval rayInterval,
             ref float tRay)
         {
-            var pVec = Vector3.Cross(ray.Direction.AsVector3(), edgeAC);
+            var pVec = Vector3.Cross(ray.Direction, edgeAC);
             var det = Vector3.Dot(edgeAB, pVec);
 
             if (MathF.Abs(det) < 1e-4f) // parallel to triangle plane
@@ -75,7 +75,7 @@ namespace Fovea.Renderer.Primitives
             var u = Vector3.Dot(tVec, pVec) * invDet;
             if (u is < 0.0f or > 1.0f) return null;
             var qVec = Vector3.Cross(tVec, edgeAB);
-            var v = Vector3.Dot(ray.Direction.AsVector3(), qVec) * invDet;
+            var v = Vector3.Dot(ray.Direction, qVec) * invDet;
             if (v < 0.0f || v + u > 1.0f) return null;
             var t0 = Vector3.Dot(qVec, edgeAC) * invDet;
 

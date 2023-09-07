@@ -50,14 +50,14 @@ namespace Fovea.Renderer.Core
                 return emitted
                        + scatterResult.Attenuation
                        * hitRecord.Material.ScatteringPDF(ray, hitRecord, outRay)
-                       * ColorRay(outRay, scene, depth - 1) * (1.0 / scatterResult.Pdf.Evaluate(outRay.Direction.AsVector3()));
+                       * ColorRay(outRay, scene, depth - 1) * (1.0 / scatterResult.Pdf.Evaluate(outRay.Direction));
             }
             else
             {
                 var lightPdf = new PrimitivePDF(scene.Lights, hitRecord.HitPoint);
                 var mixPdf = new MixturePDF(scatterResult.Pdf, lightPdf);
                 var outRay = new Ray(hitRecord.HitPoint, mixPdf.Generate(), ray.Time);
-                var pdfCorrection = 1.0 / mixPdf.Evaluate(outRay.Direction.AsVector3());
+                var pdfCorrection = 1.0 / mixPdf.Evaluate(outRay.Direction);
 
                 return emitted
                        + scatterResult.Attenuation

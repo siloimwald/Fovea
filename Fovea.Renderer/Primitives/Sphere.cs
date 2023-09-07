@@ -71,7 +71,7 @@ namespace Fovea.Renderer.Primitives
         {
             var oc = ray.Origin - center;
             var a = (float)ray.Direction.LengthSquared();
-            var h = Vector3.Dot(oc, ray.Direction.AsVector3()); // b=2h
+            var h = Vector3.Dot(oc, ray.Direction); // b=2h
             var c = oc.LengthSquared() - radius * radius;
             var disc = (float)(h * h - a * c);
 

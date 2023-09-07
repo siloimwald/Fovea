@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using static System.MathF;
 
 namespace Fovea.Renderer.VectorMath
 {
@@ -7,7 +8,7 @@ namespace Fovea.Renderer.VectorMath
     {
         public static float DegToRad(float degree)
         {
-            return degree * MathF.PI / 180.0f;
+            return degree * PI / 180.0f;
         }
 
         /// <summary>general quadratics solver, from pbrt book with claimed higher numerical stability</summary>
@@ -18,7 +19,7 @@ namespace Fovea.Renderer.VectorMath
             if (disc < 0)
                 return false;
 
-            var discRoot = MathF.Sqrt(disc);
+            var discRoot = Sqrt(disc);
             var q = b < 0 ? -0.5f * (b - discRoot) : -0.5f * (b + discRoot);
             t0 = q / a;
             t1 = c / q;
@@ -30,13 +31,21 @@ namespace Fovea.Renderer.VectorMath
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ClampF(float v, float min, float max)
         {
-            return MathF.Max(MathF.Min(v, max), min);
+            return Max(Min(v, max), min);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Swap<T>(ref T left, ref T right)
         {
             (left, right) = (right, left);
+        }
+
+        public static Vector3 Refract(Vector3 uv, Vector3 normal, float etaIOverEtaN)
+        {
+            var cosTheta = Min(1.0f, Vector3.Dot(-uv, normal));
+            var dirOutPerpendicular = (uv + normal * cosTheta) * etaIOverEtaN;
+            var dirOutParallel = normal * -Sqrt(Abs(1.0f - dirOutPerpendicular.LengthSquared()));
+            return dirOutParallel + dirOutPerpendicular;
         }
     }
 }

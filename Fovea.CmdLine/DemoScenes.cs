@@ -80,7 +80,7 @@ namespace Fovea.CmdLine
                 new Lambertian(0.7, 0.3, 0.1)));
 
             // glass sphere
-            prims.Add(new Sphere(new Vector3(260, 150, 45), 50, new Dielectric(1.5)));
+            prims.Add(new Sphere(new Vector3(260, 150, 45), 50, new Dielectric(1.5f)));
             // metal sphere
             prims.Add(new Sphere(new Vector3(0, 150, 145), 50, new Metal(0.8, 0.8, 0.9, 1.0)));
 
@@ -184,7 +184,7 @@ namespace Fovea.CmdLine
             //     .CreateSingleTriangles(white);
             // prims.AddRange(rightBox);
 
-            var glassSphere = new Sphere(new Vector3(190, 90, 190), 90, new Dielectric(1.5));
+            var glassSphere = new Sphere(new Vector3(190, 90, 190), 90, new Dielectric(1.5f));
             prims.Add(glassSphere);
             lightSources.Add(glassSphere);
 
@@ -385,7 +385,7 @@ namespace Fovea.CmdLine
             var prims = new List<IPrimitive>();
             var groundMat = new Lambertian(0.5, 0.5, 0.5);
             prims.Add(new Sphere(new Vector3(0, -1000, 0), 1000, groundMat));
-            prims.Add(new Sphere(new Vector3(0, 1, 0), 1, new Dielectric(1.5)));
+            prims.Add(new Sphere(new Vector3(0, 1, 0), 1, new Dielectric(1.5f)));
             prims.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Lambertian(0.4, 0.2, 0.1)));
             prims.Add(new Sphere(new Vector3(4, 1, 0), 1, new Metal(0.7, 0.6, 0.5)));
 
@@ -398,7 +398,7 @@ namespace Fovea.CmdLine
                 {
                     < 0.8f => new Lambertian(Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor()),
                     < 0.95f => new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0f, 0.05f)),
-                    _ => new Dielectric(1.5)
+                    _ => new Dielectric(1.5f)
                 };
             }
 

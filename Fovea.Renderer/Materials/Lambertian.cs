@@ -29,7 +29,7 @@ namespace Fovea.Renderer.Materials
 
         public double ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
         {
-            var cosine = Vector3.Dot(hitRecord.Normal, Vector3.Normalize(scatteredRay.Direction.AsVector3()));
+            var cosine = Vector3.Dot(hitRecord.Normal, Vector3.Normalize(scatteredRay.Direction));
             return cosine < 0 ? 0 : cosine / Math.PI;
         }
     }
