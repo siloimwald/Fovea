@@ -40,11 +40,11 @@ namespace Fovea.Renderer.Primitives
                 var nb = _mesh.Normals[f1];
                 var nc = _mesh.Normals[f2];
                 var n = na * w + nb * u + nc * v;
-                hitRecord.SetFaceNormal(ray, n.AsVector3());
+                hitRecord.SetFaceNormal(ray, n);
             }
             else
             {
-                hitRecord.SetFaceNormal(ray, _mesh.Normals[_faceIndex].AsVector3());
+                hitRecord.SetFaceNormal(ray, _mesh.Normals[_faceIndex]);
             }
 
             if (_mesh.Texture == null) return true; // hit at t0
@@ -60,8 +60,8 @@ namespace Fovea.Renderer.Primitives
             var (f0, f1, f2) = _mesh.Faces[_faceIndex];
             var (va, vb, vc) = (_mesh.Vertices[f0], _mesh.Vertices[f1], _mesh.Vertices[f2]);
             return new BoundingBox(
-                Vector3.Min(va.AsVector3(), Vector3.Min(vb.AsVector3(), vc.AsVector3())),
-                Vector3.Max(va.AsVector3(), Vector3.Max(vb.AsVector3(), vc.AsVector3()))
+                Vector3.Min(va, Vector3.Min(vb, vc)),
+                Vector3.Max(va, Vector3.Max(vb, vc))
             );
         }
 
@@ -73,27 +73,27 @@ namespace Fovea.Renderer.Primitives
             GetVertices(out var va, out var vb, out var vc);
             var edgeAB = vb - va;
             var edgeAC = vc - va;
-            var area = 0.5 * Vec3.Cross(edgeAB, edgeAC).Length();
+            var area = 0.5 * Vector3.Cross(edgeAB, edgeAC).Length();
             var distanceSquared = (hitRecord.HitPoint - origin).LengthSquared();
-            var cosine = Math.Abs(Vec3.Dot(direction.AsVec3(), hitRecord.Normal.AsVec3()) / direction.Length());
+            var cosine = Math.Abs(Vector3.Dot(direction, hitRecord.Normal) / direction.Length());
             var pdfVal = distanceSquared / (cosine * area);
             return (float)pdfVal;
         }
 
         public Vector3 RandomDirection(Vector3 origin)
         {
-            var r1 = Math.Sqrt(Sampler.Instance.Random01());
-            var r2 = Sampler.Instance.Random01();
+            var r1 = (float)Math.Sqrt(Sampler.Instance.Random01());
+            var r2 = (float)Sampler.Instance.Random01();
             GetVertices(out var va, out var vb, out var vc);
-            var w = 1.0 - r1;
-            var v = r1 * (1.0 - r2);
+            var w = 1.0f - r1;
+            var v = r1 * (1.0f - r2);
             var u = r2 * r1;
             var p = va * w + vb * u + vc * v;
-            return p.AsVector3() - origin;
+            return p - origin;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void GetVertices(out Point3 va, out Point3 vb, out Point3 vc)
+        private void GetVertices(out Vector3 va, out Vector3 vb, out Vector3 vc)
         {
             var (f0, f1, f2) = _mesh.Faces[_faceIndex];
             (va, vb, vc) = (_mesh.Vertices[f0], _mesh.Vertices[f1], _mesh.Vertices[f2]);

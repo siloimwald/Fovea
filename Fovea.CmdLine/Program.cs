@@ -1,5 +1,4 @@
 ﻿using System;
-using CommandLine;
 using Fovea.Renderer.Core;
 
 namespace Fovea.CmdLine

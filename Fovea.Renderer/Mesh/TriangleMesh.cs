@@ -2,15 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Primitives;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Mesh
 {
     public class TriangleMesh
     {
-        public List<Point3> Vertices { get; init; }
-        public List<Vec3> Normals { get; private set; }
-        public List<(double texU, double texV)> Texture { get; init; }
+        public List<Vector3> Vertices { get; init; }
+        public List<Vector3> Normals { get; private set; }
+        public List<(float texU, float texV)> Texture { get; init; }
         public List<(int f0, int f1, int f2)> Faces { get; init; }
         public IMaterial Material { get; private set; }
         public bool HasVertexNormals { get; set; }
@@ -53,11 +52,11 @@ namespace Fovea.Renderer.Mesh
             return triangles;
         }
 
-        private List<Vec3> GenerateVertexNormals(bool flipNormals)
+        private List<Vector3> GenerateVertexNormals(bool flipNormals)
         {
-            var normals = new List<Vec3>(Vertices.Count);
+            var normals = new List<Vector3>(Vertices.Count);
             for (var k = 0; k < Vertices.Count; k++)
-                normals.Add(new Vec3());
+                normals.Add(new Vector3());
 
             foreach (var t in Faces)
             {
@@ -65,26 +64,26 @@ namespace Fovea.Renderer.Mesh
                 var va = Vertices[f0];
                 var vb = Vertices[flipNormals ? f2 : f1];
                 var vc = Vertices[flipNormals ? f1 : f2];
-                var no = Vec3.Cross(vb - va, vc - va);
+                var no = Vector3.Cross(vb - va, vc - va);
                 normals[f0] += no;
                 normals[f1] += no;
                 normals[f2] += no;
             }
 
             for (var k = 0; k < normals.Count; k++)
-                normals[k] = Vec3.Normalize(normals[k]);
+                normals[k] = Vector3.Normalize(normals[k]);
 
             return normals;
         }
 
-        private List<Vec3> GenerateNormals(bool flipNormals = false)
+        private List<Vector3> GenerateNormals(bool flipNormals = false)
         {
             return Faces.Select(face =>
             {
                 var va = Vertices[face.f0];
                 var vb = Vertices[flipNormals ? face.f2 : face.f1];
                 var vc = Vertices[flipNormals ? face.f1 : face.f2];
-                return Vec3.Normalize(Vec3.Cross(vb - va, vc - va));
+                return Vector3.Normalize(Vector3.Cross(vb - va, vc - va));
             }).ToList();
         }
 
@@ -92,7 +91,7 @@ namespace Fovea.Renderer.Mesh
         {
             for (var i = 0; i < Vertices.Count; i++)
             {
-                Vertices[i] = Vector3.Transform(Vertices[i].AsVector3(), matrix).AsPoint3(); // TODO: yikes
+                Vertices[i] = Vector3.Transform(Vertices[i], matrix);
             }
 
             return this;

@@ -8,38 +8,38 @@ namespace Fovea.Renderer.Mesh
         /// <summary>create mesh for a quad with sd0-ed0, sd1-ed1 at the given d3 position on some axis</summary>
         /// <returns></returns>
         public static TriangleMesh Produce(
-            double minDim1,
-            double maxDim1,
-            double minDim2,
-            double maxDim2,
-            double d3,
+            float minDim1,
+            float maxDim1,
+            float minDim2,
+            float maxDim2,
+            float d3,
             Axis axis)
         {
             (minDim1, maxDim1) = minDim1 > maxDim1 ? (maxDim1, minDim1) : (minDim1, maxDim1);
             (minDim2, maxDim2) = minDim2 > maxDim2 ? (maxDim2, minDim2) : (minDim2, maxDim2);
 
-            var vertices = new List<Point3>();
+            var vertices = new List<Vector3>();
 
             if (axis == Axis.X)
             {
-                vertices.Add(new Point3(d3, minDim1, minDim2));
-                vertices.Add(new Point3(d3, maxDim1, minDim2));
-                vertices.Add(new Point3(d3, maxDim1, maxDim2));
-                vertices.Add(new Point3(d3, minDim1, maxDim2));
+                vertices.Add(new Vector3(d3, minDim1, minDim2));
+                vertices.Add(new Vector3(d3, maxDim1, minDim2));
+                vertices.Add(new Vector3(d3, maxDim1, maxDim2));
+                vertices.Add(new Vector3(d3, minDim1, maxDim2));
             }
             else if (axis == Axis.Y)
             {
-                vertices.Add(new Point3(minDim1, d3, minDim2));
-                vertices.Add(new Point3(maxDim1, d3, minDim2));
-                vertices.Add(new Point3(maxDim1, d3, maxDim2));
-                vertices.Add(new Point3(minDim1, d3, maxDim2));
+                vertices.Add(new Vector3(minDim1, d3, minDim2));
+                vertices.Add(new Vector3(maxDim1, d3, minDim2));
+                vertices.Add(new Vector3(maxDim1, d3, maxDim2));
+                vertices.Add(new Vector3(minDim1, d3, maxDim2));
             }
             else
             {
-                vertices.Add(new Point3(minDim1, minDim2, d3));
-                vertices.Add(new Point3(maxDim1, minDim2, d3));
-                vertices.Add(new Point3(maxDim1, maxDim2, d3));
-                vertices.Add(new Point3(minDim1, maxDim2, d3));
+                vertices.Add(new Vector3(minDim1, minDim2, d3));
+                vertices.Add(new Vector3(maxDim1, minDim2, d3));
+                vertices.Add(new Vector3(maxDim1, maxDim2, d3));
+                vertices.Add(new Vector3(minDim1, maxDim2, d3));
             }
 
             return new TriangleMesh
@@ -49,7 +49,7 @@ namespace Fovea.Renderer.Mesh
                 {
                     (2, 1, 0), (3, 2, 0)
                 },
-                Texture = new List<(double texU, double texV)>
+                Texture = new List<(float texU, float texV)>
                 {
                     (0, 0),
                     (1, 0),

@@ -8,13 +8,13 @@ namespace Fovea.Renderer.Mesh
     {
         /// <summary>produce a mesh for a box with the given extents</summary>
         /// <returns></returns>
-        public static TriangleMesh Produce(double xMin, double xMax, double yMin, double yMax, double zMin, double zMax)
+        public static TriangleMesh Produce(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
         {
             (xMin, xMax) = xMin <= xMax ? (xMin, xMax) : (xMax, xMin);
             (yMin, yMax) = yMin <= yMax ? (yMin, yMax) : (yMax, yMin);
             (zMin, zMax) = zMin <= zMax ? (zMin, zMax) : (zMax, zMin);
 
-            var vertices = new List<Point3>
+            var vertices = new List<Vector3>
             {
                 // xy 'front' vertices
                 new(xMin, yMin, zMin),

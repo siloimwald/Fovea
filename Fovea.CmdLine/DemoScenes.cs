@@ -58,12 +58,12 @@ namespace Fovea.CmdLine
             for (var i = 0; i < boxesPerSide; ++i)
             for (var j = 0; j < boxesPerSide; ++j)
             {
-                const double w = 100.0;
-                var x0 = -1000.0 + i * w;
-                var z0 = -1000.0 + j * w;
-                var y1 = Sampler.Instance.Random(1, 101);
+                const float w = 100.0f;
+                var x0 = -1000.0f + i * w;
+                var z0 = -1000.0f + j * w;
+                var y1 = (float)Sampler.Instance.Random(1, 101);
 
-                prims.AddRange(BoxProducer.Produce(x0, x0 + w, 0.0, y1, z0, z0 + w)
+                prims.AddRange(BoxProducer.Produce(x0, x0 + w, 0.0f, y1, z0, z0 + w)
                     .CreateSingleTriangles(baseBoxMaterial));
             }
 
@@ -346,7 +346,7 @@ namespace Fovea.CmdLine
             var metallic = new Metal(0.8, 0.85, 0.88, 0.3);
             var prims = new List<IPrimitive>();
 
-            prims.AddRange(QuadProducer.Produce(-1, 1, -1, 1, -.4, Axis.Y)
+            prims.AddRange(QuadProducer.Produce(-1, 1, -1, 1, -.4f, Axis.Y)
                 .CreateMeshTriangles(groundMaterial, true));
 
             var mesh = ObjReader.ReadObjFile(@"assets\teapot.obj", true);

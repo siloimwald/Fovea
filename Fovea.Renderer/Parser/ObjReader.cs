@@ -16,7 +16,7 @@ namespace Fovea.Renderer.Parser
     {
         public static TriangleMesh ReadObjFile(string fileName, bool normalize = false)
         {
-            var vertices = new List<Point3>();
+            var vertices = new List<Vector3>();
             var faces = new List<(int f0, int f1, int f2)>();
 
             try
@@ -37,18 +37,18 @@ namespace Fovea.Renderer.Parser
                             line[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries)
                                 .Select(p =>
                                 {
-                                    if (double.TryParse(p, NumberStyles.Float, CultureInfo.InvariantCulture,
+                                    if (float.TryParse(p, NumberStyles.Float, CultureInfo.InvariantCulture,
                                         out var number))
                                         return number;
 
-                                    return (double?) null;
+                                    return (float?) null;
                                 })
                                 .Where(p => p.HasValue)
                                 .Select(p => p.Value)
                                 .ToList();
 
                         if (point.Count == 3) // that seems to have worked out
-                            vertices.Add(new Point3(point[0], point[1], point[2]));
+                            vertices.Add(new Vector3(point[0], point[1], point[2]));
                     }
                     else if (line[0] == 'f')
                     {
@@ -82,12 +82,11 @@ namespace Fovea.Renderer.Parser
                 // for easier scene placement, transform the whole mesh to the unit cube
                 if (normalize)
                 {
-                    // this yells SIMD at you
                     var (min, max) = vertices.Aggregate(
                         (currentMin: new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity),
                             currentMax: new Vector3(float.NegativeInfinity, float.NegativeInfinity,
                                 float.NegativeInfinity)),
-                        (acc, p) => (Vector3.Min(acc.currentMin, p.AsVector3()), Vector3.Max(acc.currentMax, p.AsVector3())));
+                        (acc, p) => (Vector3.Min(acc.currentMin, p), Vector3.Max(acc.currentMax, p)));
 
                     Console.WriteLine($"bounds {min} {max}");
 
@@ -103,8 +102,8 @@ namespace Fovea.Renderer.Parser
 
                     vertices = vertices.Select(v =>
                     {
-                        var inOrigin = v - translate.AsPoint3();
-                        return new Point3(inOrigin.X * scale.X, inOrigin.Y * scale.Y, inOrigin.Z * scale.Z);
+                        var inOrigin = v - translate;
+                        return new Vector3(inOrigin.X * scale.X, inOrigin.Y * scale.Y, inOrigin.Z * scale.Z);
                     }).ToList();
                 }
 
