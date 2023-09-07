@@ -21,7 +21,7 @@ namespace Fovea.Renderer.Sampling
         public Vector3 Generate()
         {
             
-            return _orthonormalBasis.Local(Sampler.Instance.RandomCosineDirection().AsVector3());
+            return _orthonormalBasis.Local(Sampler.Instance.RandomCosineDirection());
         }
     }
 }

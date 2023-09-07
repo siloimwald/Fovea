@@ -311,7 +311,7 @@ namespace Fovea.CmdLine
 
             for (var a = 0; a < 360; a += 15)
             {
-                var m = new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0, 0.05));
+                var m = new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0f, 0.05f));
                 var cyl = new Cylinder(-1, 1, 0.3f, m);
                 var tr = new Transform()
                     .WithRotation(Axis.X, -90 + a)
@@ -396,8 +396,8 @@ namespace Fovea.CmdLine
                 var r = Sampler.Instance.Random01();
                 return r switch
                 {
-                    < 0.8 => new Lambertian(Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor()),
-                    < 0.95 => new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0, 0.05)),
+                    < 0.8f => new Lambertian(Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor()),
+                    < 0.95f => new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0f, 0.05f)),
                     _ => new Dielectric(1.5)
                 };
             }
@@ -417,7 +417,7 @@ namespace Fovea.CmdLine
                 {
                     var mat = RandomMaterial();
                     if (mat is not Lambertian) return new Sphere(center, 0.2f, RandomMaterial());
-                    var center2 = center + new Vector3(0, (float)Sampler.Instance.Random(0, 0.5), 0);
+                    var center2 = center + new Vector3(0, (float)Sampler.Instance.Random(0, 0.5f), 0);
                     return new MovingSphere(center, 0, center2, 1, 0.2f, mat);
                 }));
 

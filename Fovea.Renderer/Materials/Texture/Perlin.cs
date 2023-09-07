@@ -16,14 +16,16 @@ namespace Fovea.Renderer.Materials.Texture
         private readonly int[] _permutationY;
         private readonly int[] _permutationZ;
 
-        private readonly Vec3[] _randomVectors;
+        private readonly Vector3[] _randomVectors;
 
         public Perlin()
         {
-            _randomVectors = new Vec3[PointCount];
+            _randomVectors = new Vector3[PointCount];
             // grab us some random doubles
             for (var i = 0; i < _randomVectors.Length; ++i)
+            {
                 _randomVectors[i] = Sampler.Instance.RandomOnUnitSphere();
+            }
 
             // create three different permutations of indices
             _permutationX = Enumerable.Range(0, PointCount).ToArray();
@@ -36,9 +38,9 @@ namespace Fovea.Renderer.Materials.Texture
 
         private double Noise(Vector3 p)
         {
-            var fpx = Math.Floor(p.X);
-            var fpy = Math.Floor(p.Y);
-            var fpz = Math.Floor(p.Z);
+            var fpx = MathF.Floor(p.X);
+            var fpy = MathF.Floor(p.Y);
+            var fpz = MathF.Floor(p.Z);
 
             var u = p.X - fpx;
             var v = p.Y - fpy;
@@ -48,7 +50,7 @@ namespace Fovea.Renderer.Materials.Texture
             var j = (int) fpy;
             var k = (int) fpz;
 
-            var c = new Vec3[2, 2, 2];
+            var c = new Vector3[2, 2, 2];
 
             for (var di = 0; di < 2; ++di)
             for (var dj = 0; dj < 2; dj++)
@@ -89,9 +91,9 @@ namespace Fovea.Renderer.Materials.Texture
         }
 
         // tri-linear interpolation to smooth noise results
-        private static double TriLinearInterpolate(Vec3[,,] c, double u, double v, double w)
+        private static float TriLinearInterpolate(Vector3[,,] c, float u, float v, float w)
         {
-            var result = 0.0;
+            var result = 0.0f;
 
             var uu = u * u * (3 - 2 * u);
             var vv = v * v * (3 - 2 * v);
@@ -101,11 +103,11 @@ namespace Fovea.Renderer.Materials.Texture
             for (var j = 0; j < 2; ++j)
             for (var k = 0; k < 2; ++k)
             {
-                var weight = new Vec3(u - i, v - j, w - k);
+                var weight = new Vector3(u - i, v - j, w - k);
                 result += (i * uu + (1 - i) * (1 - u)) *
                           (j * vv + (1 - j) * (1 - v)) *
                           (k * ww + (1 - k) * (1 - w)) *
-                          Vec3.Dot(c[i, j, k], weight);
+                          Vector3.Dot(c[i, j, k], weight);
             }
 
             return result;
