@@ -19,7 +19,7 @@ namespace Fovea.Renderer.Core.BVH
         private const int BucketCount = 128;
 
         /// <summary>create a leaf if a node's centroid bounds volume is below this value</summary>
-        private const double BoundsVolumeThreshold = 1e-4;
+        private const float BoundsVolumeThreshold = 1e-4f;
 
         /// <summary>minimal primitive count in a leaf node before stopping recursion</summary>
         private const int MinPrimCount = 2;
@@ -138,15 +138,15 @@ namespace Fovea.Renderer.Core.BVH
         /// <param name="right">right index into primitive array</param>
         /// <param name="primitiveBoxes">list of precomputed bounding boxes of primitives</param>
         /// <returns></returns>
-        private static (int axis, int bucket, double costs) GetBestSplit(
+        private static (int axis, int bucket, float costs) GetBestSplit(
             BoundingBox centroidBounds,
-            double totalArea,
+            float totalArea,
             int left,
             int right,
             IReadOnlyList<BoundingBox> primitiveBoxes)
         {
             var bestBucket = -1;
-            var bestCosts = double.MaxValue;
+            var bestCosts = float.MaxValue;
             var bestAxis = -1;
 
             for (var axis = 0; axis < 3; ++axis)
@@ -311,10 +311,10 @@ namespace Fovea.Renderer.Core.BVH
         /// <param name="rightArea">area right of split</param>
         /// <param name="rightPrimitiveCount">primitive count in right part of split</param>
         /// <returns></returns>
-        private static double ComputeSAH(double totalArea,
-            double leftArea,
+        private static float ComputeSAH(float totalArea,
+            float leftArea,
             int leftPrimitiveCount,
-            double rightArea,
+            float rightArea,
             int rightPrimitiveCount)
         {
             // the costs for intersection and traversal are assumed to be constant and are omitted

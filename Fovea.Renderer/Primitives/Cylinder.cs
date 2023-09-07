@@ -38,8 +38,8 @@ namespace Fovea.Renderer.Primitives
                 hitRecord.Material = _material;
                 hitRecord.RayT = tBody;
 
-                var theta = Math.Atan2(n.X, n.Y);
-                hitRecord.TextureV = 0.5 + theta / (2 * Math.PI);
+                var theta = MathF.Atan2(n.X, n.Y);
+                hitRecord.TextureV = 0.5f + theta / (2 * MathF.PI);
                 hitRecord.TextureU = (hitPoint.Z - _zMin) / (_zMax - _zMin);
 
                 hitRecord.SetFaceNormal(ray, n);
@@ -52,8 +52,8 @@ namespace Fovea.Renderer.Primitives
             hitRecord.RayT = tCap;
             hitRecord.Material = _material;
 
-            hitRecord.TextureU = 0.5 + hitRecord.HitPoint.X / _radius * 0.5;
-            hitRecord.TextureV = 0.5 + hitRecord.HitPoint.Y / _radius * 0.5;
+            hitRecord.TextureU = 0.5f + hitRecord.HitPoint.X / _radius * 0.5f;
+            hitRecord.TextureV = 0.5f + hitRecord.HitPoint.Y / _radius * 0.5f;
 
             // flip the normal accordingly
             var s = hitRecord.HitPoint.Z < 0 ? -1 : 1;

@@ -1,6 +1,6 @@
 using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
-using static System.Math;
+using static System.MathF;
 
 namespace Fovea.Renderer.Primitives
 {
@@ -37,8 +37,8 @@ namespace Fovea.Renderer.Primitives
             hitRecord.SetFaceNormal(ray, outwardNormal);
             hitRecord.Material = _material;
 
-            hitRecord.TextureU = 0.5 + Atan2(outwardNormal.X, outwardNormal.Z) / (2 * PI);
-            hitRecord.TextureV = outwardNormal.Y * 0.5 + 0.5;
+            hitRecord.TextureU = 0.5f + Atan2(outwardNormal.X, outwardNormal.Z) / (2 * PI);
+            hitRecord.TextureV = outwardNormal.Y * 0.5f + 0.5f;
 
             return true;
         }

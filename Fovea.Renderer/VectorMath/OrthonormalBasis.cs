@@ -16,7 +16,7 @@ namespace Fovea.Renderer.VectorMath
             UAxis = Vector3.Cross(WAxis, VAxis);
         }
 
-        public Vector3 Local(double a, double b, double c)
+        public Vector3 Local(float a, float b, float c)
         {
             var v = UAxis * (float)a + VAxis * (float)b + WAxis * (float)c;
             return new Vector3(v.X, v.Y, v.Z);

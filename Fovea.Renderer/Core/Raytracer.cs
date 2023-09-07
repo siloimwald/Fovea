@@ -16,7 +16,7 @@ namespace Fovea.Renderer.Core
         private RGBColor ColorRay(Ray ray, Scene scene, int depth)
         {
             if (depth <= 0)
-                return new RGBColor(0.0);
+                return new RGBColor(0.0f);
 
             var hitRecord = new HitRecord();
             // nothing hit, yield background
@@ -50,14 +50,14 @@ namespace Fovea.Renderer.Core
                 return emitted
                        + scatterResult.Attenuation
                        * hitRecord.Material.ScatteringPDF(ray, hitRecord, outRay)
-                       * ColorRay(outRay, scene, depth - 1) * (1.0 / scatterResult.Pdf.Evaluate(outRay.Direction));
+                       * ColorRay(outRay, scene, depth - 1) * (1.0f / scatterResult.Pdf.Evaluate(outRay.Direction));
             }
             else
             {
                 var lightPdf = new PrimitivePDF(scene.Lights, hitRecord.HitPoint);
                 var mixPdf = new MixturePDF(scatterResult.Pdf, lightPdf);
                 var outRay = new Ray(hitRecord.HitPoint, mixPdf.Generate(), ray.Time);
-                var pdfCorrection = 1.0 / mixPdf.Evaluate(outRay.Direction);
+                var pdfCorrection = 1.0f / mixPdf.Evaluate(outRay.Direction);
 
                 return emitted
                        + scatterResult.Attenuation
@@ -99,10 +99,10 @@ namespace Fovea.Renderer.Core
                         {
                             var r1 = Sampler.Instance.Random01();
                             var r2 = Sampler.Instance.Random01();
-                            var u = r1 + px / ((double)imageWidth - 1);
-                            var v = r2 + py / ((double)imageHeight - 1);
-                            u = -1.0 + 2 * (u - r1);
-                            v = -1.0 + 2 * (v - r2);
+                            var u = r1 + px / ((float)imageWidth - 1);
+                            var v = r2 + py / ((float)imageHeight - 1);
+                            u = -1.0f + 2 * (u - r1);
+                            v = -1.0f + 2 * (v - r2);
                             var ray = scene.Camera.ShootRay((float)u, (float)v);
                             color += ColorRay(ray, scene, MaxDepth);
                         }
@@ -114,7 +114,7 @@ namespace Fovea.Renderer.Core
 
                     if (taskNum != 0) continue;
 
-                    var percent = pixelDone / (double) totalPixels * 100.0;
+                    var percent = pixelDone / (float) totalPixels * 100.0;
                     Console.Write($"\r{percent:000.0}% done  ");
                 }
             }

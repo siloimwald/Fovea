@@ -10,10 +10,10 @@ namespace Fovea.Renderer.Core
     {
         public readonly Vector3 Origin;
         public readonly Vector3 Direction;
-        public readonly double Time;
+        public readonly float Time;
         public readonly Vector3 InverseDirection;
 
-        public Ray(Vector3 origin, Vector3 direction, double time = 0.0)
+        public Ray(Vector3 origin, Vector3 direction, float time = 0.0f)
         {
             Origin = origin;
             Direction = direction;

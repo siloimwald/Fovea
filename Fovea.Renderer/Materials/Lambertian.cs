@@ -15,7 +15,7 @@ namespace Fovea.Renderer.Materials
             _albedo = albedo;
         }
 
-        public Lambertian(double r, double g, double b) : this(new RGBColor(r, g, b))
+        public Lambertian(float r, float g, float b) : this(new RGBColor(r, g, b))
         {
         }
 
@@ -27,10 +27,10 @@ namespace Fovea.Renderer.Materials
             return true;
         }
 
-        public double ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
+        public float ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
         {
             var cosine = Vector3.Dot(hitRecord.Normal, Vector3.Normalize(scatteredRay.Direction));
-            return cosine < 0 ? 0 : cosine / Math.PI;
+            return cosine < 0 ? 0 : cosine / MathF.PI;
         }
     }
 }

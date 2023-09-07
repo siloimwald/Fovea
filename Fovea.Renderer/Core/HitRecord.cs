@@ -31,9 +31,9 @@ namespace Fovea.Renderer.Core
         public IMaterial Material { get; set; }
 
         /// <summary>u texture coordinate</summary>
-        public double TextureU;
+        public float TextureU;
 
         /// <summary>v texture coordinate</summary>
-        public double TextureV;
+        public float TextureV;
     }
 }

@@ -52,7 +52,7 @@ namespace Fovea.CmdLine
         private static Scene GetFinalSceneBookTwo()
         {
             var prims = new List<IPrimitive>();
-            var baseBoxMaterial = new Lambertian(0.48, 0.83, 0.53);
+            var baseBoxMaterial = new Lambertian(0.48f, 0.83f, 0.53f);
 
             const int boxesPerSide = 20;
             for (var i = 0; i < boxesPerSide; ++i)
@@ -77,18 +77,18 @@ namespace Fovea.CmdLine
             // moving sphere top left
             var center1 = new Vector3(400, 400, 200);
             prims.Add(new MovingSphere(center1, 0, center1 + new Vector3(30, 0, 0), 1, 50,
-                new Lambertian(0.7, 0.3, 0.1)));
+                new Lambertian(0.7f, 0.3f, 0.1f)));
 
             // glass sphere
             prims.Add(new Sphere(new Vector3(260, 150, 45), 50, new Dielectric(1.5f)));
             // metal sphere
-            prims.Add(new Sphere(new Vector3(0, 150, 145), 50, new Metal(0.8, 0.8, 0.9, 1.0)));
+            prims.Add(new Sphere(new Vector3(0, 150, 145), 50, new Metal(0.8f, 0.8f, 0.9f, 1.0f)));
 
             // earth ball
             prims.Add(new Sphere(new Vector3(400, 200, 400), 100,
                 new Lambertian(new ImageTexture(@"Assets\earth.jpg"))));
             // perlin noise ball
-            prims.Add(new Sphere(new Vector3(220, 280, 300), 80, new Lambertian(new NoiseTexture(0.1))));
+            prims.Add(new Sphere(new Vector3(220, 280, 300), 80, new Lambertian(new NoiseTexture(0.1f))));
 
             // isotropic material does not work as of now with the whole general path tracer
 
@@ -100,7 +100,7 @@ namespace Fovea.CmdLine
             // prims.Add(new ConstantMedium(boundary, 0.0001, new RGBColor(1, 1, 1)));
 
             // sphere cluster right top
-            var white = new Lambertian(0.73, 0.73, 0.73);
+            var white = new Lambertian(0.73f, 0.73f, 0.73f);
             // var transform = new Transformation().Rotate(15, Axis.Y).Translate(-100, 270, 395);
             var transform = new Transform().WithRotation(Axis.Y, 15).WithTranslation(-100, 270, 395);
             var (sphereTransform, sphereInverse, _) = transform.Build();
@@ -135,9 +135,9 @@ namespace Fovea.CmdLine
 
         private static Scene GetCornellBoxScene()
         {
-            var red = new Lambertian(0.65, 0.05, 0.05);
-            var white = new Lambertian(0.73, 0.73, 0.73);
-            var green = new Lambertian(0.12, 0.45, 0.15);
+            var red = new Lambertian(0.65f, 0.05f, 0.05f);
+            var white = new Lambertian(0.73f, 0.73f, 0.73f);
+            var green = new Lambertian(0.12f, 0.45f, 0.15f);
             var light = new DiffuseLight(new RGBColor(5, 5, 5));
 
             var prims = new List<IPrimitive>();
@@ -208,11 +208,11 @@ namespace Fovea.CmdLine
 
         private static Scene GetDiskTestScene()
         {
-            var mat = new Lambertian(0.7, 0.8, 0.2);
+            var mat = new Lambertian(0.7f, 0.8f, 0.2f);
 
             var prims = new List<IPrimitive>
             {
-                new Sphere(new Vector3(0, -1000, 0), 999, new Lambertian(0.3, 0.3, 0.3)),
+                new Sphere(new Vector3(0, -1000, 0), 999, new Lambertian(0.3f, 0.3f, 0.3f)),
                 new Disk(new Vector3(-2, 2, 0), new Vector3(0, 0, 1), 1, mat),
                 new Disk(new Vector3(0, 2, 0), new Vector3(0, 1, 1), 1, mat),
                 new Disk(new Vector3(2, 2, 0), new Vector3(0, -1, 1), 1, mat),
@@ -275,12 +275,12 @@ namespace Fovea.CmdLine
 
         private static Scene GetTextureTestScene()
         {
-            var checker2 = new Lambertian(new CheckerBoard(new RGBColor(0.2, 0.3, 0.3), new RGBColor(0.9)));
+            var checker2 = new Lambertian(new CheckerBoard(new RGBColor(0.2f, 0.3f, 0.3f), new RGBColor(0.9f)));
             var earth = new Lambertian(new ImageTexture(@"Assets\earth.jpg"));
             var baseCylinder = new Cylinder(0, 4, 1, new Lambertian(new NoiseTexture(4)));
             var prims = new List<IPrimitive>
             {
-                new Sphere(new Vector3(0, -1000, 0), 1000, new Lambertian(0.6, 0.5, 0.3)),
+                new Sphere(new Vector3(0, -1000, 0), 1000, new Lambertian(0.6f, 0.5f, 0.3f)),
                 new Sphere(new Vector3(3, 2, -1.5f), 2, earth),
                 new Sphere(new Vector3(1.5f, 1, 2), 1, checker2),
                 new Instance(baseCylinder, new Transform().WithRotation(Axis.X, -90).WithTranslation(-1, 0, 0)),
@@ -343,7 +343,7 @@ namespace Fovea.CmdLine
         private static Scene GetObjFileTestScene()
         {
             var groundMaterial = new Lambertian(new ImageTexture(@"Assets\cb.jpg"));
-            var metallic = new Metal(0.8, 0.85, 0.88, 0.3);
+            var metallic = new Metal(0.8f, 0.85f, 0.88f, 0.3f);
             var prims = new List<IPrimitive>();
 
             prims.AddRange(QuadProducer.Produce(-1, 1, -1, 1, -.4f, Axis.Y)
@@ -383,11 +383,11 @@ namespace Fovea.CmdLine
         private static Scene GetFinalSceneBookOne()
         {
             var prims = new List<IPrimitive>();
-            var groundMat = new Lambertian(0.5, 0.5, 0.5);
+            var groundMat = new Lambertian(0.5f, 0.5f, 0.5f);
             prims.Add(new Sphere(new Vector3(0, -1000, 0), 1000, groundMat));
             prims.Add(new Sphere(new Vector3(0, 1, 0), 1, new Dielectric(1.5f)));
-            prims.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Lambertian(0.4, 0.2, 0.1)));
-            prims.Add(new Sphere(new Vector3(4, 1, 0), 1, new Metal(0.7, 0.6, 0.5)));
+            prims.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Lambertian(0.4f, 0.2f, 0.1f)));
+            prims.Add(new Sphere(new Vector3(4, 1, 0), 1, new Metal(0.7f, 0.6f, 0.5f)));
 
             // just for the sake of writing some slightly more modern c#
 

@@ -15,6 +15,6 @@ namespace Fovea.Renderer.Core.BVH
 
         public int LeftCount; // accumulated left primitive count
         public int RightCount; // accumulated right primitive count 
-        public double LeftArea; // accumulated left area
+        public float LeftArea; // accumulated left area
     }
 }

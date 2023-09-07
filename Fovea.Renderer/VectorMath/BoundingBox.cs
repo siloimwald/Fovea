@@ -41,7 +41,7 @@ namespace Fovea.Renderer.VectorMath
 
         /// <summary>compute the volume of bounding box</summary>
         /// <returns></returns>
-        public double GetVolume()
+        public float GetVolume()
         {
             var ext = GetExtent();
             return ext.X * ext.Y * ext.Z;
@@ -49,7 +49,7 @@ namespace Fovea.Renderer.VectorMath
 
         /// <summary>area of bounding box</summary>
         /// <returns>area of this bounding box</returns>
-        public double GetArea()
+        public float GetArea()
         {
             var ext = GetExtent();
             return 2.0f * (ext.X * ext.Y + ext.Y * ext.Z + ext.Z * ext.X);
@@ -60,7 +60,7 @@ namespace Fovea.Renderer.VectorMath
         /// <param name="tMin">existing min of ray interval</param>
         /// <param name="tMax">existing max of ray interval</param>
         /// <returns>true if ray intersects box</returns>
-        public bool Intersect(in Ray ray, double tMin, double tMax)
+        public bool Intersect(in Ray ray, float tMin, float tMax)
         {
             var tx1 = (_min.X - ray.Origin.X) * ray.InverseDirection.X;
             var tx2 = (_max.X - ray.Origin.X) * ray.InverseDirection.X;
@@ -83,7 +83,7 @@ namespace Fovea.Renderer.VectorMath
             return tMax >= tMin && tMax >= 0.0;
         }
 
-        public bool IntersectSse(in Ray ray, double tMin, double tMax)
+        public bool IntersectSse(in Ray ray, float tMin, float tMax)
         {
             var invDir = Vector128.Create((float) ray.InverseDirection.X, (float) ray.InverseDirection.Y,
                 (float) ray.InverseDirection.Z, 0.0f);

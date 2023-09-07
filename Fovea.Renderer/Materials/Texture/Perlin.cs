@@ -21,7 +21,7 @@ namespace Fovea.Renderer.Materials.Texture
         public Perlin()
         {
             _randomVectors = new Vector3[PointCount];
-            // grab us some random doubles
+            // grab us some random floats
             for (var i = 0; i < _randomVectors.Length; ++i)
             {
                 _randomVectors[i] = Sampler.Instance.RandomOnUnitSphere();
@@ -36,7 +36,7 @@ namespace Fovea.Renderer.Materials.Texture
             Permute(_permutationZ);
         }
 
-        private double Noise(Vector3 p)
+        private float Noise(Vector3 p)
         {
             var fpx = MathF.Floor(p.X);
             var fpy = MathF.Floor(p.Y);
@@ -64,20 +64,20 @@ namespace Fovea.Renderer.Materials.Texture
             return TriLinearInterpolate(c, u, v, w);
         }
 
-        public double Turbulence(Vector3 p, int depth = 7)
+        public float Turbulence(Vector3 p, int depth = 7)
         {
-            var result = 0.0;
-            var weight = 1.0;
+            var result = 0.0f;
+            var weight = 1.0f;
             // note: book code copies p, point3 is a struct and copied by value, we should
             // be fine messing directly with the parameter
             for (var i = 0; i < depth; ++i)
             {
                 result += weight * Noise(p);
-                weight *= 0.5;
+                weight *= 0.5f;
                 p = new Vector3(p.X * 2, p.Y * 2, p.Z * 2);
             }
 
-            return Math.Abs(result);
+            return MathF.Abs(result);
         }
 
         private static void Permute(int[] arr)

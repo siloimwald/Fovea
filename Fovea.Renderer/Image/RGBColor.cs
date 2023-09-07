@@ -1,19 +1,20 @@
 ﻿using System;
 using Fovea.Renderer.Materials;
+using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Image
 {
     public struct RGBColor : ITexture
     {
-        public readonly double R;
-        public readonly double G;
-        public readonly double B;
+        public readonly float R;
+        public readonly float G;
+        public readonly float B;
 
-        public RGBColor(double s = 0.0) : this(s, s, s)
+        public RGBColor(float s = 0.0f) : this(s, s, s)
         {
         }
 
-        public RGBColor(double r, double g, double b)
+        public RGBColor(float r, float g, float b)
         {
             R = r;
             G = g;
@@ -27,7 +28,7 @@ namespace Fovea.Renderer.Image
         }
 
         // scalar multiplication
-        public static RGBColor operator *(RGBColor color, double s)
+        public static RGBColor operator *(RGBColor color, float s)
         {
             return new(color.R * s, color.G * s, color.B * s);
         }
@@ -45,13 +46,13 @@ namespace Fovea.Renderer.Image
         {
             return new[]
             {
-                (byte) (Math.Clamp(R, 0.0, 1.0) * 255.999),
-                (byte) (Math.Clamp(G, 0.0, 1.0) * 255.999),
-                (byte) (Math.Clamp(B, 0.0, 1.0) * 255.999)
+                (byte) (MathUtils.ClampF(R, 0.0f, 1.0f) * 255.999f),
+                (byte) (MathUtils.ClampF(G, 0.0f, 1.0f) * 255.999f),
+                (byte) (MathUtils.ClampF(B, 0.0f, 1.0f) * 255.999f)
             };
         }
 
-        public RGBColor Value(double u, double v, Vector3 p)
+        public RGBColor Value(float u, float v, Vector3 p)
         {
             return this;
         }

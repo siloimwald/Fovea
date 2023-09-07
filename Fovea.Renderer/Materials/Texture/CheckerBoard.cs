@@ -16,7 +16,7 @@ namespace Fovea.Renderer.Materials.Texture
             _size = size;
         }
 
-        public RGBColor Value(double u, double v, Vector3 p)
+        public RGBColor Value(float u, float v, Vector3 p)
         {
             var sines = Sin(_size * p.X) * Sin(_size * p.Y) * Sin(_size * p.Z);
             return sines < 0 ? _odd.Value(u, v, p) : _even.Value(u, v, p);

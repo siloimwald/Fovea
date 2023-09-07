@@ -8,7 +8,7 @@ namespace Fovea.Renderer.Core
         public IPrimitive World { get; set; }
         public IPrimitive Lights { get; set; }
         public PerspectiveCamera Camera { get; set; }
-        public RGBColor Background { get; set; } = new(0.7, 0.8, 1);
+        public RGBColor Background { get; set; } = new(0.7f, 0.8f, 1f);
 
         public (int imageWidth, int ImageHeight) OutputSize { get; set; }
 

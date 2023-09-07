@@ -20,7 +20,7 @@ namespace Fovea.Renderer.Core
             return new(); // black
         }
 
-        double ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
+        float ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
         {
             return 0;
         }

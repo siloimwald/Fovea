@@ -21,7 +21,7 @@ namespace Fovea.Renderer.Materials.Texture
                 for (var py = 0; py < image.Height; ++py)
                 {
                     var c = image.GetPixel(px, py);
-                    var rgb = new RGBColor(c.R / 255.0, c.G / 255.0, c.B / 255.0);
+                    var rgb = new RGBColor(c.R / 255.0f, c.G / 255.0f, c.B / 255.0f);
                     // flip y
                     _imageBuffer[(px, image.Height - py - 1)] = rgb;
                 }
@@ -32,7 +32,7 @@ namespace Fovea.Renderer.Materials.Texture
             }
         }
 
-        public RGBColor Value(double u, double v, Vector3 p)
+        public RGBColor Value(float u, float v, Vector3 p)
         {
             if (_imageBuffer == null)
                 return new RGBColor(0, 1, 1);

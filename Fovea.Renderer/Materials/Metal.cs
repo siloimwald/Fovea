@@ -9,15 +9,15 @@ namespace Fovea.Renderer.Materials
     public class Metal : IMaterial
     {
         private readonly ITexture _albedo;
-        private readonly double _fuzzy;
+        private readonly float _fuzzy;
 
-        public Metal(ITexture albedo, double fuzzy = 0.0)
+        public Metal(ITexture albedo, float fuzzy = 0.0f)
         {
-            _fuzzy = Math.Min(fuzzy, 1.0);
+            _fuzzy = MathF.Min(fuzzy, 1.0f);
             _albedo = albedo;
         }
 
-        public Metal(double r, double g, double b, double fuzzy = 0.0) : this(new RGBColor(r, g, b), fuzzy)
+        public Metal(float r, float g, float b, float fuzzy = 0.0f) : this(new RGBColor(r, g, b), fuzzy)
         {
         }
 

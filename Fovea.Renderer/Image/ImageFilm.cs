@@ -46,15 +46,15 @@ namespace Fovea.Renderer.Image
 
         public void Average(int numSamples)
         {
-            var scale = 1.0 / numSamples; // average samples
+            var scale = 1.0f / numSamples; // average samples
             // square root for a rough gamma correction approximation (~ Gamma = 2)
             for (var cIdx = 0; cIdx < _imageBuffer.Length; ++cIdx)
             {
                 var colorAtIndex = _imageBuffer[cIdx];
                 _imageBuffer[cIdx] = new RGBColor(
-                    Math.Sqrt(colorAtIndex.R * scale),
-                    Math.Sqrt(colorAtIndex.G * scale),
-                    Math.Sqrt(colorAtIndex.B * scale));
+                    MathF.Sqrt(colorAtIndex.R * scale),
+                    MathF.Sqrt(colorAtIndex.G * scale),
+                    MathF.Sqrt(colorAtIndex.B * scale));
             }
         }
     }
