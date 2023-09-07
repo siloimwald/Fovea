@@ -61,7 +61,7 @@ namespace Fovea.CmdLine
                 const float w = 100.0f;
                 var x0 = -1000.0f + i * w;
                 var z0 = -1000.0f + j * w;
-                var y1 = (float)Sampler.Instance.Random(1, 101);
+                var y1 = Sampler.Instance.Random(1, 101);
 
                 prims.AddRange(BoxProducer.Produce(x0, x0 + w, 0.0f, y1, z0, z0 + w)
                     .CreateSingleTriangles(baseBoxMaterial));
@@ -409,15 +409,15 @@ namespace Fovea.CmdLine
                 .SelectMany(a => Enumerable.Range(-11, 22).Select(b => (a, b)))
                 .Select(tpl =>
                     new Vector3(
-                        tpl.a + 0.9f * (float)Sampler.Instance.Random01(),
+                        tpl.a + 0.9f * Sampler.Instance.Random01(),
                         0.2f,
-                        tpl.b + 0.9f * (float)Sampler.Instance.Random01()))
+                        tpl.b + 0.9f * Sampler.Instance.Random01()))
                 .Where(center => (center - offLimitsZone).Length() > 0.9f)
                 .Select<Vector3, IPrimitive>(center =>
                 {
                     var mat = RandomMaterial();
                     if (mat is not Lambertian) return new Sphere(center, 0.2f, RandomMaterial());
-                    var center2 = center + new Vector3(0, (float)Sampler.Instance.Random(0, 0.5f), 0);
+                    var center2 = center + new Vector3(0, Sampler.Instance.Random(0, 0.5f), 0);
                     return new MovingSphere(center, 0, center2, 1, 0.2f, mat);
                 }));
 

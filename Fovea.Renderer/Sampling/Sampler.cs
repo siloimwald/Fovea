@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Fovea.Renderer.Image;
-using Fovea.Renderer.VectorMath;
 using static System.MathF;
 
 namespace Fovea.Renderer.Sampling

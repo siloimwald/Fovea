@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Fovea.Renderer.Sampling;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Materials.Texture
 {

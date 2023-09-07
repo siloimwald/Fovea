@@ -56,8 +56,8 @@ namespace Fovea.Renderer.Primitives
         {
             var dir = _center - origin;
             var distanceSquared = dir.LengthSquared();
-            var r1 = (float)Sampler.Instance.Random01();
-            var r2 = (float)Sampler.Instance.Random01();
+            var r1 = Sampler.Instance.Random01();
+            var r2 = Sampler.Instance.Random01();
             var z = 1.0f + r2 * (Sqrt(1.0f - _radius * _radius / distanceSquared) - 1.0f);
             var phi = 2.0f * PI * r1;
             var x = Cos(phi) * Sqrt(1.0f - z * z);
@@ -70,10 +70,10 @@ namespace Fovea.Renderer.Primitives
             in Interval rayInterval, ref float tRay)
         {
             var oc = ray.Origin - center;
-            var a = (float)ray.Direction.LengthSquared();
+            var a = ray.Direction.LengthSquared();
             var h = Vector3.Dot(oc, ray.Direction); // b=2h
             var c = oc.LengthSquared() - radius * radius;
-            var disc = (float)(h * h - a * c);
+            var disc = h * h - a * c;
 
             if (disc < 0)
                 return false;

@@ -39,9 +39,9 @@ namespace Fovea.Renderer.Primitives
             if (hr1.RayT < 0)
                 hr1.RayT = 0;
 
-            var rayLength = (float)ray.Direction.Length();
+            var rayLength = ray.Direction.Length();
             var distanceInsideBoundary = (hr2.RayT - hr1.RayT) * rayLength;
-            var hitDistance = _negInvDensity * MathF.Log((float)Sampler.Instance.Random01());
+            var hitDistance = _negInvDensity * MathF.Log(Sampler.Instance.Random01());
 
             if (hitDistance > distanceInsideBoundary)
                 return false;

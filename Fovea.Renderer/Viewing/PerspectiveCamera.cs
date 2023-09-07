@@ -48,7 +48,7 @@ namespace Fovea.Renderer.Viewing
             // _lowerLeft = _origin - _horizontal * 0.5 - _vertical * 0.5 - wAxis * focusDistance;
             // _lensRadius = aperture / 2.0f;
 
-            var theta = (float)MathUtils.DegToRad(verticalFieldOfView);
+            var theta = MathUtils.DegToRad(verticalFieldOfView);
             var projection = Matrix4x4.CreatePerspectiveFieldOfView(theta, AspectRatio, focusDistance, 1000);
             _center = orientation.LookFrom;
             var viewMatrix = Matrix4x4.CreateLookAt(orientation.LookFrom, orientation.LookAt, orientation.UpDirection);

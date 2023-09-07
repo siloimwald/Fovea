@@ -62,7 +62,7 @@ namespace Fovea.Renderer.Primitives
             py *= _radius;
             var dir = _center - origin;
             var z = dir.LengthSquared();
-            return new OrthonormalBasis(dir).Local(px, py, z); // TODO: meh.
+            return new OrthonormalBasis(dir).Local(px, py, z); 
         }
 
         public float PdfValue(Vector3 origin, Vector3 direction)

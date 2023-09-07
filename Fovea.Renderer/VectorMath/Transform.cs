@@ -34,7 +34,7 @@ public class Transform
 
     public Transform WithRotation(Axis axis, float degree)
     {
-        var radian = (float)MathUtils.DegToRad(degree);
+        var radian = MathUtils.DegToRad(degree);
         var m = axis switch
         {
             Axis.X => Matrix4x4.CreateRotationX(radian),

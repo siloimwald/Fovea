@@ -1,6 +1,4 @@
-﻿using Fovea.Renderer.VectorMath;
-
-namespace Fovea.Renderer.Core
+﻿namespace Fovea.Renderer.Core
 {
     /// <summary>
     ///     a ray in 3d space starting at some origin and pointing at some direction. This is way too big for a struct by

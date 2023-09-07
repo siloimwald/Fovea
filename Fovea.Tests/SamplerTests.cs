@@ -1,6 +1,6 @@
 using Fovea.Renderer.Sampling;
 using Xunit;
-using static System.Math;
+using static System.MathF;
 
 namespace Fovea.Tests
 {

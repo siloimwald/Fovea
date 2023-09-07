@@ -85,8 +85,8 @@ namespace Fovea.Renderer.VectorMath
 
         public bool IntersectSse(in Ray ray, float tMin, float tMax)
         {
-            var invDir = Vector128.Create((float) ray.InverseDirection.X, (float) ray.InverseDirection.Y,
-                (float) ray.InverseDirection.Z, 0.0f);
+            var invDir = Vector128.Create(ray.InverseDirection.X, ray.InverseDirection.Y,
+                ray.InverseDirection.Z, 0.0f);
             var org = Vector128.Create(ray.Origin.X, ray.Origin.Y, ray.Origin.Z, 0.0f);
             var minVec = Vector128.Create(_min.X, _min.Y, _min.Z, 0.0f);
             var maxVec = Vector128.Create(_max.X, _max.Y, _max.Z, 0.0f);
@@ -104,8 +104,8 @@ namespace Fovea.Renderer.VectorMath
             var maxStage0 = Sse.Min(Sse.Shuffle(max, max, ShuffleMask), max);
             var gTMax = Sse.Min(Sse.Shuffle(maxStage0, maxStage0, ShuffleMask), maxStage0).GetElement(0);
 
-            gTMin = Math.Max((float) tMin, gTMin);
-            gTMax = Math.Min((float) tMax, gTMax);
+            gTMin = Math.Max(tMin, gTMin);
+            gTMax = Math.Min(tMax, gTMax);
             return gTMax >= gTMin && gTMax > 0;
         }
 

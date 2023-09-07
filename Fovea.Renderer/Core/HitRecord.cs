@@ -1,5 +1,3 @@
-using Fovea.Renderer.VectorMath;
-
 namespace Fovea.Renderer.Core
 {
     /// <summary>keeps track of various bits of an intersection.</summary>

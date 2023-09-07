@@ -76,11 +76,11 @@ namespace Fovea.Renderer.Primitives
         private bool TestCapHit(in Ray ray, in Interval rayInterval, ref float tCap)
         {
             // parallel to plane
-            if (MathF.Abs((float)ray.Direction.Z) < 1e-6f)
+            if (MathF.Abs(ray.Direction.Z) < 1e-6f)
                 return false;
 
-            var t0 = (float)((_zMin - ray.Origin.Z) / ray.Direction.Z);
-            var t1 = (float)((_zMax - ray.Origin.Z) / ray.Direction.Z);
+            var t0 = (_zMin - ray.Origin.Z) / ray.Direction.Z;
+            var t1 = (_zMax - ray.Origin.Z) / ray.Direction.Z;
 
             if (t0 > t1) MathUtils.Swap(ref t0, ref t1);
 
@@ -106,7 +106,7 @@ namespace Fovea.Renderer.Primitives
             var c = ray.Origin.X * ray.Origin.X + ray.Origin.Y * ray.Origin.Y - _radius * _radius;
 
             float t0 = 0.0f, t1 = 0.0f;
-            if (!MathUtils.SolveQuadratic((float)a, (float)b,c, ref t0, ref t1))
+            if (!MathUtils.SolveQuadratic(a, (float)b,c, ref t0, ref t1))
                 return false;
 
             tBody = t0;

@@ -18,7 +18,7 @@ namespace Fovea.Renderer.VectorMath
 
         public Vector3 Local(float a, float b, float c)
         {
-            var v = UAxis * (float)a + VAxis * (float)b + WAxis * (float)c;
+            var v = UAxis * a + VAxis * b + WAxis * c;
             return new Vector3(v.X, v.Y, v.Z);
         }
 

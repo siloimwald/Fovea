@@ -1,5 +1,4 @@
-﻿using System;
-using Fovea.Renderer.Materials;
+﻿using Fovea.Renderer.Materials;
 using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Image

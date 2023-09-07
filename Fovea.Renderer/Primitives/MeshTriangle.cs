@@ -83,7 +83,7 @@ namespace Fovea.Renderer.Primitives
         public Vector3 RandomDirection(Vector3 origin)
         {
             var r1 = (float)Math.Sqrt(Sampler.Instance.Random01());
-            var r2 = (float)Sampler.Instance.Random01();
+            var r2 = Sampler.Instance.Random01();
             GetVertices(out var va, out var vb, out var vc);
             var w = 1.0f - r1;
             var v = r1 * (1.0f - r2);

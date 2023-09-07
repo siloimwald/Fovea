@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core
 {
@@ -103,7 +102,7 @@ namespace Fovea.Renderer.Core
                             var v = r2 + py / ((float)imageHeight - 1);
                             u = -1.0f + 2 * (u - r1);
                             v = -1.0f + 2 * (v - r2);
-                            var ray = scene.Camera.ShootRay((float)u, (float)v);
+                            var ray = scene.Camera.ShootRay(u, v);
                             color += ColorRay(ray, scene, MaxDepth);
                         }
 
