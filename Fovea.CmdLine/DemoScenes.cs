@@ -81,15 +81,15 @@ namespace Fovea.CmdLine
                 new Lambertian(0.7, 0.3, 0.1)));
 
             // glass sphere
-            prims.Add(new Sphere(new Point3(260, 150, 45), 50, new Dielectric(1.5)));
+            prims.Add(new Sphere(new Vector3(260, 150, 45), 50, new Dielectric(1.5)));
             // metal sphere
-            prims.Add(new Sphere(new Point3(0, 150, 145), 50, new Metal(0.8, 0.8, 0.9, 1.0)));
+            prims.Add(new Sphere(new Vector3(0, 150, 145), 50, new Metal(0.8, 0.8, 0.9, 1.0)));
 
             // earth ball
-            prims.Add(new Sphere(new Point3(400, 200, 400), 100,
+            prims.Add(new Sphere(new Vector3(400, 200, 400), 100,
                 new Lambertian(new ImageTexture(@"Assets\earth.jpg"))));
             // perlin noise ball
-            prims.Add(new Sphere(new Point3(220, 280, 300), 80, new Lambertian(new NoiseTexture(0.1))));
+            prims.Add(new Sphere(new Vector3(220, 280, 300), 80, new Lambertian(new NoiseTexture(0.1))));
 
             // isotropic material does not work as of now with the whole general path tracer
 
@@ -110,7 +110,7 @@ namespace Fovea.CmdLine
                 var z = Sampler.Instance.RandomInt(0, 165);
 
                 return new Instance(
-                    new Sphere(new Point3(x, y, z), 10, white),
+                    new Sphere(new Vector3(x, y, z), 10, white),
                     transform.GetMatrix(), transform.GetInverseMatrix());
             }));
 
@@ -183,7 +183,7 @@ namespace Fovea.CmdLine
             //     .CreateSingleTriangles(white);
             // prims.AddRange(rightBox);
 
-            var glassSphere = new Sphere(new Point3(190, 90, 190), 90, new Dielectric(1.5));
+            var glassSphere = new Sphere(new Vector3(190, 90, 190), 90, new Dielectric(1.5));
             prims.Add(glassSphere);
             lightSources.Add(glassSphere);
 
@@ -211,7 +211,7 @@ namespace Fovea.CmdLine
 
             var prims = new List<IPrimitive>
             {
-                new Sphere(new Point3(0, -1000, 0), 999, new Lambertian(0.3, 0.3, 0.3)),
+                new Sphere(new Vector3(0, -1000, 0), 999, new Lambertian(0.3, 0.3, 0.3)),
                 new Disk(new Point3(-2, 2, 0), new Vector3(0, 0, 1), 1, mat),
                 new Disk(new Point3(0, 2, 0), new Vector3(0, 1, 1), 1, mat),
                 new Disk(new Point3(2, 2, 0), new Vector3(0, -1, 1), 1, mat),
@@ -250,8 +250,8 @@ namespace Fovea.CmdLine
 
             var prims = new List<IPrimitive>
             {
-                new Sphere(new Point3(0, -1000, 0), 1000, perlinTex),
-                new Sphere(new Point3(0, 2, 0), 2, perlinTex)
+                new Sphere(new Vector3(0, -1000, 0), 1000, perlinTex),
+                new Sphere(new Vector3(0, 2, 0), 2, perlinTex)
             };
 
             // Camera
@@ -279,9 +279,9 @@ namespace Fovea.CmdLine
             var baseCylinder = new Cylinder(0, 4, 1, new Lambertian(new NoiseTexture(4)));
             var prims = new List<IPrimitive>
             {
-                new Sphere(new Point3(0, -1000, 0), 1000, new Lambertian(0.6, 0.5, 0.3)),
-                new Sphere(new Point3(3, 2, -1.5), 2, earth),
-                new Sphere(new Point3(1.5, 1, 2), 1, checker2),
+                new Sphere(new Vector3(0, -1000, 0), 1000, new Lambertian(0.6, 0.5, 0.3)),
+                new Sphere(new Vector3(3, 2, -1.5f), 2, earth),
+                new Sphere(new Vector3(1.5f, 1, 2), 1, checker2),
                 new Instance(baseCylinder, new Transformation().Rotate(-90, Axis.X).Translate(-1, 0, 0)),
                 new Instance(baseCylinder, new Transformation().Rotate(45, Axis.Y).Translate(-4.5, 1, 0))
             };
@@ -350,7 +350,7 @@ namespace Fovea.CmdLine
             var mesh = ObjReader.ReadObjFile(@"assets\teapot.obj", true);
 
             var env = new FlipFace(
-                new Sphere(new Point3(), 10, new Lambertian(new ImageTexture(@"Assets\forest.jpg"))));
+                new Sphere(new Vector3(), 10, new Lambertian(new ImageTexture(@"Assets\forest.jpg"))));
 
             // var diffuseLight = new DiffuseLight(new RGBColor(5, 5, 6));
             // var lightSource = new PrimitiveList(QuadProducer.Produce(-3, 3, -3, 3, 5, Axis.Y)
@@ -382,10 +382,10 @@ namespace Fovea.CmdLine
         {
             var prims = new List<IPrimitive>();
             var groundMat = new Lambertian(0.5, 0.5, 0.5);
-            prims.Add(new Sphere(new Point3(0, -1000, 0), 1000, groundMat));
-            prims.Add(new Sphere(new Point3(0, 1, 0), 1, new Dielectric(1.5)));
-            prims.Add(new Sphere(new Point3(-4, 1, 0), 1, new Lambertian(0.4, 0.2, 0.1)));
-            prims.Add(new Sphere(new Point3(4, 1, 0), 1, new Metal(0.7, 0.6, 0.5)));
+            prims.Add(new Sphere(new Vector3(0, -1000, 0), 1000, groundMat));
+            prims.Add(new Sphere(new Vector3(0, 1, 0), 1, new Dielectric(1.5)));
+            prims.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Lambertian(0.4, 0.2, 0.1)));
+            prims.Add(new Sphere(new Vector3(4, 1, 0), 1, new Metal(0.7, 0.6, 0.5)));
 
             // just for the sake of writing some slightly more modern c#
 
@@ -414,7 +414,7 @@ namespace Fovea.CmdLine
                 .Select<Vector3, IPrimitive>(center =>
                 {
                     var mat = RandomMaterial();
-                    if (mat is not Lambertian) return new Sphere(center.AsPoint3(), 0.2, RandomMaterial());
+                    if (mat is not Lambertian) return new Sphere(center, 0.2f, RandomMaterial());
                     var center2 = center + new Vector3(0, (float)Sampler.Instance.Random(0, 0.5), 0);
                     return new MovingSphere(center, 0, center2, 1, 0.2f, mat);
                 }));

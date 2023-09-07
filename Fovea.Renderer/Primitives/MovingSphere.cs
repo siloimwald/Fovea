@@ -28,7 +28,7 @@ namespace Fovea.Renderer.Primitives
         {
             var center = CenterAtTime((float)ray.Time);
             var root = 0.0;
-            if (!Sphere.IntersectSphere(ray, center.AsPoint3(), _radius, rayInterval, ref root))
+            if (!Sphere.IntersectSphere(ray, center, _radius, rayInterval, ref root))
                 return false;
 
             hitRecord.RayT = root;
