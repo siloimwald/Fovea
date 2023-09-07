@@ -66,7 +66,7 @@ namespace Fovea.Renderer.Core
             }
         }
 
-        public void Render(Scene scene)
+        public void Render(Scene scene, string fileName = "output.ppm")
         {
             var (imageWidth, imageHeight) = scene.OutputSize;
             var image = new ImageFilm(imageWidth, imageHeight);
@@ -125,7 +125,7 @@ namespace Fovea.Renderer.Core
             // average and gamma correct whole image in one go
             image.Average(NumSamples);
             Console.WriteLine($"\nFinished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
-            image.SaveAs("output.ppm");
+            image.SaveAs(fileName);
         }
     }
 }

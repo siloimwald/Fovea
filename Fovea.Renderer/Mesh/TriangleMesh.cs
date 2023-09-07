@@ -88,9 +88,12 @@ namespace Fovea.Renderer.Mesh
             }).ToList();
         }
 
-        public TriangleMesh ApplyTransform(Matrix4 matrix)
+        public TriangleMesh ApplyTransform(Matrix4x4 matrix)
         {
-            for (var i = 0; i < Vertices.Count; i++) Vertices[i] = matrix * Vertices[i];
+            for (var i = 0; i < Vertices.Count; i++)
+            {
+                Vertices[i] = Vector3.Transform(Vertices[i].AsVector3(), matrix).AsPoint3(); // TODO: yikes
+            }
 
             return this;
         }

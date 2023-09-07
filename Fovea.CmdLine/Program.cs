@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System;
+using CommandLine;
 using Fovea.Renderer.Core;
 
 namespace Fovea.CmdLine
@@ -7,16 +8,31 @@ namespace Fovea.CmdLine
     {
         private static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<CommandLineArgs>(args)
-                .WithParsed(opts =>
+            Console.WriteLine("rendering all test scenes...");
+            foreach (int i in Enum.GetValues(typeof(DemoScenes)))
+            {
+                var fileName = $"{Enum.GetName(typeof(DemoScenes), i)}.ppm";
+                Console.WriteLine($"rendering {fileName}");
+                var renderer = new Raytracer
                 {
-                    var renderer = new Raytracer
-                    {
-                        NumSamples = opts.NumSamples
-                    };
-                    var scene = DemoSceneCreator.MakeScene(DemoScenes.FinalSceneBookTwo, opts.ImageWidth);
-                    renderer.Render(scene);
-                });
+                    NumSamples = 10
+                };
+                var scene = DemoSceneCreator.MakeScene((DemoScenes)i, 512);
+                renderer.Render(scene, fileName);
+            }
+            
+            // Parser.Default.ParseArguments<CommandLineArgs>(args)
+            //     .WithParsed(opts =>
+            //     {
+            //         var renderer = new Raytracer
+            //         {
+            //             NumSamples = opts.NumSamples
+            //         };
+            //         var foo = DemoScenes.GetValuesAsUnderlyingType<int>()
+            //         
+            //         var scene = DemoSceneCreator.MakeScene(DemoScenes.FinalSceneBookTwo, opts.ImageWidth);
+            //         renderer.Render(scene);
+            //     });
         }
     }
 }

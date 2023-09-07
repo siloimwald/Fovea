@@ -11,7 +11,6 @@ using Fovea.Renderer.Parser;
 using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
-using Fovea.Renderer.VectorMath.Transforms;
 using Fovea.Renderer.Viewing;
 
 namespace Fovea.CmdLine
@@ -102,7 +101,9 @@ namespace Fovea.CmdLine
 
             // sphere cluster right top
             var white = new Lambertian(0.73, 0.73, 0.73);
-            var transform = new Transformation().Rotate(15, Axis.Y).Translate(-100, 270, 395);
+            // var transform = new Transformation().Rotate(15, Axis.Y).Translate(-100, 270, 395);
+            var transform = new Transform().WithRotation(Axis.Y, 15).WithTranslation(-100, 270, 395);
+            var (sphereTransform, sphereInverse, _) = transform.Build();
             prims.AddRange(Enumerable.Range(0, 1000).Select(_ =>
             {
                 var x = Sampler.Instance.RandomInt(0, 165);
@@ -111,7 +112,7 @@ namespace Fovea.CmdLine
 
                 return new Instance(
                     new Sphere(new Vector3(x, y, z), 10, white),
-                    transform.GetMatrix(), transform.GetInverseMatrix());
+                    sphereTransform, sphereInverse);
             }));
 
             var orientation = new Orientation
@@ -172,7 +173,7 @@ namespace Fovea.CmdLine
             // tall left box
             // don't use instancing here, rather transform stuff directly
             var leftBox = BoxProducer.Produce(0, 165, 0, 330, 0, 165)
-                .ApplyTransform(new Transformation().Rotate(15, Axis.Y).Translate(265, 0, 295).GetMatrix())
+                .ApplyTransform(new Transform().WithRotation(Axis.Y, 15).WithTranslation(265, 0, 295).BuildForwardOnly())
                 // .CreateSingleTriangles(new Metal(0.8, 0.85, 0.88, 0));
                 .CreateSingleTriangles(white);
             // var leftBoxSmoke = new ConstantMedium(new PrimitiveList(leftBox), 0.01, new RGBColor(0, 0, 0));
@@ -282,8 +283,8 @@ namespace Fovea.CmdLine
                 new Sphere(new Vector3(0, -1000, 0), 1000, new Lambertian(0.6, 0.5, 0.3)),
                 new Sphere(new Vector3(3, 2, -1.5f), 2, earth),
                 new Sphere(new Vector3(1.5f, 1, 2), 1, checker2),
-                new Instance(baseCylinder, new Transformation().Rotate(-90, Axis.X).Translate(-1, 0, 0)),
-                new Instance(baseCylinder, new Transformation().Rotate(45, Axis.Y).Translate(-4.5, 1, 0))
+                new Instance(baseCylinder, new Transform().WithRotation(Axis.X, -90).WithTranslation(-1, 0, 0)),
+                new Instance(baseCylinder, new Transform().WithRotation(Axis.Y, 45).WithTranslation(-4.5f, 1, 0))
             };
 
             // Camera
@@ -312,11 +313,12 @@ namespace Fovea.CmdLine
             {
                 var m = new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0, 0.05));
                 var cyl = new Cylinder(-1, 1, 0.3f, m);
-                var tr = new Transformation()
-                    .Rotate(-90 + a, Axis.X)
-                    .Translate(0, 5, -5)
-                    .Rotate(a, Axis.Z);
-                prims.Add(new Instance(cyl, tr.GetMatrix(), tr.GetInverseMatrix()));
+                var tr = new Transform()
+                    .WithRotation(Axis.X, -90 + a)
+                    .WithTranslation(0, 5, -5)
+                    .WithRotation(Axis.Z, a);
+                
+                prims.Add(new Instance(cyl, tr));
             }
 
             // Camera

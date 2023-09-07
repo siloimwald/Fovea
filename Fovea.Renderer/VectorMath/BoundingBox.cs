@@ -159,10 +159,10 @@ namespace Fovea.Renderer.VectorMath
                 ext.Z > 0 ? o.Z / ext.Z : o.Z);
         }
 
-        public BoundingBox Transform(Matrix4 transform)
+        public BoundingBox Transform(Matrix4x4 transform)
         {
-            var transformedMin = (transform * _min.AsPoint3()).AsVector3();
-            var transformedMax = (transform * _max.AsPoint3()).AsVector3();
+            var transformedMin = Vector3.Transform(_min, transform);
+            var transformedMax = Vector3.Transform(_max, transform);
             return new BoundingBox(
                 Vector3.Min(transformedMin, transformedMax),
                 Vector3.Max(transformedMin, transformedMax));

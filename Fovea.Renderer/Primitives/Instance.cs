@@ -1,6 +1,5 @@
 using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
-using Fovea.Renderer.VectorMath.Transforms;
 
 namespace Fovea.Renderer.Primitives
 {
@@ -11,34 +10,42 @@ namespace Fovea.Renderer.Primitives
     public class Instance : IPrimitive
     {
         private readonly IPrimitive _instance;
-        private readonly Matrix4 _inverseTransform;
-        private readonly Matrix4 _transform;
+        private readonly Matrix4x4 _inverseTransform;
+        private readonly Matrix4x4 _transform;
 
-        public Instance(IPrimitive instance, Matrix4 transform, Matrix4 inverseTransform)
+        public Instance(IPrimitive instance, Matrix4x4 transform, Matrix4x4 inverseTransform)
         {
             _instance = instance;
             _transform = transform;
             _inverseTransform = inverseTransform;
         }
 
-        public Instance(IPrimitive instance, Transformation transformation)
-            : this(instance, transformation.GetMatrix(), transformation.GetInverseMatrix())
+        public Instance(IPrimitive instance, Transform transformation)
+            
         {
+            var (forward, inverse, _) = transformation.Build();
+            _instance = instance;
+            _transform = forward;
+            _inverseTransform = inverse;
         }
 
         public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
         {
-            var transformedRay = new Ray(_inverseTransform * ray.Origin,
-                _inverseTransform * ray.Direction);
+            
+            var inverseOrg = Vector3.Transform(ray.Origin.AsVector3(), _inverseTransform);
+            var inverseDir = Vector3.Transform(ray.Direction.AsVector3(), _inverseTransform);
+            
+            var transformedRay = new Ray(inverseOrg, inverseDir);
+            
             if (!_instance.Hit(transformedRay, rayInterval, ref hitRecord))
                 return false;
 
-            hitRecord.HitPoint = (_transform * hitRecord.HitPoint.AsPoint3()).AsVector3(); // TODO: yikes.
+            hitRecord.HitPoint = Vector3.Transform(hitRecord.HitPoint, _transform);
             // normal needs the transposed of the inverse
             // if a scaling is involved we need to re-normalize
-            var n = Vec3.Normalize(_inverseTransform.TransformVectorTransposed(hitRecord.Normal.AsVec3()));
+            var n = Vector3.Normalize(Vector3.TransformNormal(hitRecord.Normal, _inverseTransform));
             // use untransformed ray here
-            hitRecord.SetFaceNormal(ray, n.AsVector3());
+            hitRecord.SetFaceNormal(ray, n);
             return true;
         }
 
