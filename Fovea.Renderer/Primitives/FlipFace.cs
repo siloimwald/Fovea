@@ -1,40 +1,39 @@
 using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
 
-namespace Fovea.Renderer.Primitives
+namespace Fovea.Renderer.Primitives;
+
+public class FlipFace : IPrimitive
 {
-    public class FlipFace : IPrimitive
+    private readonly IPrimitive _prim;
+
+    public FlipFace(IPrimitive prim)
     {
-        private readonly IPrimitive _prim;
+        _prim = prim;
+    }
 
-        public FlipFace(IPrimitive prim)
-        {
-            _prim = prim;
-        }
+    public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
+    {
+        if (!_prim.Hit(ray, rayInterval, ref hitRecord))
+            return false;
 
-        public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
-        {
-            if (!_prim.Hit(ray, rayInterval, ref hitRecord))
-                return false;
+        hitRecord.IsFrontFace = !hitRecord.IsFrontFace;
 
-            hitRecord.IsFrontFace = !hitRecord.IsFrontFace;
+        return true;
+    }
 
-            return true;
-        }
+    public BoundingBox GetBoundingBox(float t0, float t1)
+    {
+        return _prim.GetBoundingBox(t0, t1);
+    }
 
-        public BoundingBox GetBoundingBox(float t0, float t1)
-        {
-            return _prim.GetBoundingBox(t0, t1);
-        }
+    public float PdfValue(Vector3 origin, Vector3 direction)
+    {
+        return _prim.PdfValue(origin, direction);
+    }
 
-        public float PdfValue(Vector3 origin, Vector3 direction)
-        {
-            return _prim.PdfValue(origin, direction);
-        }
-
-        public Vector3 RandomDirection(Vector3 origin)
-        {
-            return _prim.RandomDirection(origin);
-        }
+    public Vector3 RandomDirection(Vector3 origin)
+    {
+        return _prim.RandomDirection(origin);
     }
 }

@@ -4,33 +4,32 @@ using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 
-namespace Fovea.Renderer.Materials
+namespace Fovea.Renderer.Materials;
+
+public class Lambertian : IMaterial
 {
-    public class Lambertian : IMaterial
+    private readonly ITexture _albedo;
+
+    public Lambertian(ITexture albedo)
     {
-        private readonly ITexture _albedo;
+        _albedo = albedo;
+    }
 
-        public Lambertian(ITexture albedo)
-        {
-            _albedo = albedo;
-        }
+    public Lambertian(float r, float g, float b) : this(new RGBColor(r, g, b))
+    {
+    }
 
-        public Lambertian(float r, float g, float b) : this(new RGBColor(r, g, b))
-        {
-        }
+    public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
+    {
+        scatterResult.IsSpecular = false;
+        scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
+        scatterResult.Pdf = new CosinePDF(new OrthonormalBasis(hitRecord.Normal));
+        return true;
+    }
 
-        public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
-        {
-            scatterResult.IsSpecular = false;
-            scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
-            scatterResult.Pdf = new CosinePDF(new OrthonormalBasis(hitRecord.Normal));
-            return true;
-        }
-
-        public float ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
-        {
-            var cosine = Vector3.Dot(hitRecord.Normal, Vector3.Normalize(scatteredRay.Direction));
-            return cosine < 0 ? 0 : cosine / MathF.PI;
-        }
+    public float ScatteringPDF(in Ray ray, in HitRecord hitRecord, in Ray scatteredRay)
+    {
+        var cosine = Vector3.Dot(hitRecord.Normal, Vector3.Normalize(scatteredRay.Direction));
+        return cosine < 0 ? 0 : cosine / MathF.PI;
     }
 }

@@ -2,36 +2,35 @@
 using CommandLine;
 using Fovea.Renderer.Core;
 
-namespace Fovea.CmdLine
+namespace Fovea.CmdLine;
+
+internal class Program
 {
-    internal class Program
+    private static void Main(string[] args)
     {
-        private static void Main(string[] args)
-        {
-            // Console.WriteLine("rendering all test scenes...");
-            // foreach (int i in Enum.GetValues(typeof(DemoScenes)))
-            // {
-            //     var fileName = $"{Enum.GetName(typeof(DemoScenes), i)}.ppm";
-            //     Console.WriteLine($"rendering {fileName}");
-            //     var renderer = new Raytracer
-            //     {
-            //         NumSamples = 10
-            //     };
-            //     var scene = DemoSceneCreator.MakeScene((DemoScenes)i, 512);
-            //     renderer.Render(scene, fileName);
-            // }
+        // Console.WriteLine("rendering all test scenes...");
+        // foreach (int i in Enum.GetValues(typeof(DemoScenes)))
+        // {
+        //     var fileName = $"{Enum.GetName(typeof(DemoScenes), i)}.ppm";
+        //     Console.WriteLine($"rendering {fileName}");
+        //     var renderer = new Raytracer
+        //     {
+        //         NumSamples = 10
+        //     };
+        //     var scene = DemoSceneCreator.MakeScene((DemoScenes)i, 512);
+        //     renderer.Render(scene, fileName);
+        // }
             
-            Parser.Default.ParseArguments<CommandLineArgs>(args)
-                .WithParsed(opts =>
+        Parser.Default.ParseArguments<CommandLineArgs>(args)
+            .WithParsed(opts =>
+            {
+                var renderer = new Raytracer
                 {
-                    var renderer = new Raytracer
-                    {
-                        NumSamples = opts.NumSamples
-                    };
+                    NumSamples = opts.NumSamples
+                };
                     
-                    var scene = DemoSceneCreator.MakeScene(DemoScenes.FinalSceneBookTwo, opts.ImageWidth);
-                    renderer.Render(scene);
-                });
-        }
+                var scene = DemoSceneCreator.MakeScene(DemoScenes.FinalSceneBookTwo, opts.ImageWidth);
+                renderer.Render(scene);
+            });
     }
 }

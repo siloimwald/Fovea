@@ -1,9 +1,8 @@
 using Fovea.Renderer.Image;
 
-namespace Fovea.Renderer.Materials
+namespace Fovea.Renderer.Materials;
+
+public interface ITexture
 {
-    public interface ITexture
-    {
-        RGBColor Value(float u, float v, Vector3 p);
-    }
+    RGBColor Value(float u, float v, Vector3 p);
 }

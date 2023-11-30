@@ -1,9 +1,8 @@
-namespace Fovea.Renderer.VectorMath
+namespace Fovea.Renderer.VectorMath;
+
+public enum Axis
 {
-    public enum Axis
-    {
-        X = 0,
-        Y = 1,
-        Z = 2
-    }
+    X = 0,
+    Y = 1,
+    Z = 2
 }

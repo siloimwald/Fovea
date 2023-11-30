@@ -1,27 +1,26 @@
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Image;
 
-namespace Fovea.Renderer.Materials
+namespace Fovea.Renderer.Materials;
+
+public class DiffuseLight : IMaterial
 {
-    public class DiffuseLight : IMaterial
+    private readonly ITexture _color;
+
+    public DiffuseLight(ITexture color)
     {
-        private readonly ITexture _color;
+        _color = color;
+    }
 
-        public DiffuseLight(ITexture color)
-        {
-            _color = color;
-        }
+    public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
+    {
+        return false;
+    }
 
-        public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
-        {
-            return false;
-        }
-
-        public RGBColor Emitted(in Ray ray, in HitRecord hitRecord)
-        {
-            return hitRecord.IsFrontFace
-                ? _color.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint)
-                : new RGBColor();
-        }
+    public RGBColor Emitted(in Ray ray, in HitRecord hitRecord)
+    {
+        return hitRecord.IsFrontFace
+            ? _color.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint)
+            : new RGBColor();
     }
 }
