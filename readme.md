@@ -24,7 +24,7 @@ Should probably compile and run fine with any recent dotnet core. (currently NET
 The command line executable accepts two parameters:
 - -s samples
 - -w image width (the height is derived from the aspect ratio)
-- the output file is fixed as "output.ppm"
+- the output file is fixed as "output.png"
 - i.e. run something like `dotnet run -p Fovea.CmdLine -c Release -- -s 10 -w 800`
 
 Fancy picture time

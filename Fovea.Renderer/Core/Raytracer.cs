@@ -4,6 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Fovea.Renderer.Core;
 
@@ -65,10 +68,11 @@ public class Raytracer
         }
     }
 
-    public void Render(Scene scene, string fileName = "output.ppm")
+    public void Render(Scene scene, string fileName = "output.png")
     {
         var (imageWidth, imageHeight) = scene.OutputSize;
-        var image = new ImageFilm(imageWidth, imageHeight);
+        // var image = new ImageFilm(imageWidth, imageHeight);
+        var image = new Image<RgbaVector>(imageWidth, imageHeight);
 
         // print what we're doing
         Console.WriteLine($"Image size {imageWidth}x{imageHeight}, samples = {NumSamples}");
@@ -106,7 +110,8 @@ public class Raytracer
                         color += ColorRay(ray, scene, MaxDepth);
                     }
 
-                    image[(px, imageHeight - py - 1)] = color;
+                    image[px, imageHeight - py - 1] = new RgbaVector(color.R, color.G, color.B);                    
+                    //image[(px, imageHeight - py - 1)] = color;
                 }
 
                 Interlocked.Add(ref pixelDone, max - offset);
@@ -120,10 +125,21 @@ public class Raytracer
 
         Parallel.For(0, threadCount,
             new ParallelOptions {MaxDegreeOfParallelism = Environment.ProcessorCount}, RenderInterleaved);
-
+        
         // average and gamma correct whole image in one go
-        image.Average(NumSamples);
+        image.Mutate(c => c.ProcessPixelRowsAsVector4(row =>
+        {
+            for (var x = 0; x < row.Length; x++)
+            {
+                row[x] = Vector4.Divide(row[x], NumSamples);
+                row[x] = Vector4.SquareRoot(row[x]);
+                row[x].W = 1.0f; // fix the alpha channel
+            }
+        }));
+        
         Console.WriteLine($"\nFinished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
-        image.SaveAs(fileName);
+        image.SaveAsPng(fileName);
+        // manually dispose the thing, otherwise a warning pops up about using it in the closure/local function
+        image.Dispose();
     }
 }

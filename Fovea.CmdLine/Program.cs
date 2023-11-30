@@ -29,7 +29,7 @@ internal class Program
                     NumSamples = opts.NumSamples
                 };
                     
-                var scene = DemoSceneCreator.MakeScene(DemoScenes.FinalSceneBookTwo, opts.ImageWidth);
+                var scene = DemoSceneCreator.MakeScene(DemoScenes.TextureDemo, opts.ImageWidth);
                 renderer.Render(scene);
             });
     }
