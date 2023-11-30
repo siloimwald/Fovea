@@ -1,4 +1,4 @@
-using Fovea.Renderer.Image;
+using Fovea.Renderer.Core;
 
 namespace Fovea.Renderer.Materials;
 

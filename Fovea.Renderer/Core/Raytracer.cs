@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -109,9 +108,9 @@ public class Raytracer
                         var ray = scene.Camera.ShootRay(u, v);
                         color += ColorRay(ray, scene, MaxDepth);
                     }
-
+                    
+                    // ReSharper disable once AccessToDisposedClosure
                     image[px, imageHeight - py - 1] = new RgbaVector(color.R, color.G, color.B);                    
-                    //image[(px, imageHeight - py - 1)] = color;
                 }
 
                 Interlocked.Add(ref pixelDone, max - offset);
@@ -139,7 +138,6 @@ public class Raytracer
         
         Console.WriteLine($"\nFinished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
         image.SaveAsPng(fileName);
-        // manually dispose the thing, otherwise a warning pops up about using it in the closure/local function
         image.Dispose();
     }
 }

@@ -1,4 +1,3 @@
-using Fovea.Renderer.Image;
 
 namespace Fovea.Renderer.Core;
 

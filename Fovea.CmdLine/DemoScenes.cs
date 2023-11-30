@@ -3,7 +3,6 @@ using System.Linq;
 using System.Numerics;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
-using Fovea.Renderer.Image;
 using Fovea.Renderer.Materials;
 using Fovea.Renderer.Materials.Texture;
 using Fovea.Renderer.Mesh;

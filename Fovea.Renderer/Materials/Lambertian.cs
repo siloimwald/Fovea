@@ -1,6 +1,5 @@
 using System;
 using Fovea.Renderer.Core;
-using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 

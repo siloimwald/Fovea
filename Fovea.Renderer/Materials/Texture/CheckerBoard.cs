@@ -1,4 +1,4 @@
-using Fovea.Renderer.Image;
+using Fovea.Renderer.Core;
 using static System.MathF;
 
 namespace Fovea.Renderer.Materials.Texture;

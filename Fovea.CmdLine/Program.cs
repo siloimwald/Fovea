@@ -1,6 +1,7 @@
 ﻿using System;
 using CommandLine;
 using Fovea.Renderer.Core;
+using SixLabors.ImageSharp.Diagnostics;
 
 namespace Fovea.CmdLine;
 
@@ -32,5 +33,7 @@ internal class Program
                 var scene = DemoSceneCreator.MakeScene(DemoScenes.TextureDemo, opts.ImageWidth);
                 renderer.Render(scene);
             });
+        // TODO: need to dispose all the stuff...
+        Console.WriteLine(MemoryDiagnostics.TotalUndisposedAllocationCount);
     }
 }

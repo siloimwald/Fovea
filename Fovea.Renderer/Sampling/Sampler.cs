@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Fovea.Renderer.Image;
+using Fovea.Renderer.Core;
 using static System.MathF;
 
 namespace Fovea.Renderer.Sampling;

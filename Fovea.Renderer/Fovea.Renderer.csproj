@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2"/>
     </ItemGroup>
 

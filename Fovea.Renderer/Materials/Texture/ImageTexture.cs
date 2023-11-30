@@ -1,30 +1,20 @@
 using System;
-using System.Drawing;
-using System.IO;
-using Fovea.Renderer.Image;
+using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Fovea.Renderer.Materials.Texture;
 
-public class ImageTexture : ITexture
+public class ImageTexture : ITexture, IDisposable
 {
-    private readonly ImageFilm _imageBuffer;
+    private readonly Image<RgbaVector> _imageBuffer;
 
     public ImageTexture(string fileName)
     {
         try
         {
-            using var stream = new FileStream(fileName, FileMode.Open);
-            using var image = new Bitmap(stream);
-            _imageBuffer = new ImageFilm(image.Width, image.Height);
-            for (var px = 0; px < image.Width; ++px)
-            for (var py = 0; py < image.Height; ++py)
-            {
-                var c = image.GetPixel(px, py);
-                var rgb = new RGBColor(c.R / 255.0f, c.G / 255.0f, c.B / 255.0f);
-                // flip y
-                _imageBuffer[(px, image.Height - py - 1)] = rgb;
-            }
+            _imageBuffer = Image.Load<RgbaVector>(fileName);
         }
         catch
         {
@@ -41,6 +31,15 @@ public class ImageTexture : ITexture
         var texV = MathUtils.ClampF(v, 0.0f, 1.0f);
         var px = (int) (texU * (_imageBuffer.Width - 1));
         var py = (int) (texV * (_imageBuffer.Height - 1));
-        return _imageBuffer[(px, py)];
+        return _imageBuffer[px, _imageBuffer.Height - py - 1].FromRgbaVector();
+    }
+
+    // public void Dispose()
+    // {
+    //     _imageBuffer?.Dispose();
+    // }
+    public void Dispose()
+    {
+        _imageBuffer?.Dispose();
     }
 }

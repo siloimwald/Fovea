@@ -1,4 +1,3 @@
-using Fovea.Renderer.Image;
 using Fovea.Renderer.Sampling;
 
 namespace Fovea.Renderer.Core;

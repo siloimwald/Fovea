@@ -1,7 +1,7 @@
 ﻿using Fovea.Renderer.Materials;
-using Fovea.Renderer.VectorMath;
+using SixLabors.ImageSharp.PixelFormats;
 
-namespace Fovea.Renderer.Image;
+namespace Fovea.Renderer.Core;
 
 public struct RGBColor : ITexture
 {
@@ -39,20 +39,17 @@ public struct RGBColor : ITexture
         return new(left.R * right.R, left.G * right.G, left.B * right.B);
     }
 
-    /// <summary>clamps color components to [0..1], scales by 255 and packs components as an byte array with form [r,g,b]</summary>
-    /// <returns></returns>
-    public byte[] ToByteArray()
-    {
-        return new[]
-        {
-            (byte) (MathUtils.ClampF(R, 0.0f, 1.0f) * 255.999f),
-            (byte) (MathUtils.ClampF(G, 0.0f, 1.0f) * 255.999f),
-            (byte) (MathUtils.ClampF(B, 0.0f, 1.0f) * 255.999f)
-        };
-    }
-
     public RGBColor Value(float u, float v, Vector3 p)
     {
         return this;
+    }
+}
+
+// for the time being, ease the transition, eventually replace RGBColor
+public static class RGBColorExtensions 
+{
+    public static RGBColor FromRgbaVector(this RgbaVector rgbaVector)
+    {
+        return new RGBColor(rgbaVector.R, rgbaVector.G, rgbaVector.B);
     }
 }
