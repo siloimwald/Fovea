@@ -1,21 +1,20 @@
 using System;
-using System.Linq;
-using Xunit;
+using FluentAssertions;
+using NUnit.Framework;
 
 namespace Fovea.Tests;
 
 public class MiscTests
 {
-    [Fact]
-    public void TestPartitioningScheme()
+    // verifies that our image partitioning scheme touches every pixel exactly once
+    
+    [TestCase(16, 320, 200, 10)]
+    [TestCase(7, 812, 217, 200)]
+    [TestCase(40, 16, 16, 100)]
+    public void TestPartitioningScheme(int threadCount, int imageWidth, int imageHeight, int pixelPerThread)
     {
-        var threadCount = 13;
-        var imageWidth = 358;
-        var imageHeight = 479;
-
         var totalPixels = imageWidth * imageHeight;
         var image = new int[totalPixels];
-        var pixelPerThread = 10;
 
         for (var t = 0; t < threadCount; t++)
         {
@@ -29,6 +28,6 @@ public class MiscTests
             }
         }
 
-        Assert.True(image.All(pixel => pixel == 1));
+        image.Should().AllSatisfy(p => p.Should().Be(1));
     }
 }

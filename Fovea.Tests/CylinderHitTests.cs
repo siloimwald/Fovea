@@ -1,13 +1,15 @@
 using System.Numerics;
+using FluentAssertions;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Primitives;
-using Xunit;
+using NUnit.Framework;
+
 
 namespace Fovea.Tests;
 
 public class CylinderHitTests
 {
-    [Fact]
+    [Test]
     public void HitCapFromOutSide()
     {
         // cylinder on z axis from -1 to 1 with radius 1
@@ -19,24 +21,24 @@ public class CylinderHitTests
 
         var hasHit = cyl.Hit(rayFromPosZ, new Interval(1e-4f, 1e12f), ref hitRecord);
         Assert.True(hasHit);
-        Assert.Equal(new Vector3(0, 0, 1), hitRecord.HitPoint);
-        Assert.Equal(1.0, hitRecord.RayT, 3); // from z=2 to z=1 at bottom cap
-        Assert.Equal(new Vector3(0, 0, 1), hitRecord.Normal);
-        Assert.True(hitRecord.IsFrontFace);
-
+        hitRecord.HitPoint.Should().Be(Vector3.UnitZ);
+        hitRecord.RayT.Should().Be(1); // from z=2 to z=1 at bottom cap
+        hitRecord.Normal.Should().Be(Vector3.UnitZ);
+        hitRecord.IsFrontFace.Should().BeTrue();
+        
         // other side
         var rayFromNegZ = new Ray(new Vector3(0, 0, -2), new Vector3(0, 0, 1));
         hitRecord = new HitRecord();
         hasHit = cyl.Hit(rayFromNegZ, new Interval(1e-4f, 1e12f), ref hitRecord);
 
-        Assert.True(hasHit);
-        Assert.Equal(new Vector3(0, 0, -1), hitRecord.HitPoint);
-        Assert.Equal(1.0, hitRecord.RayT, 3);
-        Assert.Equal(new Vector3(0, 0, -1), hitRecord.Normal);
-        Assert.True(hitRecord.IsFrontFace);
+        hasHit.Should().BeTrue();
+        hitRecord.HitPoint.Should().Be(-Vector3.UnitZ);
+        hitRecord.RayT.Should().Be(1.0f);
+        hitRecord.Normal.Should().Be(-Vector3.UnitZ);
+        hitRecord.IsFrontFace.Should().BeTrue();
     }
 
-    [Fact]
+    [Test]
     public void HitCapFromInside()
     {
         // cylinder on z axis from -1 to 1 with radius 1
@@ -47,25 +49,28 @@ public class CylinderHitTests
         var hitRecord = new HitRecord();
 
         var hasHit = cyl.Hit(rayToNegZ, new Interval(1e-4f, 1e12f), ref hitRecord);
-        Assert.True(hasHit);
-        Assert.Equal(new Vector3(0, 0, -1), hitRecord.HitPoint);
-        Assert.Equal(1.0, hitRecord.RayT, 3); // from z=2 to z=1 at bottom cap
-        Assert.Equal(new Vector3(0, 0, 1), hitRecord.Normal);
-        Assert.False(hitRecord.IsFrontFace);
-
+        
+        hasHit.Should().BeTrue();
+        hitRecord.HitPoint.Should().Be(-Vector3.UnitZ);
+        hitRecord.RayT.Should().Be(1.0f);
+        hitRecord.Normal.Should().Be(Vector3.UnitZ);
+        hitRecord.IsFrontFace.Should().BeFalse();
+        
         // same again, other direction
         var rayToPosZ = new Ray(new Vector3(), new Vector3(0, 0, 1));
         hitRecord = new HitRecord();
 
         hasHit = cyl.Hit(rayToPosZ, new Interval(1e-4f, 1e12f), ref hitRecord);
-        Assert.True(hasHit);
-        Assert.Equal(new Vector3(0, 0, 1), hitRecord.HitPoint);
-        Assert.Equal(1.0, hitRecord.RayT, 3); // from z=2 to z=1 at bottom cap
-        Assert.Equal(new Vector3(0, 0, -1), hitRecord.Normal);
-        Assert.False(hitRecord.IsFrontFace);
+        
+        hasHit.Should().BeTrue();
+        hitRecord.HitPoint.Should().Be(Vector3.UnitZ);
+        hitRecord.RayT.Should().Be(1.0f);
+        hitRecord.Normal.Should().Be(-Vector3.UnitZ);
+        hitRecord.IsFrontFace.Should().BeFalse();
+        
     }
 
-    [Fact]
+    [Test]
     public void BodyHitFromOutSide()
     {
         // cylinder on z axis from -1 to 1 with radius 1
@@ -75,24 +80,24 @@ public class CylinderHitTests
         var rayFromMinusX = new Ray(new Vector3(-2, 0, 0.5f), new Vector3(1, 0, 0));
         var hitRecord = new HitRecord();
         var hasHit = cyl.Hit(rayFromMinusX, new Interval(1e-4f, 1e12f), ref hitRecord);
-
-        Assert.True(hasHit);
-        Assert.Equal(new Vector3(-1, 0, 0.5f), hitRecord.HitPoint);
-        Assert.Equal(1.0, hitRecord.RayT, 3);
-        Assert.Equal(new Vector3(-1, 0, 0), hitRecord.Normal);
-        Assert.True(hitRecord.IsFrontFace);
+        
+        hasHit.Should().BeTrue();
+        hitRecord.HitPoint.Should().Be(new Vector3(-1, 0, 0.5f));
+        hitRecord.RayT.Should().Be(1.0f);
+        hitRecord.Normal.Should().Be(-Vector3.UnitX);
+        hitRecord.IsFrontFace.Should().BeTrue();
 
         var rayFromPosY = new Ray(new Vector3(0, 2, -0.5f), new Vector3(0, -1, 0));
         hitRecord = new HitRecord();
         hasHit = cyl.Hit(rayFromPosY, new Interval(1e-4f, 1e12f), ref hitRecord);
-        Assert.True(hasHit);
-        Assert.Equal(new Vector3(0, 1, -0.5f), hitRecord.HitPoint);
-        Assert.Equal(1.0, hitRecord.RayT, 3);
-        Assert.Equal(new Vector3(0, 1, 0), hitRecord.Normal);
-        Assert.True(hitRecord.IsFrontFace);
+        hasHit.Should().BeTrue();
+        hitRecord.HitPoint.Should().Be(new Vector3(0, 1, -0.5f));
+        hitRecord.RayT.Should().Be(1.0f);
+        hitRecord.Normal.Should().Be(Vector3.UnitY);
+        hitRecord.IsFrontFace.Should().BeTrue();
     }
 
-    [Fact]
+    [Test]
     public void BodyHitFromInside()
     {
         // cylinder on z axis from -1 to 1 with radius 1
@@ -102,28 +107,28 @@ public class CylinderHitTests
         var hitRecord = new HitRecord();
         var hasHit = cyl.Hit(rayFromPosZ, new Interval(1e-4f, 1e12f), ref hitRecord);
 
-        Assert.True(hasHit);
-        Assert.Equal(new Vector3(1, 0, 0.5f), hitRecord.HitPoint);
-        Assert.Equal(1.0, hitRecord.RayT, 3);
-        Assert.Equal(new Vector3(-1, 0, 0), hitRecord.Normal);
-        Assert.False(hitRecord.IsFrontFace);
-
+        hasHit.Should().BeTrue();
+        hitRecord.HitPoint.Should().Be(new Vector3(1, 0, 0.5f));
+        hitRecord.RayT.Should().Be(1.0f);
+        hitRecord.Normal.Should().Be(-Vector3.UnitX);
+        hitRecord.IsFrontFace.Should().BeFalse();
+        
         var rayFromPosY = new Ray(new Vector3(0, 0, -0.5f), new Vector3(0, -1, 0));
         hitRecord = new HitRecord();
         hasHit = cyl.Hit(rayFromPosY, new Interval(1e-4f, 1e12f), ref hitRecord);
-        Assert.True(hasHit);
-        Assert.Equal(new Vector3(0, -1, -0.5f), hitRecord.HitPoint);
-        Assert.Equal(1.0, hitRecord.RayT, 3);
-        Assert.Equal(new Vector3(0, 1, 0), hitRecord.Normal);
-        Assert.False(hitRecord.IsFrontFace);
+        hasHit.Should().BeTrue();
+        hitRecord.HitPoint.Should().Be(new Vector3(0, -1, -0.5f));
+        hitRecord.RayT.Should().Be(1);
+        hitRecord.Normal.Should().Be(Vector3.UnitY);
+        hitRecord.IsFrontFace.Should().BeFalse();
     }
 
-    [Fact]
+    [Test]
     public void TestCylinderBox()
     {
         var cyl = new Cylinder(-5, 1, 5, null);
         var box = cyl.GetBoundingBox(0, 1);
-        Assert.Equal(new Vector3(10, 10, 6), box.GetExtent());
-        Assert.Equal(new Vector3(0, 0, -2), box.GetCentroid());
+        box.GetExtent().Should().Be(new Vector3(10, 10, 6));
+        box.GetCentroid().Should().Be(new Vector3(0, 0, -2));
     }
 }

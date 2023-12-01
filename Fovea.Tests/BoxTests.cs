@@ -1,17 +1,18 @@
 using System.Numerics;
+using FluentAssertions;
 using Fovea.Renderer.Primitives;
-using Xunit;
+using NUnit.Framework;
 
 namespace Fovea.Tests;
 
 public class BoxTests
 {
-    [Fact]
+    [Test]
     public void TestSphereBox()
     {
         var s = new Sphere(new Vector3(1, 1, 1), 2, null);
         var bBox = s.GetBoundingBox(0, 1);
-        Assert.Equal(6 * 4 * 4, bBox.GetArea(), 3);
-        Assert.Equal(new Vector3(1, 1, 1), bBox.GetCentroid());
+        bBox.GetArea().Should().Be(6 * 4 * 4);
+        bBox.GetCentroid().Should().Be(Vector3.One);
     }
 }
