@@ -1,31 +1,59 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Numerics;
 using FluentAssertions;
+using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser;
+using Fovea.Renderer.Parser.Yaml;
 using NUnit.Framework;
-using YamlDotNet.Core;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace Fovea.Tests;
 
 public class YamlTests
 {
+    private const string SimpleSceneYaml = """
+                                           options:
+                                              samples: 250
+                                           materials:
+                                              blue:
+                                                  !matte
+                                                      texture: "blue"
+                                              green_metal:
+                                                  !metal { texture: "greenish",
+                                                           fuzzy: 0.5 }
+                                           textures:
+                                              blue: !ct { color: { r: 0.3, g: 0.2, b:1 } }
+                                              greenish: !ct { color: { r: 0.2, g: 0.8, b: 0.3 } }
+                                           primitives:
+                                              - !sphere
+                                                  center:
+                                                      y: 1
+                                                  radius: 0.5
+                                                  material: "blue"
+                                              - !quad
+                                                  topLeft: { x: -10, y: 10 }
+                                                  bottomRight: { x: 10, y: -10 }
+                                                  material: "greenish"
+                                           """;
+
+
     [Test]
     public void CameraParsing()
     {
         const string yaml = """
-                       orientation:
-                         look_at: !3 [278, -10.5, 42]
-                         look_from: !3 [0,-3,9]
-                         up_direction: !3 [0,1,0]
-                       field_of_view: 40
-                       near: 1
-                       far: 1500
-                       """;
+                            orientation:
+                              lookAt: { x: 278, y: -10.5, z: 42 }
+                              lookFrom:
+                                 y: -3
+                                 z: 9
+                              upDirection:
+                                 y: 1
+                            fieldOfView: 40
+                            near: 1
+                            far: 1500
+                            """;
 
-        var deserializer = GetDeserializer();
-           
+        var deserializer = YamlParser.Get();
+
         var cameraDescriptor = deserializer.Deserialize<CameraDescriptor>(yaml);
 
         cameraDescriptor.Far.Should().Be(1500);
@@ -37,24 +65,164 @@ public class YamlTests
     }
 
     [Test]
+    public void CameraParsingDefaults()
+    {
+        const string yaml = """
+                            fieldOfView: 40
+                            near: 42
+                            """;
+
+        var defaultCam = new CameraDescriptor();
+        var deserializer = YamlParser.Get();
+        var cameraDescriptor = deserializer.Deserialize<CameraDescriptor>(yaml);
+
+        cameraDescriptor.Far.Should().Be(defaultCam.Far);
+        cameraDescriptor.Near.Should().Be(42);
+        cameraDescriptor.FieldOfView.Should().Be(40);
+        cameraDescriptor.Orientation.LookAt.Should().Be(defaultCam.Orientation.LookAt);
+        cameraDescriptor.Orientation.LookFrom.Should().Be(defaultCam.Orientation.LookFrom);
+        cameraDescriptor.Orientation.UpDirection.Should().Be(defaultCam.Orientation.UpDirection);
+    }
+
+
+    [Test]
     public void SphereParsing()
     {
-        const string yaml = "{ center: !3 [128, -1, -10.12], radius: 42.69 }";
-        
-        var deserializer = GetDeserializer();
+        const string yaml = """{ center: {x: 128, y: -1, z: -10.12 } material: "foo" , radius: 42.69 }""";
+
+        var deserializer = YamlParser.Get();
         var sphereDescriptor = deserializer.Deserialize<SphereDescriptor>(yaml);
         sphereDescriptor.Radius.Should().BeApproximately(42.69f, 1e-4f);
         sphereDescriptor.Center.Should().Be(new Vector3(128, -1, -10.12f));
+        sphereDescriptor.Material.Should().Be("foo");
     }
 
-    private static IDeserializer GetDeserializer()
+    // attempt at parsing a arbitrary box (made up of 6 faces with 2 triangles each)
+    [Test]
+    public void QuadParsing()
     {
-        return new DeserializerBuilder()
-            .WithNamingConvention(UnderscoredNamingConvention.Instance)
-            .IgnoreUnmatchedProperties()
-            .WithTypeConverter(new Vector3YamlConverter())
-            .WithTagMapping(new TagName("!3"), typeof(Vector3))
-            .Build();
+        const string yaml = """
+                            topLeft: { x: -20, y: 10.4 }
+                            bottomRight: { x: 4, y: -69.42 }
+                            axis: 'bla'
+                            material: 'yellow'
+                            """;
+        var deserializer = YamlParser.Get();
+        var quadDescriptor = deserializer.Deserialize<QuadDescriptor>(yaml);
+        quadDescriptor.Axis.Should().Be("bla");
+        quadDescriptor.TopLeft.Should().Be(new Vector2(-20f, 10.4f));
+        quadDescriptor.BottomRight.Should().Be(new Vector2(4f, -69.42f));
+        quadDescriptor.Material.Should().Be("yellow");
+    }
 
+    [Test]
+    public void CompoundSceneList()
+    {
+        const string yaml = """
+                            [
+                             !quad { topLeft: { x: -20, y: 10.4 }, bottomRight: { x: 4, y: -69.42 }, axis: 'bla' },
+                             !sphere { center: { x: 128, y: -1, z: -10.12 }, radius: 42.69 }
+                            ]
+                            """;
+        var deserializer = YamlParser.Get();
+        var scene = deserializer.Deserialize<List<IPrimitiveGenerator>>(yaml);
+        scene.Should().HaveCount(2);
+        scene[0].Should().BeOfType<QuadDescriptor>();
+        scene[1].Should().BeOfType<SphereDescriptor>();
+        (scene[0] as QuadDescriptor)!.Axis.Should().Be("bla");
+        (scene[1] as SphereDescriptor)!.Radius.Should().Be(42.69f);
+    }
+
+    [Test]
+    public void CompoundTextureList()
+    {
+        const string yaml = """
+                            [
+                                !ct { color: { r: 1, g: 0.5, b: 1 } },
+                                !t { fileName: "foo.png" },
+                                !noise { scale: 1.5 }
+                            ]
+                            """;
+
+        var deserializer = YamlParser.Get();
+        var textureList = deserializer.Deserialize<List<ITextureGenerator>>(yaml);
+        textureList.Should().HaveCount(3);
+        textureList[0].Should().BeOfType<ColorTextureDescriptor>();
+        textureList[1].Should().BeOfType<ImageTextureDescriptor>();
+        textureList[2].Should().BeOfType<NoiseTextureDescriptor>();
+        (textureList[0] as ColorTextureDescriptor)!.Color.Should().Be(new RGBColor(1, 0.5f, 1));
+        (textureList[1] as ImageTextureDescriptor)!.FileName.Should().Be("foo.png");
+        (textureList[2] as NoiseTextureDescriptor)!.Scale.Should().Be(1.5f);
+    }
+
+    [Test]
+    public void RenderOptionsParser()
+    {
+        const string yaml = """
+                            {   numSamples: 500,
+                                imageWidth: 320,
+                                imageHeight: 200,
+                                maxDepth: 50
+                            }
+                            """;
+
+        var deserializer = YamlParser.Get();
+        var opts = deserializer.Deserialize<RenderOptionsDescriptor>(yaml);
+        opts.NumSamples.Should().Be(500);
+        opts.ImageWidth.Should().Be(320);
+        opts.ImageHeight.Should().Be(200);
+        opts.MaxDepth.Should().Be(50);
+
+        // partial defaults are preserved
+        const string yaml2 = """
+                             {   numSamples: 500,
+                                 imageHeight: 200
+                             }
+                             """;
+
+        opts = deserializer.Deserialize<RenderOptionsDescriptor>(yaml2);
+        opts.NumSamples.Should().Be(500);
+        opts.ImageWidth.Should().Be(800);
+        opts.ImageHeight.Should().Be(200);
+        opts.MaxDepth.Should().Be(50);
+    }
+
+    [Test]
+    public void MatteMaterialParsing()
+    {
+        const string yaml = "{ texture: 'whatever' }";
+        var deserializer = YamlParser.Get();
+        var matteDescriptor = deserializer.Deserialize<MatteDescriptor>(yaml);
+        matteDescriptor.Texture.Should().Be("whatever");
+    }
+
+    [Test]
+    public void MetalMaterialParsing()
+    {
+        const string yaml = "{ texture: 'bla', fuzzy: 0.35 }";
+        var deserializer = YamlParser.Get();
+        var metalDescriptor = deserializer.Deserialize<MetalDescriptor>(yaml);
+        metalDescriptor.Texture.Should().Be("bla");
+        metalDescriptor.Fuzzy.Should().Be(0.35f);
+    }
+
+    [Test]
+    public void SimpleSceneParsing()
+    {
+        var deserializer = YamlParser.Get();
+        var scene = deserializer.Deserialize<SceneDescriptor>(SimpleSceneYaml);
+
+        scene.Materials.Should().ContainKeys("blue", "green_metal");
+        scene.Textures.Should().ContainKeys("blue", "greenish");
+        scene.Materials["green_metal"].Should().BeOfType<MetalDescriptor>();
+        var greenMetal = scene.Materials["green_metal"] as MetalDescriptor;
+        greenMetal!.Fuzzy.Should().Be(0.5f);
+        greenMetal.Texture.Should().Be("greenish");
+    }
+
+    [Test]
+    public void SimpleSceneBuilding()
+    {
+        
     }
 }

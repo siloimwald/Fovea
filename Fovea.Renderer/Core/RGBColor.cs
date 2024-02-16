@@ -5,9 +5,9 @@ namespace Fovea.Renderer.Core;
 
 public struct RGBColor : ITexture
 {
-    public readonly float R;
-    public readonly float G;
-    public readonly float B;
+    public float R { get; init; }
+    public float G { get; init; }
+    public float B { get; init; }
 
     public RGBColor(float s = 0.0f) : this(s, s, s)
     {
