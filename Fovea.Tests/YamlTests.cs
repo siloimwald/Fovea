@@ -94,7 +94,7 @@ public class YamlTests
         var sphereDescriptor = deserializer.Deserialize<SphereDescriptor>(yaml);
         sphereDescriptor.Radius.Should().BeApproximately(42.69f, 1e-4f);
         sphereDescriptor.Center.Should().Be(new Vector3(128, -1, -10.12f));
-        sphereDescriptor.Material.Should().Be("foo");
+        sphereDescriptor.MaterialReference.Should().Be("foo");
     }
 
     // attempt at parsing a arbitrary box (made up of 6 faces with 2 triangles each)
@@ -105,14 +105,16 @@ public class YamlTests
                             topLeft: { x: -20, y: 10.4 }
                             bottomRight: { x: 4, y: -69.42 }
                             axis: 'bla'
+                            position: 4
                             material: 'yellow'
                             """;
         var deserializer = YamlParser.Get();
         var quadDescriptor = deserializer.Deserialize<QuadDescriptor>(yaml);
         quadDescriptor.Axis.Should().Be("bla");
         quadDescriptor.TopLeft.Should().Be(new Vector2(-20f, 10.4f));
+        quadDescriptor.Position.Should().Be(4);
         quadDescriptor.BottomRight.Should().Be(new Vector2(4f, -69.42f));
-        quadDescriptor.Material.Should().Be("yellow");
+        quadDescriptor.MaterialReference.Should().Be("yellow");
     }
 
     [Test]
@@ -163,15 +165,17 @@ public class YamlTests
                                 imageWidth: 320,
                                 imageHeight: 200,
                                 maxDepth: 50
+                                outputFile: 'result.png'
                             }
                             """;
 
         var deserializer = YamlParser.Get();
-        var opts = deserializer.Deserialize<RenderOptionsDescriptor>(yaml);
+        var opts = deserializer.Deserialize<RenderOptions>(yaml);
         opts.NumSamples.Should().Be(500);
         opts.ImageWidth.Should().Be(320);
         opts.ImageHeight.Should().Be(200);
         opts.MaxDepth.Should().Be(50);
+        opts.OutputFile.Should().Be("result.png");
 
         // partial defaults are preserved
         const string yaml2 = """
@@ -180,7 +184,7 @@ public class YamlTests
                              }
                              """;
 
-        opts = deserializer.Deserialize<RenderOptionsDescriptor>(yaml2);
+        opts = deserializer.Deserialize<RenderOptions>(yaml2);
         opts.NumSamples.Should().Be(500);
         opts.ImageWidth.Should().Be(800);
         opts.ImageHeight.Should().Be(200);
@@ -193,7 +197,7 @@ public class YamlTests
         const string yaml = "{ texture: 'whatever' }";
         var deserializer = YamlParser.Get();
         var matteDescriptor = deserializer.Deserialize<MatteDescriptor>(yaml);
-        matteDescriptor.Texture.Should().Be("whatever");
+        matteDescriptor.TextureReference.Should().Be("whatever");
     }
 
     [Test]
@@ -202,7 +206,7 @@ public class YamlTests
         const string yaml = "{ texture: 'bla', fuzzy: 0.35 }";
         var deserializer = YamlParser.Get();
         var metalDescriptor = deserializer.Deserialize<MetalDescriptor>(yaml);
-        metalDescriptor.Texture.Should().Be("bla");
+        metalDescriptor.TextureReference.Should().Be("bla");
         metalDescriptor.Fuzzy.Should().Be(0.35f);
     }
 
@@ -217,12 +221,6 @@ public class YamlTests
         scene.Materials["green_metal"].Should().BeOfType<MetalDescriptor>();
         var greenMetal = scene.Materials["green_metal"] as MetalDescriptor;
         greenMetal!.Fuzzy.Should().Be(0.5f);
-        greenMetal.Texture.Should().Be("greenish");
-    }
-
-    [Test]
-    public void SimpleSceneBuilding()
-    {
-        
+        greenMetal.TextureReference.Should().Be("greenish");
     }
 }

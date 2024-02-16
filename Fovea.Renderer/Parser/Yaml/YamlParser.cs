@@ -1,4 +1,7 @@
-﻿using YamlDotNet.Core;
+﻿using System.IO;
+using System.Xml;
+using Fovea.Renderer.Core;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -19,5 +22,24 @@ public static class YamlParser
             .WithTagMapping(new TagName("!noise"), typeof(NoiseTextureDescriptor))
             .WithTagMapping(new TagName("!ct"), typeof(ColorTextureDescriptor)) // meh...
             .Build();
+    }
+
+    public static Scene ParseFile(string fileName)
+    {
+        using var stream = File.OpenText(fileName);
+        return Parse(stream);
+    }
+
+    public static Scene ParseYaml(string yaml)
+    {
+        using var stringReader = new StreamReader(yaml);
+        return Parse(stringReader);
+    }
+
+    private static Scene Parse(TextReader streamReader)
+    {
+        var parser = Get();
+        var sceneDescriptor = parser.Deserialize<SceneDescriptor>(streamReader);
+        return sceneDescriptor.Build();
     }
 }

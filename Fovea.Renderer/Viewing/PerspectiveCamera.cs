@@ -7,16 +7,8 @@ namespace Fovea.Renderer.Viewing;
 
 public class PerspectiveCamera
 {
-    // private readonly Vec3 _horizontal;
-    // private readonly float _lensRadius;
-    // private readonly Point3 _lowerLeft;
-    // private readonly Point3 _origin;
     private readonly float _time0;
     private readonly float _time1;
-    // private readonly Vec3 _uAxis;
-    // private readonly Vec3 _vAxis;
-    // private readonly Vec3 _vertical;
-
     private readonly Matrix4x4 _inverseView;
     private readonly Matrix4x4 _inverseProjection;
     private readonly Vector3 _center;
@@ -24,12 +16,12 @@ public class PerspectiveCamera
     public PerspectiveCamera(Orientation orientation,
         float aspectRatio,
         float verticalFieldOfView,
-        float aperture,
-        float focusDistance,
+        // float aperture,
+        float near,
+        float far,
         float time0 = 0,
         float time1 = 0)
     {
-        AspectRatio = aspectRatio;
         _time0 = time0;
         _time1 = time1;
         //
@@ -49,7 +41,7 @@ public class PerspectiveCamera
         // _lensRadius = aperture / 2.0f;
 
         var theta = MathUtils.DegToRad(verticalFieldOfView);
-        var projection = Matrix4x4.CreatePerspectiveFieldOfView(theta, AspectRatio, focusDistance, 1000);
+        var projection = Matrix4x4.CreatePerspectiveFieldOfView(theta, aspectRatio, near, far);
         _center = orientation.LookFrom;
         var viewMatrix = Matrix4x4.CreateLookAt(orientation.LookFrom, orientation.LookAt, orientation.UpDirection);
         var failedToInvert = Matrix4x4.Invert(viewMatrix, out _inverseView);
@@ -59,8 +51,6 @@ public class PerspectiveCamera
             throw new Exception("failed to invert camera matrices");
         }
     }
-
-    public float AspectRatio { get; }
 
     public Ray ShootRay(float s, float t)
     {

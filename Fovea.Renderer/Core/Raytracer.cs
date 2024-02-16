@@ -67,9 +67,10 @@ public class Raytracer
         }
     }
 
-    public void Render(Scene scene, string fileName = "output.png")
+    public void Render(Scene scene)
     {
-        var (imageWidth, imageHeight) = scene.OutputSize;
+        var imageWidth = scene.Options.ImageWidth;
+        var imageHeight = scene.Options.ImageHeight;
         // var image = new ImageFilm(imageWidth, imageHeight);
         var image = new Image<RgbaVector>(imageWidth, imageHeight);
 
@@ -137,7 +138,7 @@ public class Raytracer
         }));
         
         Console.WriteLine($"\nFinished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
-        image.SaveAsPng(fileName);
+        image.SaveAsPng(scene.Options.OutputFile);
         image.Dispose();
     }
 }

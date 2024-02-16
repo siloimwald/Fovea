@@ -1,4 +1,3 @@
-
 namespace Fovea.Renderer.Core;
 
 public interface IMaterial
@@ -8,7 +7,10 @@ public interface IMaterial
     /// <param name="hitRecord">record with all the important intersection bits</param>
     /// <param name="scatterResult">result of interaction</param>
     /// <returns>true if ScatterResult contents should be used (and are set)</returns>
-    bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult);
+    bool Scatter(in Ray rayIn,
+        HitRecord hitRecord,
+        
+        ref ScatterResult scatterResult);
 
     /// <summary>emitted color for this material, if any. defaults to black</summary>
     /// <param name="ray">incoming ray</param>

@@ -14,10 +14,6 @@ public class Lambertian : IMaterial
         _albedo = albedo;
     }
 
-    public Lambertian(float r, float g, float b) : this(new RGBColor(r, g, b))
-    {
-    }
-
     public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
     {
         scatterResult.IsSpecular = false;

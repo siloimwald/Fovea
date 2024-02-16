@@ -14,4 +14,10 @@ public class CameraDescriptor
         LookFrom = Vector3.UnitZ,
         UpDirection = Vector3.UnitY
     };
+
+    // for the time being, this will do...
+    public PerspectiveCamera AsPerspectiveCamera(float aspectRatio)
+    {
+        return new PerspectiveCamera(Orientation, aspectRatio, FieldOfView, Near, Far);
+    }
 }

@@ -15,10 +15,6 @@ public class Metal : IMaterial
         _albedo = albedo;
     }
 
-    public Metal(float r, float g, float b, float fuzzy = 0.0f) : this(new RGBColor(r, g, b), fuzzy)
-    {
-    }
-
     public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
     {
         scatterResult.IsSpecular = true;

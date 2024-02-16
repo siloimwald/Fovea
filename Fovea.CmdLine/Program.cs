@@ -1,6 +1,6 @@
 ﻿using System;
-using CommandLine;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Parser.Yaml;
 using SixLabors.ImageSharp.Diagnostics;
 
 namespace Fovea.CmdLine;
@@ -9,30 +9,17 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        // Console.WriteLine("rendering all test scenes...");
-        // foreach (int i in Enum.GetValues(typeof(DemoScenes)))
-        // {
-        //     var fileName = $"{Enum.GetName(typeof(DemoScenes), i)}.ppm";
-        //     Console.WriteLine($"rendering {fileName}");
-        //     var renderer = new Raytracer
-        //     {
-        //         NumSamples = 10
-        //     };
-        //     var scene = DemoSceneCreator.MakeScene((DemoScenes)i, 512);
-        //     renderer.Render(scene, fileName);
-        // }
+
+        if (args.Length > 0)
+        {
+            Console.WriteLine($"reading scene file {args[0]}");
+            var scene = YamlParser.ParseFile(args[0]);
+            var renderer = new Raytracer();
+            renderer.Render(scene);
+        }
+        
             
-        Parser.Default.ParseArguments<CommandLineArgs>(args)
-            .WithParsed(opts =>
-            {
-                var renderer = new Raytracer
-                {
-                    NumSamples = opts.NumSamples
-                };
-                    
-                var scene = DemoSceneCreator.MakeScene(DemoScenes.TextureDemo, opts.ImageWidth);
-                renderer.Render(scene);
-            });
+        
         // TODO: need to dispose all the stuff...
         Console.WriteLine(MemoryDiagnostics.TotalUndisposedAllocationCount);
     }
