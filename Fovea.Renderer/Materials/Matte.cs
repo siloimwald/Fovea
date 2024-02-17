@@ -5,11 +5,11 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Materials;
 
-public class Lambertian : IMaterial
+public class Matte : IMaterial
 {
     private readonly ITexture _albedo;
 
-    public Lambertian(ITexture albedo)
+    public Matte(ITexture albedo)
     {
         _albedo = albedo;
     }

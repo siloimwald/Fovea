@@ -35,7 +35,7 @@ public abstract class MaterialDescriptorBase
 public class MatteDescriptor : MaterialDescriptorBase, IMaterialGenerator
 {
     public IMaterial Generate(IDictionary<string, ITexture> textures)
-        => new Lambertian(GetTextureOrFail(textures));
+        => new Matte(GetTextureOrFail(textures));
 }
 
 public class DielectricDescriptor : IMaterialGenerator

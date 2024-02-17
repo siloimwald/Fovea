@@ -380,7 +380,7 @@ public static class DemoSceneCreator
         };
         
         
-        var groundMat = new Lambertian(new RGBColor(0.5f, 0.5f, 0.5f));
+        var groundMat = new Matte(new RGBColor(0.5f, 0.5f, 0.5f));
         // prims.Add(new Sphere(new Vector3(0, -1000, 0), 1000, groundMat));
         // prims.Add(new Sphere(new Vector3(0, 1, 0), 1, new Dielectric(1.5f)));
         // prims.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Lambertian(new RGBColor(0.4f, 0.2f, 0.1f))));
@@ -413,7 +413,7 @@ public static class DemoSceneCreator
             var r = Sampler.Instance.Random01();
             return r switch
             {
-                < 0.8f => new Lambertian(Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor()),
+                < 0.8f => new Matte(Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor()),
                 < 0.95f => new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0f, 0.05f)),
                 _ => new Dielectric(1.5f)
             };
