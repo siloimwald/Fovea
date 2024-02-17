@@ -253,4 +253,16 @@ public class YamlTests
         flipFace.Primitive.Should().BeOfType<SphereDescriptor>();
         (flipFace.Primitive as SphereDescriptor)!.Radius.Should().Be(42.69f);
     }
+
+    [Test]
+    public void MeshFileParsing()
+    {
+        const string yaml = "!mesh { fileName: 'foo.obj', normalize: true, vertexNormals: true, flipNormals: true }";
+        var deserializer = YamlParser.GetDeserializer();
+        var mesh = deserializer.Deserialize<MeshFileDescriptor>(yaml);
+        mesh.FileName.Should().Be("foo.obj");
+        mesh.VertexNormals.Should().BeTrue();
+        mesh.FlipNormals.Should().BeTrue();
+        mesh.Normalize.Should().BeTrue();
+    }
 }

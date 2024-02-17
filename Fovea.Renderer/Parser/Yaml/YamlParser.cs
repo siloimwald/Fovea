@@ -66,6 +66,7 @@ public static class YamlParser
             ("!glass", typeof(DielectricDescriptor)), // not technical glass, but eh
             ("!quad", typeof(QuadDescriptor)),
             ("!ff", typeof(FlipFaceDescriptor)),
+            ("!mesh", typeof(MeshFileDescriptor)),
             ("!sphere", typeof(SphereDescriptor)),
             ("!t", typeof(ImageTextureDescriptor)),
             ("!noise", typeof(NoiseTextureDescriptor)),

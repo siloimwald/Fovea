@@ -82,3 +82,28 @@ public class FlipFaceDescriptor : IPrimitiveGenerator
         return innerPrim.Select(p => new FlipFace(p)).ToList<IPrimitive>();        
     }
 }
+
+public class MeshFileDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
+{
+    /// <summary>
+    /// obj file
+    /// </summary>
+    public string FileName { get; set; }
+    public bool FlipNormals { get; set; }
+
+    /// <summary>
+    /// transform whole mesh into unit cube
+    /// </summary>
+    public bool Normalize { get; set; }
+    
+    /// <summary>
+    /// generate per vertex normals, i.e. smoothed mesh
+    /// </summary>
+    public bool VertexNormals { get; set; }
+    
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials)
+    {
+        var mesh = ObjReader.ReadObjFile(FileName, Normalize);
+        return mesh.CreateMeshTriangles(GetMaterialOrFail(materials), FlipNormals, VertexNormals);
+    }
+}
