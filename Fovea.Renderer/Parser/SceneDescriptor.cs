@@ -2,6 +2,7 @@
 using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
+using Fovea.Renderer.Parser.Yaml;
 
 namespace Fovea.Renderer.Parser;
 
@@ -30,13 +31,13 @@ public class SceneDescriptor
 
     public CameraDescriptor Camera { get; init; }
 
-    public Scene Build()
+    public Scene Build(ParserContext context)
     {
         // step 1, convert all textures to their real representation
         var textures =
             Textures.ToDictionary(
                 ks => ks.Key,
-                vs => vs.Value.Generate());
+                vs => vs.Value.Generate(context));
 
         // step 2, do the same for materials and use texture references from above
         var materials = Materials.ToDictionary(
@@ -45,7 +46,7 @@ public class SceneDescriptor
 
         var primList = Primitives.Aggregate(new List<IPrimitive>(), (acc, prim) =>
             {
-                acc.AddRange(prim.Generate(materials));
+                acc.AddRange(prim.Generate(materials, context));
                 return acc;
             });
         

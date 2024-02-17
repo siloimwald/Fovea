@@ -38,21 +38,19 @@ public static class YamlParser
     
     public static Scene ParseFile(string fileName)
     {
+        var fullPath = Path.GetFullPath(Path.GetDirectoryName(fileName)!);
         using var stream = File.OpenText(fileName);
-        return Parse(stream);
+        return Parse(stream, new ParserContext
+        {
+            SceneFileLocation = fullPath
+        });
     }
 
-    public static Scene ParseYaml(string yaml)
-    {
-        using var stringReader = new StringReader(yaml);
-        return Parse(stringReader);
-    }
-
-    private static Scene Parse(TextReader streamReader)
+    private static Scene Parse(TextReader streamReader, ParserContext context)
     {
         var parser = GetDeserializer();
         var sceneDescriptor = parser.Deserialize<SceneDescriptor>(streamReader);
-        return sceneDescriptor.Build();
+        return sceneDescriptor.Build(context);
     }
 
     // quick workaround, yaml.net misses a overload for this, or i am not finding it :)

@@ -1,6 +1,8 @@
-﻿using Fovea.Renderer.Core;
+﻿using System.IO;
+using Fovea.Renderer.Core;
 using Fovea.Renderer.Materials;
 using Fovea.Renderer.Materials.Texture;
+using Fovea.Renderer.Parser.Yaml;
 
 namespace Fovea.Renderer.Parser;
 
@@ -9,23 +11,24 @@ namespace Fovea.Renderer.Parser;
 
 public interface ITextureGenerator
 {
-    ITexture Generate();
+    ITexture Generate(ParserContext context);
 }
 
 public class NoiseTextureDescriptor : ITextureGenerator
 {
     public float Scale { get; init; }
-    public ITexture Generate() => new NoiseTexture(Scale);
+    public ITexture Generate(ParserContext context) => new NoiseTexture(Scale);
 }
 
 public class ColorTextureDescriptor : ITextureGenerator
 {
     public RGBColor Color { get; init; }
-    public ITexture Generate() => Color;
+    public ITexture Generate(ParserContext context) => Color;
 }
 
 public class ImageTextureDescriptor : ITextureGenerator
 {
     public string FileName { get; init; }
-    public ITexture Generate() => new ImageTexture(FileName);
+
+    public ITexture Generate(ParserContext context) => new ImageTexture(Path.Combine(context.SceneFileLocation, FileName));
 }

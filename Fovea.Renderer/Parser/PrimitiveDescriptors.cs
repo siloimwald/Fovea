@@ -1,8 +1,10 @@
 ﻿
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Mesh;
+using Fovea.Renderer.Parser.Yaml;
 using Fovea.Renderer.Primitives;
 using YamlDotNet.Serialization;
 
@@ -35,7 +37,7 @@ public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public string Axis { get; init; } = "Y";
 
 
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials)
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
         var axis = Axis.ToUpper() switch
         {
@@ -61,7 +63,7 @@ public class SphereDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public Vector3 Center { get; init; }
     public float Radius { get; init; }
 
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials)
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
         // this is where C# 12 comes in handy ;)
         return [new Sphere(Center, Radius, GetMaterialOrFail(materials))];
@@ -75,10 +77,10 @@ public class FlipFaceDescriptor : IPrimitiveGenerator
 {
     public IPrimitiveGenerator Primitive { get; set; }
     
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials)
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
         // not great, not terrible
-        var innerPrim = Primitive.Generate(materials);
+        var innerPrim = Primitive.Generate(materials, context);
         return innerPrim.Select(p => new FlipFace(p)).ToList<IPrimitive>();        
     }
 }
@@ -101,9 +103,10 @@ public class MeshFileDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     /// </summary>
     public bool VertexNormals { get; set; }
     
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials)
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
-        var mesh = ObjReader.ReadObjFile(FileName, Normalize);
+        // TODO: pass some context so this is relative to the scene file location, not the cwd
+        var mesh = ObjReader.ReadObjFile(Path.Combine(context.SceneFileLocation, FileName), Normalize);
         return mesh.CreateMeshTriangles(GetMaterialOrFail(materials), FlipNormals, VertexNormals);
     }
 }
