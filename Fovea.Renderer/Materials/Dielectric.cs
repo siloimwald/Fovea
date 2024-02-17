@@ -5,18 +5,11 @@ using static System.MathF;
 
 namespace Fovea.Renderer.Materials;
 
-public class Dielectric : IMaterial
+public class Dielectric(float ior) : IMaterial
 {
-    private readonly float _ior;
-
-    public Dielectric(float ior)
-    {
-        _ior = ior;
-    }
-
     public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
     {
-        var ratio = hitRecord.IsFrontFace ? 1.0f / _ior : _ior;
+        var ratio = hitRecord.IsFrontFace ? 1.0f / ior : ior;
         var unitDirection = Vector3.Normalize(rayIn.Direction);
 
         var cosTheta = Min(Vector3.Dot(-unitDirection, hitRecord.Normal), 1.0f);

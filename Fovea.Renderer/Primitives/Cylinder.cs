@@ -4,20 +4,11 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives;
 
-public class Cylinder : IPrimitive
+public class Cylinder(float zMin, float zMax, float radius, IMaterial material)
+    : IPrimitive
 {
-    private readonly IMaterial _material;
-    private readonly float _radius;
-    private readonly float _zMax;
-    private readonly float _zMin;
-
-    public Cylinder(float zMin, float zMax, float radius, IMaterial material)
-    {
-        _zMin = Math.Min(zMin, zMax);
-        _zMax = Math.Max(zMin, zMax);
-        _radius = radius;
-        _material = material;
-    }
+    private readonly float _zMax = Math.Max(zMin, zMax);
+    private readonly float _zMin = Math.Min(zMin, zMax);
 
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
     {
@@ -33,9 +24,9 @@ public class Cylinder : IPrimitive
         if (hitBody && !hitCap || hitBody && tBody < tCap)
         {
             var hitPoint = ray.PointsAt(tBody);
-            var n = (hitPoint - new Vector3(0, 0, hitPoint.Z)) * (1.0f / _radius);
+            var n = (hitPoint - new Vector3(0, 0, hitPoint.Z)) * (1.0f / radius);
             hitRecord.HitPoint = hitPoint;
-            hitRecord.Material = _material;
+            hitRecord.Material = material;
             hitRecord.RayT = tBody;
 
             var theta = MathF.Atan2(n.X, n.Y);
@@ -50,10 +41,10 @@ public class Cylinder : IPrimitive
         // cap hit
         hitRecord.HitPoint = ray.PointsAt(tCap);
         hitRecord.RayT = tCap;
-        hitRecord.Material = _material;
+        hitRecord.Material = material;
 
-        hitRecord.TextureU = 0.5f + hitRecord.HitPoint.X / _radius * 0.5f;
-        hitRecord.TextureV = 0.5f + hitRecord.HitPoint.Y / _radius * 0.5f;
+        hitRecord.TextureU = 0.5f + hitRecord.HitPoint.X / radius * 0.5f;
+        hitRecord.TextureV = 0.5f + hitRecord.HitPoint.Y / radius * 0.5f;
 
         // flip the normal accordingly
         var s = hitRecord.HitPoint.Z < 0 ? -1 : 1;
@@ -63,8 +54,8 @@ public class Cylinder : IPrimitive
 
     public BoundingBox GetBoundingBox(float t0, float t1)
     {
-        var min = new Vector3(-_radius, -_radius, _zMin);
-        var max = new Vector3(_radius, _radius, _zMax);
+        var min = new Vector3(-radius, -radius, _zMin);
+        var max = new Vector3(radius, radius, _zMax);
         return new BoundingBox(min, max);
     }
 
@@ -86,7 +77,7 @@ public class Cylinder : IPrimitive
 
         tCap = t0;
         var hp = ray.PointsAt(tCap);
-        var r2 = _radius * _radius;
+        var r2 = radius * radius;
         if (rayInterval.Contains(tCap) && !(hp.X * hp.X + hp.Y * hp.Y > r2)) return true;
         tCap = t1;
         hp = ray.PointsAt(tCap);
@@ -103,7 +94,7 @@ public class Cylinder : IPrimitive
     {
         var a = ray.Direction.X * ray.Direction.X + ray.Direction.Y * ray.Direction.Y;
         var b = 2.0 * (ray.Direction.X * ray.Origin.X + ray.Direction.Y * ray.Origin.Y);
-        var c = ray.Origin.X * ray.Origin.X + ray.Origin.Y * ray.Origin.Y - _radius * _radius;
+        var c = ray.Origin.X * ray.Origin.X + ray.Origin.Y * ray.Origin.Y - radius * radius;
 
         float t0 = 0.0f, t1 = 0.0f;
         if (!MathUtils.SolveQuadratic(a, (float)b,c, ref t0, ref t1))

@@ -3,22 +3,11 @@ using static System.MathF;
 
 namespace Fovea.Renderer.Materials.Texture;
 
-public class CheckerBoard : ITexture
+public class CheckerBoard(ITexture even, ITexture odd, int size = 10) : ITexture
 {
-    private readonly ITexture _even;
-    private readonly ITexture _odd;
-    private readonly int _size;
-
-    public CheckerBoard(ITexture even, ITexture odd, int size = 10)
-    {
-        _even = even;
-        _odd = odd;
-        _size = size;
-    }
-
     public RGBColor Value(float u, float v, Vector3 p)
     {
-        var sines = Sin(_size * p.X) * Sin(_size * p.Y) * Sin(_size * p.Z);
-        return sines < 0 ? _odd.Value(u, v, p) : _even.Value(u, v, p);
+        var sines = Sin(size * p.X) * Sin(size * p.Y) * Sin(size * p.Z);
+        return sines < 0 ? odd.Value(u, v, p) : even.Value(u, v, p);
     }
 }

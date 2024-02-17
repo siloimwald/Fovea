@@ -6,28 +6,20 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives;
 
-public class ConstantMedium : IPrimitive
+public class ConstantMedium(IPrimitive boundary, float density, ITexture color) : IPrimitive
 {
-    private readonly IPrimitive _boundary;
-    private readonly Isotropic _material;
-    private readonly float _negInvDensity;
-
-    public ConstantMedium(IPrimitive boundary, float density, ITexture color)
-    {
-        _negInvDensity = -1.0f / density;
-        _boundary = boundary;
-        _material = new Isotropic(color);
-    }
+    private readonly Isotropic _material = new(color);
+    private readonly float _negInvDensity = -1.0f / density;
 
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
     {
         var hr1 = new HitRecord();
         var hr2 = new HitRecord();
 
-        if (!_boundary.Hit(ray, Interval.Everything(), ref hr1))
+        if (!boundary.Hit(ray, Interval.Everything(), ref hr1))
             return false;
 
-        if (!_boundary.Hit(ray, Interval.HalfOpenWithOffset() with { Min = hr1.RayT + 0.001f}, ref hr2))
+        if (!boundary.Hit(ray, Interval.HalfOpenWithOffset() with { Min = hr1.RayT + 0.001f}, ref hr2))
             return false;
 
         hr1.RayT = Math.Max(hr1.RayT, rayInterval.Min);
@@ -57,6 +49,6 @@ public class ConstantMedium : IPrimitive
 
     public BoundingBox GetBoundingBox(float t0, float t1)
     {
-        return _boundary.GetBoundingBox(t0, t1);
+        return boundary.GetBoundingBox(t0, t1);
     }
 }

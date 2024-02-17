@@ -3,18 +3,11 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives;
 
-public class FlipFace : IPrimitive
+public class FlipFace(IPrimitive prim) : IPrimitive
 {
-    private readonly IPrimitive _prim;
-
-    public FlipFace(IPrimitive prim)
-    {
-        _prim = prim;
-    }
-
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
     {
-        if (!_prim.Hit(ray, rayInterval, ref hitRecord))
+        if (!prim.Hit(ray, rayInterval, ref hitRecord))
             return false;
 
         hitRecord.IsFrontFace = !hitRecord.IsFrontFace;
@@ -24,16 +17,16 @@ public class FlipFace : IPrimitive
 
     public BoundingBox GetBoundingBox(float t0, float t1)
     {
-        return _prim.GetBoundingBox(t0, t1);
+        return prim.GetBoundingBox(t0, t1);
     }
 
     public float PdfValue(Vector3 origin, Vector3 direction)
     {
-        return _prim.PdfValue(origin, direction);
+        return prim.PdfValue(origin, direction);
     }
 
     public Vector3 RandomDirection(Vector3 origin)
     {
-        return _prim.RandomDirection(origin);
+        return prim.RandomDirection(origin);
     }
 }

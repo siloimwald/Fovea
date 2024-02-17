@@ -2,8 +2,6 @@
 using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
-using Fovea.Renderer.Primitives;
-using Fovea.Renderer.Viewing;
 
 namespace Fovea.Renderer.Parser;
 

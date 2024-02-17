@@ -2,24 +2,15 @@ using Fovea.Renderer.Core;
 
 namespace Fovea.Renderer.Sampling;
 
-public class PrimitivePDF : IPDF
+public class PrimitivePDF(IPrimitive primitive, Vector3 origin) : IPDF
 {
-    private readonly Vector3 _origin;
-    private readonly IPrimitive _primitive;
-
-    public PrimitivePDF(IPrimitive primitive, Vector3 origin)
-    {
-        _primitive = primitive;
-        _origin = origin;
-    }
-
     public float Evaluate(Vector3 direction)
     {
-        return _primitive.PdfValue(_origin, direction);
+        return primitive.PdfValue(origin, direction);
     }
 
     public Vector3 Generate()
     {
-        return _primitive.RandomDirection(_origin);
+        return primitive.RandomDirection(origin);
     }
 }

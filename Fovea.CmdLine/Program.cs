@@ -1,5 +1,4 @@
-﻿using System;
-using CommandLine;
+﻿using CommandLine;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser.Yaml;
 using Microsoft.Extensions.Logging;

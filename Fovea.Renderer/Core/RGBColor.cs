@@ -3,21 +3,14 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Fovea.Renderer.Core;
 
-public struct RGBColor : ITexture
+public struct RGBColor(float r, float g, float b) : ITexture
 {
-    public float R { get; init; }
-    public float G { get; init; }
-    public float B { get; init; }
+    public float R { get; init; } = r;
+    public float G { get; init; } = g;
+    public float B { get; init; } = b;
 
     public RGBColor(float s = 0.0f) : this(s, s, s)
     {
-    }
-
-    public RGBColor(float r, float g, float b)
-    {
-        R = r;
-        G = g;
-        B = b;
     }
 
     // addition

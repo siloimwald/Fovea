@@ -1,23 +1,15 @@
 using System;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Sampling;
-using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Materials;
 
-public class Matte : IMaterial
+public class Matte(ITexture albedo) : IMaterial
 {
-    private readonly ITexture _albedo;
-
-    public Matte(ITexture albedo)
-    {
-        _albedo = albedo;
-    }
-
     public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
     {
         scatterResult.IsSpecular = false;
-        scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
+        scatterResult.Attenuation = albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
         scatterResult.Pdf = new CosinePDF(hitRecord.Normal);
         return true;
     }
