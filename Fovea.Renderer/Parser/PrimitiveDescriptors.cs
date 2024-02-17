@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Mesh;
 using Fovea.Renderer.Primitives;
@@ -34,7 +35,7 @@ public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public string Axis { get; init; } = "Y";
 
 
-    public void Generate(IDictionary<string, IMaterial> materials, List<IPrimitive> existingPrimitives)
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials)
     {
         var axis = Axis.ToUpper() switch
         {
@@ -47,9 +48,8 @@ public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
         var max = Vector2.Max(TopLeft, BottomRight);
         var material = GetMaterialOrFail(materials);
         // TODO: might move the producer here
-        existingPrimitives.AddRange(
-            QuadProducer
-                .Produce(min.X, max.X, min.Y, max.Y, Position, axis).CreateSingleTriangles(material));
+        return QuadProducer
+            .Produce(min.X, max.X, min.Y, max.Y, Position, axis).CreateSingleTriangles(material);
     }
 }
 
@@ -61,8 +61,24 @@ public class SphereDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public Vector3 Center { get; init; }
     public float Radius { get; init; }
 
-    public void Generate(IDictionary<string, IMaterial> materials, List<IPrimitive> existingPrimitives)
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials)
     {
-        existingPrimitives.Add(new Sphere(Center, Radius, GetMaterialOrFail(materials)));
+        // this is where C# 12 comes in handy ;)
+        return [new Sphere(Center, Radius, GetMaterialOrFail(materials))];
+    }
+}
+
+/// <summary>
+/// take a primitive and flip its normals
+/// </summary>
+public class FlipFaceDescriptor : IPrimitiveGenerator
+{
+    public IPrimitiveGenerator Primitive { get; set; }
+    
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials)
+    {
+        // not great, not terrible
+        var innerPrim = Primitive.Generate(materials);
+        return innerPrim.Select(p => new FlipFace(p)).ToList<IPrimitive>();        
     }
 }

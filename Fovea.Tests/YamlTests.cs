@@ -242,4 +242,15 @@ public class YamlTests
         roundTrip[1].Should().BeOfType<SphereDescriptor>();
         (roundTrip[1] as SphereDescriptor)!.Radius.Should().Be(42.69f);
     }
+
+    [Test]
+    public void FlipFaceParsing()
+    {
+        const string yaml = "!ff { primitive: !sphere { center: { x: 128, y: -1, z: -10.12 }, radius: 42.69 } }";
+        var deserializer = YamlParser.GetDeserializer();
+        var flipFace = deserializer.Deserialize<FlipFaceDescriptor>(yaml);
+        flipFace.Should().BeOfType<FlipFaceDescriptor>();
+        flipFace.Primitive.Should().BeOfType<SphereDescriptor>();
+        (flipFace.Primitive as SphereDescriptor)!.Radius.Should().Be(42.69f);
+    }
 }

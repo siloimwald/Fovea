@@ -43,16 +43,15 @@ public class SceneDescriptor
             ks => ks.Key,
             vs => vs.Value.Generate(textures));
 
-        var list = new List<IPrimitive>();
-
-        foreach (var primDescriptor in Primitives)
-        {
-            primDescriptor.Generate(materials, list);
-        }
+        var primList = Primitives.Aggregate(new List<IPrimitive>(), (acc, prim) =>
+            {
+                acc.AddRange(prim.Generate(materials));
+                return acc;
+            });
         
         return new Scene
         {
-            World = new BVHTree(list),
+            World = new BVHTree(primList),
             Background = new RGBColor(0.2f, 0.2f, 0.2f),
             Options = Options,
             Camera = Camera.AsPerspectiveCamera(Options.ImageWidth/(float)Options.ImageHeight)

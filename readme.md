@@ -1,8 +1,16 @@
-### Ray Tracing in One Weekend (and more)
 
-Update: currently in the process of adapting this to version 4 of the books,
+#### (current state notes)
+
+Currently in the process of adapting this to version 4 of the books,
 some things are broken (notably, depth of field). Replaced custom Vec3/Point3 implementations with
 the `System.Numerics` Vector3 variants, leads to some artifacts.
+
+The current state requires .NET 8 and uses C# 12 features. Although the latter very sparsely, for now.
+
+- short term goal, wrap things up and be on par with book version 4
+- long term: add (back in again) CSG through signed distance trickery as the next feature
+
+### Ray Tracing in One Weekend (and more)
 
 C# implementation of Peter Shirley's excellent free books on ray and path tracing
 with some own additions. [Take me to the books!](https://raytracing.github.io/)
@@ -14,10 +22,11 @@ In addition to the books
 
 - more general instancing support through transformation matrices
 - cylinders and disks, because why not
-- slightly more fancy BVH (iirc based on pbrt), using a SAH approach with binning
+- slightly more fancy BVH, IIRC based on the (also excellent) [PBR Book](https://pbr-book.org/), using a SAH approach with binning
 - triangle (mesh) support, either as standalone triangles or as a mesh
 - instead of the whole xy/xz/.. rect stuff, i've added sort of factory methods to produce
 quads/boxes from triangles. i.e. the cornell box is actually all triangles except for the sphere.
+- added a yaml scene file parser, does not yet cover all capabilities
 
 Compile and run:
 Should probably compile and run fine with any recent dotnet core. (currently NET7)

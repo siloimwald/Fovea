@@ -5,5 +5,5 @@ namespace Fovea.Renderer.Parser;
 
 public interface IPrimitiveGenerator
 {
-    void Generate(IDictionary<string, IMaterial> materials, List<IPrimitive> existingPrimitives);
+    List<IPrimitive> Generate(IDictionary<string, IMaterial> materials);
 }
