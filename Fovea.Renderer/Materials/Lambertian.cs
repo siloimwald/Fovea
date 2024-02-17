@@ -18,7 +18,7 @@ public class Lambertian : IMaterial
     {
         scatterResult.IsSpecular = false;
         scatterResult.Attenuation = _albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
-        scatterResult.Pdf = new CosinePDF(new OrthonormalBasis(hitRecord.Normal));
+        scatterResult.Pdf = new CosinePDF(hitRecord.Normal);
         return true;
     }
 
