@@ -70,6 +70,7 @@ public static class YamlParser
             ("!sphere", typeof(SphereDescriptor)),
             ("!t", typeof(ImageTextureDescriptor)),
             ("!noise", typeof(NoiseTextureDescriptor)),
+            ("!diffLight", typeof(DiffuseLightDescriptor)),
             ("!ct", typeof(ColorTextureDescriptor)), // meh, directly to RGB would be neat
         };
     }

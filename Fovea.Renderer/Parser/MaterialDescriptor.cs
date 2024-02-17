@@ -53,3 +53,8 @@ public class MetalDescriptor : MaterialDescriptorBase, IMaterialGenerator
     public IMaterial Generate(IDictionary<string, ITexture> textures)
         => new Metal(GetTextureOrFail(textures), Fuzzy);
 }
+
+public class DiffuseLightDescriptor : MaterialDescriptorBase, IMaterialGenerator
+{
+    public IMaterial Generate(IDictionary<string, ITexture> textures) => new DiffuseLight(GetTextureOrFail(textures));
+}
