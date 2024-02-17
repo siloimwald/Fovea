@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Core.BVH;
 using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Viewing;
 
@@ -53,7 +54,7 @@ public class SceneDescriptor
         
         return new Scene
         {
-            World = new PrimitiveList(list),
+            World = new BVHTree(list),
             Background = new RGBColor(0.2f, 0.2f, 0.2f),
             Options = Options,
             Camera = Camera.AsPerspectiveCamera(Options.ImageWidth/(float)Options.ImageHeight)

@@ -52,7 +52,7 @@ public class YamlTests
                             far: 1500
                             """;
 
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
 
         var cameraDescriptor = deserializer.Deserialize<CameraDescriptor>(yaml);
 
@@ -73,7 +73,7 @@ public class YamlTests
                             """;
 
         var defaultCam = new CameraDescriptor();
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var cameraDescriptor = deserializer.Deserialize<CameraDescriptor>(yaml);
 
         cameraDescriptor.Far.Should().Be(defaultCam.Far);
@@ -90,7 +90,7 @@ public class YamlTests
     {
         const string yaml = """{ center: {x: 128, y: -1, z: -10.12 } material: "foo" , radius: 42.69 }""";
 
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var sphereDescriptor = deserializer.Deserialize<SphereDescriptor>(yaml);
         sphereDescriptor.Radius.Should().BeApproximately(42.69f, 1e-4f);
         sphereDescriptor.Center.Should().Be(new Vector3(128, -1, -10.12f));
@@ -108,7 +108,7 @@ public class YamlTests
                             position: 4
                             material: 'yellow'
                             """;
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var quadDescriptor = deserializer.Deserialize<QuadDescriptor>(yaml);
         quadDescriptor.Axis.Should().Be("bla");
         quadDescriptor.TopLeft.Should().Be(new Vector2(-20f, 10.4f));
@@ -126,7 +126,7 @@ public class YamlTests
                              !sphere { center: { x: 128, y: -1, z: -10.12 }, radius: 42.69 }
                             ]
                             """;
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var scene = deserializer.Deserialize<List<IPrimitiveGenerator>>(yaml);
         scene.Should().HaveCount(2);
         scene[0].Should().BeOfType<QuadDescriptor>();
@@ -146,7 +146,7 @@ public class YamlTests
                             ]
                             """;
 
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var textureList = deserializer.Deserialize<List<ITextureGenerator>>(yaml);
         textureList.Should().HaveCount(3);
         textureList[0].Should().BeOfType<ColorTextureDescriptor>();
@@ -164,12 +164,12 @@ public class YamlTests
                             {   numSamples: 500,
                                 imageWidth: 320,
                                 imageHeight: 200,
-                                maxDepth: 50
+                                maxDepth: 50,
                                 outputFile: 'result.png'
                             }
                             """;
 
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var opts = deserializer.Deserialize<RenderOptions>(yaml);
         opts.NumSamples.Should().Be(500);
         opts.ImageWidth.Should().Be(320);
@@ -195,7 +195,7 @@ public class YamlTests
     public void MatteMaterialParsing()
     {
         const string yaml = "{ texture: 'whatever' }";
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var matteDescriptor = deserializer.Deserialize<MatteDescriptor>(yaml);
         matteDescriptor.TextureReference.Should().Be("whatever");
     }
@@ -204,7 +204,7 @@ public class YamlTests
     public void MetalMaterialParsing()
     {
         const string yaml = "{ texture: 'bla', fuzzy: 0.35 }";
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var metalDescriptor = deserializer.Deserialize<MetalDescriptor>(yaml);
         metalDescriptor.TextureReference.Should().Be("bla");
         metalDescriptor.Fuzzy.Should().Be(0.35f);
@@ -213,7 +213,7 @@ public class YamlTests
     [Test]
     public void SimpleSceneParsing()
     {
-        var deserializer = YamlParser.Get();
+        var deserializer = YamlParser.GetDeserializer();
         var scene = deserializer.Deserialize<SceneDescriptor>(SimpleSceneYaml);
 
         scene.Materials.Should().ContainKeys("blue", "green_metal");
@@ -222,5 +222,24 @@ public class YamlTests
         var greenMetal = scene.Materials["green_metal"] as MetalDescriptor;
         greenMetal!.Fuzzy.Should().Be(0.5f);
         greenMetal.TextureReference.Should().Be("greenish");
+    }
+
+    [Test]
+    public void DeserializeKeepsTags()
+    {
+        const string yaml = """
+                            [
+                             !quad { topLeft: { x: -20, y: 10.4 }, bottomRight: { x: 4, y: -69.42 }, axis: 'bla' },
+                             !sphere { center: { x: 128, y: -1, z: -10.12 }, radius: 42.69 }
+                            ]
+                            """;
+        var scene = YamlParser.GetDeserializer().Deserialize<List<IPrimitiveGenerator>>(yaml);
+        var serializer = YamlParser.GetSerializer();
+        var serializedYaml = serializer.Serialize(scene);
+        var roundTrip = YamlParser.GetDeserializer().Deserialize<List<IPrimitiveGenerator>>(serializedYaml);
+        roundTrip.Should().HaveCount(2);
+        roundTrip[0].Should().BeOfType<QuadDescriptor>();
+        roundTrip[1].Should().BeOfType<SphereDescriptor>();
+        (roundTrip[1] as SphereDescriptor)!.Radius.Should().Be(42.69f);
     }
 }

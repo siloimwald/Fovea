@@ -38,6 +38,14 @@ public class MatteDescriptor : MaterialDescriptorBase, IMaterialGenerator
         => new Lambertian(GetTextureOrFail(textures));
 }
 
+public class DielectricDescriptor : IMaterialGenerator
+{
+    [YamlMember(Alias = "ior")]
+    public float IOR { get; init; }
+
+    public IMaterial Generate(IDictionary<string, ITexture> textures) => new Dielectric(IOR);
+}
+
 public class MetalDescriptor : MaterialDescriptorBase, IMaterialGenerator
 {
     public float Fuzzy { get; init; }
