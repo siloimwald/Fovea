@@ -45,17 +45,14 @@ public static class QuadProducer
         return new TriangleMesh
         {
             Vertices = vertices,
-            Faces = new List<(int f0, int f1, int f2)>
-            {
-                (2, 1, 0), (3, 2, 0)
-            },
-            Texture = new List<(float texU, float texV)>
-            {
+            Faces = [(2, 1, 0), (3, 2, 0)],
+            Texture =
+            [
                 (0, 0),
                 (1, 0),
                 (1, 1),
                 (0, 1)
-            }
+            ]
         };
     }
 }

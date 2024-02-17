@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Fovea.Renderer.Sampling;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -11,9 +12,9 @@ namespace Fovea.Renderer.Core;
 
 public class Raytracer
 {
-    public int MaxDepth { get; set; } = 50;
-    public int NumSamples { get; set; } = 100;
-
+    
+    private static readonly ILogger<Raytracer> Log = Logging.GetLogger<Raytracer>();
+    
     private RGBColor ColorRay(Ray ray, Scene scene, int depth)
     {
         if (depth <= 0)
@@ -75,8 +76,9 @@ public class Raytracer
         var image = new Image<RgbaVector>(imageWidth, imageHeight);
 
         // print what we're doing
-        Console.WriteLine($"Image size {imageWidth}x{imageHeight}, samples = {NumSamples}");
-
+        Log.LogInformation("Image size {imageWidth}x{imageHeight}, samples = {numSamples}",
+            imageWidth, imageHeight, scene.Options.NumSamples);
+        
         var sw = Stopwatch.StartNew();
 
         // a simple image partitioning scheme, each thread renders chunks of 'pixelPerThread'
@@ -98,7 +100,7 @@ public class Raytracer
                 {
                     var py = Math.DivRem(p, imageWidth, out var px);
                     var color = new RGBColor();
-                    for (var s = 0; s < NumSamples; ++s)
+                    for (var s = 0; s < scene.Options.NumSamples; ++s)
                     {
                         var r1 = Sampler.Instance.Random01();
                         var r2 = Sampler.Instance.Random01();
@@ -107,7 +109,7 @@ public class Raytracer
                         u = -1.0f + 2 * (u - r1);
                         v = -1.0f + 2 * (v - r2);
                         var ray = scene.Camera.ShootRay(u, v);
-                        color += ColorRay(ray, scene, MaxDepth);
+                        color += ColorRay(ray, scene, scene.Options.MaxDepth);
                     }
                     
                     // ReSharper disable once AccessToDisposedClosure
@@ -116,7 +118,7 @@ public class Raytracer
 
                 Interlocked.Add(ref pixelDone, max - offset);
 
-                if (taskNum != 0) continue;
+                if (taskNum != 0) continue; // make only one task print progress
 
                 var percent = pixelDone / (float) totalPixels * 100.0;
                 Console.Write($"\r{percent:000.0}% done  ");
@@ -131,7 +133,7 @@ public class Raytracer
         {
             for (var x = 0; x < row.Length; x++)
             {
-                row[x] = Vector4.Divide(row[x], NumSamples);
+                row[x] = Vector4.Divide(row[x], scene.Options.NumSamples);
                 row[x] = Vector4.SquareRoot(row[x]);
                 row[x].W = 1.0f; // fix the alpha channel
             }
