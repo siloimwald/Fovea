@@ -15,8 +15,9 @@ public static class DemoSceneCreator
     {
         return sceneId switch
         {
-            DemoSceneId.FinalSceneBookOne => GetFinalSceneBookOne(),
-            _ => GetFinalSceneBookOne()
+            DemoSceneId.FinalSceneBookOne => GetFinalSceneBookOne(false),
+            DemoSceneId.FinalSceneBookOneMovingSpheres => GetFinalSceneBookOne(true),
+            _ => GetFinalSceneBookOne(false)
             // DemoScenes.ObjFileTest => GetObjFileTestScene(),
             // DemoScenes.CylinderTest => GetCylinderTestScene(),
             // DemoScenes.TextureDemo => GetTextureTestScene(),
@@ -362,7 +363,7 @@ public static class DemoSceneCreator
     //     };
     // }
 
-    private static SceneDescriptor GetFinalSceneBookOne()
+    private static SceneDescriptor GetFinalSceneBookOne(bool withMovingSpheres)
     {
         var textures = new Dictionary<string, ITextureGenerator>()
         {
@@ -413,6 +414,19 @@ public static class DemoSceneCreator
                 textures[textureName] = new ColorTextureDescriptor
                     { Color = Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor() };
                 materials.Add(materialName, new MatteDescriptor { TextureReference = textureName });
+
+                if (withMovingSpheres)
+                {
+                    var center1 = center + new Vector3(0, Sampler.Instance.Random(0, 0.5f), 0);
+                    prims.Add(new SphereDescriptor
+                    {
+                        Center = center,
+                        Center1 = center1,
+                        MaterialReference = materialName,
+                        Radius = 0.2f
+                    });
+                    continue;
+                }
                 
             }
             else if (materialRnd < 0.95f) // metal

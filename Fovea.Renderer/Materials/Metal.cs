@@ -18,7 +18,10 @@ public class Metal(ITexture albedo, float fuzzy = 0.0f) : IMaterial
         var dir = reflected + Sampler.Instance.RandomOnUnitSphere() * _fuzzy;
         
         // book 1 drop in
-        scatterResult.OutRay = new Ray(hitRecord.HitPoint, dir);
+        scatterResult.OutRay = 
+            new Ray(hitRecord.HitPoint,
+                dir,
+                rayIn.Time);
         
         scatterResult.SpecularRay =
             new Ray(hitRecord.HitPoint, dir, rayIn.Time);

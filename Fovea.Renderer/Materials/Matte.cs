@@ -14,7 +14,10 @@ public class Matte(ITexture albedo) : IMaterial
         scatterResult.Pdf = new CosinePDF(hitRecord.Normal);
 
         // book 1 drop in
-        scatterResult.OutRay = new Ray(hitRecord.HitPoint, hitRecord.Normal + Sampler.Instance.RandomCosineDirection());
+        scatterResult.OutRay = 
+            new Ray(hitRecord.HitPoint,
+                hitRecord.Normal + Sampler.Instance.RandomCosineDirection(),
+                rayIn.Time);
         
         return true;
     }

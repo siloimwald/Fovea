@@ -92,8 +92,20 @@ public class YamlTests
         var sphereDescriptor = deserializer.Deserialize<SphereDescriptor>(yaml);
         sphereDescriptor.Radius.Should().BeApproximately(42.69f, 1e-4f);
         sphereDescriptor.Center.Should().Be(new Vector3(128, -1, -10.12f));
+        sphereDescriptor.Center1.Should().Be(null);
+        sphereDescriptor.IsMoving.Should().BeFalse();
         sphereDescriptor.MaterialReference.Should().Be("foo");
-    }
+        
+        const string movingSphere = """
+                                    center: {x: 1, y: 0, z: 1 }
+                                    center1: { x: 2, y: 4, z: -2 }
+                                    material: "foo"
+                                    radius: 42.69 
+                                    """;
+        var movingSphereDescriptor = deserializer.Deserialize<SphereDescriptor>(movingSphere);
+        movingSphereDescriptor.IsMoving.Should().BeTrue();
+        movingSphereDescriptor.Center1.Should().Be(new Vector3(2, 4, -2));
+    }   
 
     // attempt at parsing a arbitrary box (made up of 6 faces with 2 triangles each)
     [Test]

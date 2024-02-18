@@ -7,15 +7,35 @@ namespace Fovea.Renderer.Primitives;
 
 public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimitive
 {
+    private readonly Vector3 _centerVec; // vector from center0 to center1 for moving sphere
+    private readonly bool _isMoving = false;
+    
+    /// <summary>
+    /// moving sphere constructor
+    /// </summary>
+    /// <param name="center">center for time 0</param>
+    /// <param name="center1">center for time 1</param>
+    /// <param name="radius">radius</param>
+    /// <param name="material">sphere material</param>
+    public Sphere(Vector3 center, Vector3 center1, float radius, IMaterial material)
+        :this(center, radius, material)
+    {
+        _centerVec = center1 - center;
+        _isMoving = true;
+    }
+    
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
     {
         var root = 0.0f;
-        if (!IntersectSphere(ray, center, radius, rayInterval, ref root))
+
+        var sphereCenter = _isMoving ? CenterAtTime(ray.Time) : center;
+        
+        if (!IntersectSphere(ray, sphereCenter, radius, rayInterval, ref root))
             return false;
 
         hitRecord.RayT = root;
         hitRecord.HitPoint = ray.PointsAt(hitRecord.RayT);
-        var outwardNormal = (hitRecord.HitPoint - center) * (1.0f / radius);
+        var outwardNormal = (hitRecord.HitPoint - sphereCenter) * (1.0f / radius);
         hitRecord.SetFaceNormal(ray, outwardNormal);
         hitRecord.Material = material;
 
@@ -27,7 +47,9 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
 
     public BoundingBox GetBoundingBox(float t0, float t1)
     {
-        return SphereBox(center, radius);
+        return _isMoving
+            ? BoundingBox.Union(SphereBox(CenterAtTime(t0), radius), SphereBox(CenterAtTime(t1), radius))
+            : SphereBox(center, radius);
     }
 
     public float PdfValue(Vector3 origin, Vector3 direction)
@@ -36,6 +58,7 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
         if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hr))
             return 0;
 
+        // TODO: no time parameter here        
         var cosTheta = Sqrt(1.0f - radius * radius / (center - origin).LengthSquared());
         var solidAngle = 2.0f * PI * (1.0f - cosTheta);
         return (1.0f / solidAngle);
@@ -43,6 +66,7 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
 
     public Vector3 RandomDirection(Vector3 origin)
     {
+        // TODO: no time parameter here        
         var dir = center - origin;
         var distanceSquared = dir.LengthSquared();
         var r1 = Sampler.Instance.Random01();
@@ -85,5 +109,15 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
     {
         return new(center - new Vector3(radius, radius, radius),
             center + new Vector3(radius, radius, radius));
+    }
+
+    /// <summary>
+    /// linearly interpolate sphere center depending on time
+    /// </summary>
+    /// <param name="t">ray time</param>
+    /// <returns>sphere center time t</returns>
+    private Vector3 CenterAtTime(float t)
+    {
+        return center + _centerVec * t;
     }
 }

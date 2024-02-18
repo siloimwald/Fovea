@@ -68,7 +68,8 @@ public class PerspectiveCamera
         var pixelSample = pixelCenter + PixelSampleSquare();
         var origin = _useDepthOfField ? DefocusDiskSample() : _center;
         var dir = pixelSample - origin;
-        return new Ray(origin, dir);
+        var rayTime = Sampler.Instance.Random01();
+        return new Ray(origin, dir, rayTime);
     }
 
     private Vector3 PixelSampleSquare()

@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Fovea.Renderer.Core;
@@ -12,8 +11,7 @@ namespace Fovea.Renderer.Parser;
 
 public abstract class PrimitiveDescriptorBase
 {
-    [YamlMember(Alias = "material")]
-    public string MaterialReference { get; init; } = string.Empty;
+    [YamlMember(Alias = "material")] public string MaterialReference { get; init; } = string.Empty;
 
     protected IMaterial GetMaterialOrFail(IDictionary<string, IMaterial> materials)
     {
@@ -22,13 +20,15 @@ public abstract class PrimitiveDescriptorBase
             return material;
         }
 
-        throw new SceneReferenceNotFoundException($"{this.GetType().Name} did not find referenced material {MaterialReference}");
+        throw new SceneReferenceNotFoundException(
+            $"{this.GetType().Name} did not find referenced material {MaterialReference}");
     }
 }
 
 public class MeshProducerBase : PrimitiveDescriptorBase
 {
     public bool FlipNormals { get; init; }
+
     /// <summary>
     /// produce MeshTriangles instead of normal once, required for UV support
     /// </summary>
@@ -57,9 +57,10 @@ public class QuadDescriptor : MeshProducerBase, IPrimitiveGenerator
         var min = Vector2.Min(ExtentMin, ExtentMax);
         var max = Vector2.Max(ExtentMin, ExtentMax);
         var material = GetMaterialOrFail(materials);
-        
+
         var mesh = QuadProducer.Produce(min.X, max.X, min.Y, max.Y, Position, axis);
-        return AsMesh ? mesh.CreateMeshTriangles(material, FlipNormals)
+        return AsMesh
+            ? mesh.CreateMeshTriangles(material, FlipNormals)
             : mesh.CreateSingleTriangles(material, FlipNormals);
     }
 }
@@ -70,12 +71,21 @@ public class QuadDescriptor : MeshProducerBase, IPrimitiveGenerator
 public class SphereDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 {
     public Vector3 Center { get; init; }
+    public Vector3? Center1 { get; init; }
+    [YamlIgnore]
+    public bool IsMoving => Center1.HasValue;
     public float Radius { get; init; }
 
     public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
+        var material = GetMaterialOrFail(materials);
         // this is where C# 12 comes in handy ;)
-        return [new Sphere(Center, Radius, GetMaterialOrFail(materials))];
+        return
+        [
+            IsMoving
+                ? new Sphere(Center, Center1!.Value, Radius, material)
+                : new Sphere(Center, Radius, material)
+        ];
     }
 }
 
@@ -85,12 +95,12 @@ public class SphereDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 public class FlipFaceDescriptor : IPrimitiveGenerator
 {
     public IPrimitiveGenerator Primitive { get; set; }
-    
+
     public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
         // not great, not terrible
         var innerPrim = Primitive.Generate(materials, context);
-        return innerPrim.Select(p => new FlipFace(p)).ToList<IPrimitive>();        
+        return innerPrim.Select(p => new FlipFace(p)).ToList<IPrimitive>();
     }
 }
 
@@ -100,18 +110,19 @@ public class MeshFileDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     /// obj file
     /// </summary>
     public string FileName { get; set; }
+
     public bool FlipNormals { get; set; }
 
     /// <summary>
     /// transform whole mesh into unit cube
     /// </summary>
     public bool Normalize { get; set; }
-    
+
     /// <summary>
     /// generate per vertex normals, i.e. smoothed mesh
     /// </summary>
     public bool VertexNormals { get; set; }
-    
+
     public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
         // TODO: pass some context so this is relative to the scene file location, not the cwd
