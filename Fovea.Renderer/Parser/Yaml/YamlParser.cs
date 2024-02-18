@@ -65,11 +65,11 @@ public class YamlParser
             Log.LogWarning("no textures defined");
         }
 
-        if (sceneDescriptor.Lights == null || sceneDescriptor.Lights.Count == 0)
-        {
-            Log.LogWarning("no light source defined");
-            throw new NotSupportedException("scene needs at least one light source");
-        }
+        // if (sceneDescriptor.Lights == null || sceneDescriptor.Lights.Count == 0)
+        // {
+        //     Log.LogWarning("no light source defined");
+        //     throw new NotSupportedException("scene needs at least one light source");
+        // }
         
         return sceneDescriptor.Build(context);
     }

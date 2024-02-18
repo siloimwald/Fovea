@@ -378,13 +378,6 @@ public static class DemoSceneCreator
             ["rightSphere"] = new MetalDescriptor { TextureReference = "rightSphere" },
             ["glass"] = new DielectricDescriptor { IOR = 1.5f }
         };
-        
-        
-        var groundMat = new Matte(new RGBColor(0.5f, 0.5f, 0.5f));
-        // prims.Add(new Sphere(new Vector3(0, -1000, 0), 1000, groundMat));
-        // prims.Add(new Sphere(new Vector3(0, 1, 0), 1, new Dielectric(1.5f)));
-        // prims.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Lambertian(new RGBColor(0.4f, 0.2f, 0.1f))));
-        // prims.Add(new Sphere(new Vector3(4, 1, 0), 1, new Metal(new RGBColor(0.7f, 0.6f, 0.5f))));
 
         var prims = new List<IPrimitiveGenerator>
         {
@@ -407,18 +400,6 @@ public static class DemoSceneCreator
             .Where(center => (center - offLimitsZone).Length() > 0.9f)
             .ToList();
 
-        // add many small random spheres with randomized materials
-        IMaterial RandomMaterial()
-        {
-            var r = Sampler.Instance.Random01();
-            return r switch
-            {
-                < 0.8f => new Matte(Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor()),
-                < 0.95f => new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0f, 0.05f)),
-                _ => new Dielectric(1.5f)
-            };
-        }
-
         // need unique names
         var materialSuffix = 0;
         var textureSuffix = 0;
@@ -426,17 +407,7 @@ public static class DemoSceneCreator
         {
             var materialRnd = Sampler.Instance.Random01();
             var materialName = $"mat{materialSuffix++}";
-            if (materialRnd >= 0.95f) // glass
-            {
-                materials.Add(materialName, new DielectricDescriptor { IOR = 1.5f });
-            }
-            else if (materialRnd >= 0.8f && materialRnd < 0.95f) // metal
-            {
-                var textureName = $"tex{textureSuffix++}";
-                textures[textureName] = new ColorTextureDescriptor { Color = Sampler.Instance.RandomColor(0.5f) };
-                materials.Add(materialName, new MetalDescriptor { Fuzzy = Sampler.Instance.Random(0, 0.05f), TextureReference = textureName });
-            }
-            else // matte
+            if (materialRnd < 0.8f) // matte
             {
                 var textureName = $"tex{textureSuffix++}";
                 textures[textureName] = new ColorTextureDescriptor
@@ -444,11 +415,17 @@ public static class DemoSceneCreator
                 materials.Add(materialName, new MatteDescriptor { TextureReference = textureName });
                 
             }
-            
-            // TODO: original code would add moving spheres for matte spheres
-            //         if (mat is not Lambertian) return new Sphere(center, 0.2f, RandomMaterial());
-            //         var center2 = center + new Vector3(0, Sampler.Instance.Random(0, 0.5f), 0);
-            //         return new MovingSphere(center, 0, center2, 1, 0.2f, mat);
+            else if (materialRnd < 0.95f) // metal
+            {
+                var textureName = $"tex{textureSuffix++}";
+                textures[textureName] = new ColorTextureDescriptor { Color = Sampler.Instance.RandomColor(0.5f) };
+                materials.Add(materialName, new MetalDescriptor { Fuzzy = Sampler.Instance.Random(0, 0.05f), TextureReference = textureName });
+            }
+            else // glass
+            {
+                materials.Add(materialName, new DielectricDescriptor { IOR = 1.5f });
+            }
+
             prims.Add(new SphereDescriptor
             {
                 Center = center,
@@ -456,37 +433,7 @@ public static class DemoSceneCreator
                 Radius = 0.2f
             });
         }
-        
-        // IMaterial RandomMaterial()
-        // {
-        //     var r = Sampler.Instance.Random01();
-        //     return r switch
-        //     {
-        //         < 0.8f => new Lambertian(Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor()),
-        //         < 0.95f => new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0f, 0.05f)),
-        //         _ => new Dielectric(1.5f)
-        //     };
-        // }
-        //
-        // var offLimitsZone = new Vector3(4, 0.2f, 0);
-        //
-        // prims.AddRange(Enumerable
-        //     .Range(-11, 22)
-        //     .SelectMany(a => Enumerable.Range(-11, 22).Select(b => (a, b)))
-        //     .Select(tpl =>
-        //         new Vector3(
-        //             tpl.a + 0.9f * Sampler.Instance.Random01(),
-        //             0.2f,
-        //             tpl.b + 0.9f * Sampler.Instance.Random01()))
-        //     .Where(center => (center - offLimitsZone).Length() > 0.9f)
-        //     .Select<Vector3, IPrimitive>(center =>
-        //     {
-        //         var mat = RandomMaterial();
-        //         if (mat is not Lambertian) return new Sphere(center, 0.2f, RandomMaterial());
-        //         var center2 = center + new Vector3(0, Sampler.Instance.Random(0, 0.5f), 0);
-        //         return new MovingSphere(center, 0, center2, 1, 0.2f, mat);
-        //     }));
-
+ 
         var orientation = new Orientation
         {
             LookFrom = new Vector3(13, 2, 3),
@@ -498,8 +445,8 @@ public static class DemoSceneCreator
         {
             Camera = new CameraDescriptor
             {
-                Far = 10f,
-                Near = 1.0f,
+                FocusDistance = 10.0f,
+                DefocusAngle = 0.6f,
                 FieldOfView = 20.0f,
                 Orientation = orientation
             },

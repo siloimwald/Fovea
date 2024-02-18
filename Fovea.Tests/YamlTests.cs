@@ -49,16 +49,16 @@ public class YamlTests
                               upDirection:
                                  y: 1
                             fieldOfView: 40
-                            near: 1
-                            far: 1500
+                            focusDistance: 4.5
+                            defocusAngle: 2.4
                             """;
 
         var deserializer = YamlParser.GetDeserializer();
 
         var cameraDescriptor = deserializer.Deserialize<CameraDescriptor>(yaml);
 
-        cameraDescriptor.Far.Should().Be(1500);
-        cameraDescriptor.Near.Should().Be(1);
+        cameraDescriptor.FocusDistance.Should().Be(4.5f);
+        cameraDescriptor.DefocusAngle.Should().Be(2.4f);
         cameraDescriptor.FieldOfView.Should().Be(40);
         cameraDescriptor.Orientation.LookAt.Should().Be(new Vector3(278, -10.5f, 42));
         cameraDescriptor.Orientation.LookFrom.Should().Be(new Vector3(0, -3, 9));
@@ -68,17 +68,14 @@ public class YamlTests
     [Test]
     public void CameraParsingDefaults()
     {
-        const string yaml = """
-                            fieldOfView: 40
-                            near: 42
-                            """;
+        const string yaml = "fieldOfView: 40";
 
         var defaultCam = new CameraDescriptor();
         var deserializer = YamlParser.GetDeserializer();
         var cameraDescriptor = deserializer.Deserialize<CameraDescriptor>(yaml);
 
-        cameraDescriptor.Far.Should().Be(defaultCam.Far);
-        cameraDescriptor.Near.Should().Be(42);
+        cameraDescriptor.FocusDistance.Should().Be(defaultCam.FocusDistance);
+        cameraDescriptor.DefocusAngle.Should().Be(defaultCam.DefocusAngle);
         cameraDescriptor.FieldOfView.Should().Be(40);
         cameraDescriptor.Orientation.LookAt.Should().Be(defaultCam.Orientation.LookAt);
         cameraDescriptor.Orientation.LookFrom.Should().Be(defaultCam.Orientation.LookFrom);

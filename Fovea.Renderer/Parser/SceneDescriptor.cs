@@ -5,6 +5,7 @@ using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
 using Fovea.Renderer.Parser.Yaml;
 using Fovea.Renderer.Primitives;
+using Fovea.Renderer.Viewing;
 using Microsoft.Extensions.Logging;
 
 namespace Fovea.Renderer.Parser;
@@ -78,7 +79,7 @@ public class SceneDescriptor
             Background = new RGBColor(0.2f, 0.2f, 0.2f),
             Options = Options,
             Lights = new PrimitiveList(lightSources), // crashes with BVH and single item
-            Camera = Camera.AsPerspectiveCamera(Options.ImageWidth/(float)Options.ImageHeight)
+            Camera = new PerspectiveCamera(Camera, Options)
         };
     }
 }
