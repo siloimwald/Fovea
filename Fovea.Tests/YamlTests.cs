@@ -4,6 +4,7 @@ using FluentAssertions;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser;
 using Fovea.Renderer.Parser.Yaml;
+using Fovea.Renderer.Primitives;
 using NUnit.Framework;
 
 namespace Fovea.Tests;
@@ -30,8 +31,8 @@ public class YamlTests
                                                   radius: 0.5
                                                   material: "blue"
                                               - !quad
-                                                  topLeft: { x: -10, y: 10 }
-                                                  bottomRight: { x: 10, y: -10 }
+                                                  extentMin: { x: -10, y: 10 }
+                                                  extentMax: { x: 10, y: -10 }
                                                   material: "greenish"
                                            """;
 
@@ -102,19 +103,23 @@ public class YamlTests
     public void QuadParsing()
     {
         const string yaml = """
-                            topLeft: { x: -20, y: 10.4 }
-                            bottomRight: { x: 4, y: -69.42 }
+                            extentMin: { x: -20, y: 10.4 }
+                            extentMax: { x: 4, y: -69.42 }
                             axis: 'bla'
                             position: 4
                             material: 'yellow'
+                            flipNormals: true
+                            asMesh: true
                             """;
         var deserializer = YamlParser.GetDeserializer();
         var quadDescriptor = deserializer.Deserialize<QuadDescriptor>(yaml);
         quadDescriptor.Axis.Should().Be("bla");
-        quadDescriptor.TopLeft.Should().Be(new Vector2(-20f, 10.4f));
+        quadDescriptor.ExtentMin.Should().Be(new Vector2(-20f, 10.4f));
         quadDescriptor.Position.Should().Be(4);
-        quadDescriptor.BottomRight.Should().Be(new Vector2(4f, -69.42f));
+        quadDescriptor.ExtentMax.Should().Be(new Vector2(4f, -69.42f));
         quadDescriptor.MaterialReference.Should().Be("yellow");
+        quadDescriptor.FlipNormals.Should().BeTrue();
+        quadDescriptor.AsMesh.Should().BeTrue();
     }
 
     [Test]
@@ -122,7 +127,7 @@ public class YamlTests
     {
         const string yaml = """
                             [
-                             !quad { topLeft: { x: -20, y: 10.4 }, bottomRight: { x: 4, y: -69.42 }, axis: 'bla' },
+                             !quad { extentMin: { x: -20, y: 10.4 }, extentMax: { x: 4, y: -69.42 }, axis: 'bla' },
                              !sphere { center: { x: 128, y: -1, z: -10.12 }, radius: 42.69 }
                             ]
                             """;
@@ -229,7 +234,7 @@ public class YamlTests
     {
         const string yaml = """
                             [
-                             !quad { topLeft: { x: -20, y: 10.4 }, bottomRight: { x: 4, y: -69.42 }, axis: 'bla' },
+                             !quad { extentMin: { x: -20, y: 10.4 }, extentMax: { x: 4, y: -69.42 }, axis: 'bla' },
                              !sphere { center: { x: 128, y: -1, z: -10.12 }, radius: 42.69 }
                             ]
                             """;
@@ -273,5 +278,38 @@ public class YamlTests
         var deserializer = YamlParser.GetDeserializer();
         var light = deserializer.Deserialize<DiffuseLightDescriptor>(yaml);
         light.TextureReference.Should().Be("fooWhite");
+    }
+
+    [Test]
+    public void LightSourceHandling()
+    {
+        // a light source should be correctly parsed and also end up in the light source block
+        const string yaml = """
+                            camera:
+                                near: 1
+                                far: 10
+                            textures:
+                                white: !ct 
+                                    color:
+                                     r: 1
+                                     g: 1
+                                     b: 1
+                            materials:
+                                light: !matte
+                                    texture: white
+                            lights:
+                                - !sphere
+                                  center:
+                                    y: 1
+                                  material: light                                       
+                            """;
+        
+        var deserializer = YamlParser.GetDeserializer();
+        var scene = deserializer.Deserialize<SceneDescriptor>(yaml);
+        scene.Lights.Should().HaveCount(1);
+        scene.Lights[0].Should().BeOfType<SphereDescriptor>();
+        var buildResult = scene.Build(new ParserContext());
+        buildResult.Lights.Should().BeOfType<PrimitiveList>();
+        (buildResult.Lights as PrimitiveList)![0].Should().BeOfType<Sphere>();
     }
 }

@@ -26,16 +26,24 @@ public abstract class PrimitiveDescriptorBase
     }
 }
 
+public class MeshProducerBase : PrimitiveDescriptorBase
+{
+    public bool FlipNormals { get; init; }
+    /// <summary>
+    /// produce MeshTriangles instead of normal once, required for UV support
+    /// </summary>
+    public bool AsMesh { get; init; }
+}
+
 /// <summary>
 /// axis aligned quad (producing two triangles)
 /// </summary>
-public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
+public class QuadDescriptor : MeshProducerBase, IPrimitiveGenerator
 {
-    public Vector2 TopLeft { get; init; }
-    public Vector2 BottomRight { get; init; }
+    public Vector2 ExtentMin { get; init; }
+    public Vector2 ExtentMax { get; init; }
     public float Position { get; init; }
     public string Axis { get; init; } = "Y";
-
 
     public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
@@ -46,12 +54,13 @@ public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
             _ => VectorMath.Axis.Z
         };
 
-        var min = Vector2.Min(TopLeft, BottomRight);
-        var max = Vector2.Max(TopLeft, BottomRight);
+        var min = Vector2.Min(ExtentMin, ExtentMax);
+        var max = Vector2.Max(ExtentMin, ExtentMax);
         var material = GetMaterialOrFail(materials);
-        // TODO: might move the producer here
-        return QuadProducer
-            .Produce(min.X, max.X, min.Y, max.Y, Position, axis).CreateSingleTriangles(material);
+        
+        var mesh = QuadProducer.Produce(min.X, max.X, min.Y, max.Y, Position, axis);
+        return AsMesh ? mesh.CreateMeshTriangles(material, FlipNormals)
+            : mesh.CreateSingleTriangles(material, FlipNormals);
     }
 }
 

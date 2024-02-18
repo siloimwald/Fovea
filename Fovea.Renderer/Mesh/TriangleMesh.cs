@@ -15,16 +15,22 @@ public class TriangleMesh
     public bool HasVertexNormals { get; set; }
 
     /// <summary>
-    ///     creates single triangles for this mesh, that is don't reuse any vertices but instead build every individual
-    ///     triangle. This increases storage but is somewhat faster to ray trace since you can precompute things
+    /// creates single triangles for this mesh, that is don't reuse any vertices but instead build every individual
+    /// triangle. This increases storage but is somewhat faster to ray trace since you can precompute things
+    /// Note that this does not support uv coordinates, since the mesh reference itself is dropped
     /// </summary>
     /// <param name="material">material to use for all triangles</param>
+    /// <param name="flipNormals">true if normal should be flip, shuffling the vertex order</param>
     /// <returns></returns>
-    public List<IPrimitive> CreateSingleTriangles(IMaterial material)
+    public List<IPrimitive> CreateSingleTriangles(IMaterial material, bool flipNormals = false)
     {
         return
             Faces
-                .Select(face => new Triangle(Vertices[face.f0], Vertices[face.f1], Vertices[face.f2], material))
+                .Select(face =>
+                {
+                    var (faceIndex1, faceIndex2) = flipNormals ? (face.f1, face.f2) : (face.f2, face.f2);
+                    return new Triangle(Vertices[face.f0], Vertices[faceIndex1], Vertices[faceIndex2], material);
+                })
                 .ToList<IPrimitive>();
     }
 

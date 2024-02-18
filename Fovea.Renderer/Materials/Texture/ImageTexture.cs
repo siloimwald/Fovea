@@ -1,6 +1,7 @@
 using System;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.VectorMath;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -9,16 +10,18 @@ namespace Fovea.Renderer.Materials.Texture;
 public class ImageTexture : ITexture, IDisposable
 {
     private readonly Image<RgbaVector> _imageBuffer;
-
+    private static readonly ILogger<ImageTexture> Log = Logging.GetLogger<ImageTexture>();
+    
     public ImageTexture(string fileName)
     {
         try
         {
+            Log.LogDebug("Reading {textureFileName}", fileName);
             _imageBuffer = Image.Load<RgbaVector>(fileName);
         }
         catch
         {
-            Console.WriteLine($"failed to read {fileName}");
+            Log.LogWarning("Failed to read {textureFileName}", fileName);
         }
     }
 

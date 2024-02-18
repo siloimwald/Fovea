@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Fovea.Renderer.Core;
+using Microsoft.Extensions.Logging;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace Fovea.Renderer.Parser.Yaml;
 
-public static class YamlParser 
+public class YamlParser
 {
+    private static readonly ILogger<YamlParser> Log = Logging.GetLogger<YamlParser>();
+    
     public static IDeserializer GetDeserializer()
     {
         var deserializerBuilder = new DeserializerBuilder()
@@ -50,6 +53,24 @@ public static class YamlParser
     {
         var parser = GetDeserializer();
         var sceneDescriptor = parser.Deserialize<SceneDescriptor>(streamReader);
+        // try to do some hardening and sanity checking
+
+        if (sceneDescriptor.Materials.Count == 0)
+        {
+            Log.LogWarning("no materials defined");
+        }
+
+        if (sceneDescriptor.Textures.Count == 0)
+        {
+            Log.LogWarning("no textures defined");
+        }
+
+        if (sceneDescriptor.Lights == null || sceneDescriptor.Lights.Count == 0)
+        {
+            Log.LogWarning("no light source defined");
+            throw new NotSupportedException("scene needs at least one light source");
+        }
+        
         return sceneDescriptor.Build(context);
     }
 

@@ -15,9 +15,6 @@ public static class QuadProducer
         float d3,
         Axis axis)
     {
-        (minDim1, maxDim1) = minDim1 > maxDim1 ? (maxDim1, minDim1) : (minDim1, maxDim1);
-        (minDim2, maxDim2) = minDim2 > maxDim2 ? (maxDim2, minDim2) : (minDim2, maxDim2);
-
         var vertices = new List<Vector3>();
 
         if (axis == Axis.X)
