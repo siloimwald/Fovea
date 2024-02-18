@@ -36,6 +36,8 @@ public struct RGBColor(float r, float g, float b) : ITexture
     {
         return this;
     }
+
+    public static readonly RGBColor White = new RGBColor(1, 1, 1);
 }
 
 // for the time being, ease the transition, eventually replace RGBColor

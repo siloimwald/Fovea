@@ -16,7 +16,7 @@ public class ConstantMedium(IPrimitive boundary, float density, ITexture color) 
         var hr1 = new HitRecord();
         var hr2 = new HitRecord();
 
-        if (!boundary.Hit(ray, Interval.Everything(), ref hr1))
+        if (!boundary.Hit(ray, Interval.Universe, ref hr1))
             return false;
 
         if (!boundary.Hit(ray, Interval.HalfOpenWithOffset() with { Min = hr1.RayT + 0.001f}, ref hr2))

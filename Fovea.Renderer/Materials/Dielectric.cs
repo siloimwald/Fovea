@@ -19,7 +19,8 @@ public class Dielectric(float ior) : IMaterial
         var outDir = cannotRefract || Reflectance(cosTheta, ratio) > Sampler.Instance.Random01()
             ? Vector3.Reflect(unitDirection, hitRecord.Normal)
             : MathUtils.Refract(unitDirection, hitRecord.Normal, ratio);
-
+        
+        scatterResult.OutRay = new Ray(hitRecord.HitPoint, outDir);
         scatterResult.IsSpecular = true;
         scatterResult.Pdf = null;
         scatterResult.Attenuation = new RGBColor(1.0f, 1.0f, 1.0f);

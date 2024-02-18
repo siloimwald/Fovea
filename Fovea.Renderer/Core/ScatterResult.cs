@@ -9,4 +9,5 @@ public struct ScatterResult
     public bool IsSpecular;
     public Ray SpecularRay;
     public IPDF Pdf;
+    public Ray OutRay { get; set; }
 }

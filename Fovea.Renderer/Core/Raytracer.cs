@@ -14,6 +14,28 @@ public class Raytracer
 {
     
     private static readonly ILogger<Raytracer> Log = Logging.GetLogger<Raytracer>();
+
+    private RGBColor ColorRayBook1(in Ray ray, Scene scene, int depth)
+    {
+        if (depth <= 0)
+            return new RGBColor(0.0f);
+        
+        var hitRecord = new HitRecord();
+
+        if (scene.World.Hit(ray, new Interval(1e-3f, float.PositiveInfinity), ref hitRecord))
+        {
+            var scatterResult = new ScatterResult();
+            if (hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
+            {
+                return scatterResult.Attenuation * ColorRayBook1(scatterResult.OutRay, scene, depth - 1);
+            }
+            return new RGBColor();
+        }
+
+        var unitDir = Vector3.Normalize(ray.Direction);
+        var a = 0.5f * (unitDir.Y + 1.0f);
+        return RGBColor.White * (1.0f - a) + new RGBColor(0.5f, 0.7f, 1.0f) * a;
+    }
     
     private RGBColor ColorRay(Ray ray, Scene scene, int depth)
     {
@@ -102,14 +124,9 @@ public class Raytracer
                     var color = new RGBColor();
                     for (var s = 0; s < scene.Options.NumSamples; ++s)
                     {
-                        var r1 = Sampler.Instance.Random01();
-                        var r2 = Sampler.Instance.Random01();
-                        var u = r1 + px / ((float)imageWidth - 1);
-                        var v = r2 + py / ((float)imageHeight - 1);
-                        u = -1.0f + 2 * (u - r1);
-                        v = -1.0f + 2 * (v - r2);
-                        var ray = scene.Camera.ShootRay(u, v);
-                        color += ColorRay(ray, scene, scene.Options.MaxDepth);
+                        var ray = scene.Camera.ShootRay(px, py);
+                        // color += ColorRay(ray, scene, scene.Options.MaxDepth);
+                        color += ColorRayBook1(ray, scene, scene.Options.MaxDepth);
                     }
                     
                     // ReSharper disable once AccessToDisposedClosure

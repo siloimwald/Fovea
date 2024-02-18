@@ -14,16 +14,16 @@ public struct Interval
     /// the right bound/max value of this interval
     /// </summary>
     public float Max;
-    
+
     /// <summary>
-    /// creates an empty interval [+oo, -oo]
+    /// default interval is empty [+oo, -oo]
     /// </summary>
     public Interval()
     {
         Min = float.PositiveInfinity;
         Max = float.NegativeInfinity;
     }
-
+    
     /// <summary>
     /// creates the interval [min, max]
     /// </summary>
@@ -35,6 +35,8 @@ public struct Interval
         Max = max;
     }
 
+    public float Size => Max - Min;
+    
     /// <summary>
     /// tests if this interval contains the value t, i.e. t \in [min, max]
     /// </summary>
@@ -69,13 +71,6 @@ public struct Interval
         return new Interval(1e-4f, float.PositiveInfinity);
     }
 
-    /// <summary>
-    /// the interval [-oo, +oo]
-    /// </summary>
-    /// <returns></returns>
-    public static Interval Everything()
-    {
-        return new Interval(float.NegativeInfinity, float.PositiveInfinity);
-    }
-    
+    public static readonly Interval Universe = new Interval(float.NegativeInfinity, float.PositiveInfinity);
+    public static readonly Interval Empty = new Interval(float.PositiveInfinity, float.NegativeInfinity);
 }
