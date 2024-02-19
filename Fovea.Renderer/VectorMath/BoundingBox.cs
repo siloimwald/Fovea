@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using Fovea.Renderer.Core;
@@ -13,30 +14,69 @@ public class BoundingBox
 {
     private const byte ShuffleMask = (3 << 4) | (2 << 2) | 1;
 
-    /// <summary>maximal extent of this bounding box</summary>
-    private readonly Vector3 _max;
+    /// <summary>extent of this bounding box on the X axis</summary>
+    public readonly Interval ExtentX;
 
-    /// <summary>minimal extent of this bounding box</summary>
-    private readonly Vector3 _min;
+    /// <summary>extent of this bounding box on the Y axis</summary>
+    public readonly Interval ExtentY;
+
+    /// <summary>extent of this bounding box on the Z axis</summary>
+    public readonly Interval ExtentZ;
 
     /// <summary>create a new bounding box with the given min/max. Those are assumed to be correctly ordered already.</summary>
     /// <param name="min">min. points along all dimensions</param>
     /// <param name="max">max. points along all dimensions</param>
     public BoundingBox(Vector3 min, Vector3 max)
+        : this(new Interval(MathF.Min(min.X, max.X), MathF.Max(min.X, max.X)),
+            new Interval(MathF.Min(min.Y, max.Y), MathF.Max(min.Y, max.Y)),
+            new Interval(MathF.Min(min.Z, max.Z), MathF.Max(min.Z, max.Z)))
     {
-        _min = min;
-        _max = max;
+    }
+
+    private BoundingBox(Interval x, Interval y, Interval z)
+    {
+        ExtentX = x;
+        ExtentY = y;
+        ExtentZ = z;
+
+        const float delta = 0.0001f;
+        if (ExtentX.Size < delta)
+        {
+            ExtentX = ExtentX.Expand(delta);
+        }
+
+        if (ExtentY.Size < delta)
+        {
+            ExtentY = ExtentY.Expand(delta);
+        }
+
+        if (ExtentZ.Size < delta)
+        {
+            ExtentZ = ExtentZ.Expand(delta);
+        }
+    }
+
+    /// <summary>unite two bounding boxes by computing the minimal box that fully contains both input parameters</summary>
+    /// <param name="boxA">bounding box object</param>
+    /// <param name="boxB">bounding box object</param>
+    /// <returns>Box = boxA U boxB </returns>
+    public static BoundingBox Union(BoundingBox boxA, BoundingBox boxB)
+    {
+        var x = new Interval(boxA.ExtentX, boxB.ExtentX);
+        var y = new Interval(boxA.ExtentY, boxB.ExtentY);
+        var z = new Interval(boxA.ExtentZ, boxB.ExtentZ);
+        return new BoundingBox(x, y, z);
     }
 
     /// <summary>box center</summary>
     public Vector3 GetCentroid()
     {
-        return _min + GetExtent() * 0.5f;
+        return new Vector3(ExtentX.Min, ExtentY.Min, ExtentZ.Min) + GetExtent() * 0.5f;
     }
 
     public Vector3 GetExtent()
     {
-        return _max - _min;
+        return new Vector3(ExtentX.Size, ExtentY.Size, ExtentZ.Size);
     }
 
     /// <summary>compute the volume of bounding box</summary>
@@ -57,46 +97,93 @@ public class BoundingBox
 
     /// <summary>test whether the given ray intersects this bounding box</summary>
     /// <param name="ray">ray to test against</param>
-    /// <param name="tMin">existing min of ray interval</param>
-    /// <param name="tMax">existing max of ray interval</param>
+    /// <param name="interval">current ray interval</param>
     /// <returns>true if ray intersects box</returns>
-    public bool Intersect(in Ray ray, float tMin, float tMax)
+    public bool Intersect(in Ray ray, Interval interval)
     {
-        var tx1 = (_min.X - ray.Origin.X) * ray.InverseDirection.X;
-        var tx2 = (_max.X - ray.Origin.X) * ray.InverseDirection.X;
+        for (var a = 0; a < 3; a++)
+        {
+            var t0 = (Axis(a).Min - ray.Origin[a]) * ray.InverseDirection[a];
+            var t1 = (Axis(a).Max - ray.Origin[a]) * ray.InverseDirection[a];
 
-        tMin = Math.Max(tMin, Math.Min(tx1, tx2));
-        tMax = Math.Min(tMax, Math.Max(tx1, tx2));
+            if (ray.InverseDirection[a] < 0)
+            {
+                (t0, t1) = (t1, t0);
+            }
 
-        var ty1 = (_min.Y - ray.Origin.Y) * ray.InverseDirection.Y;
-        var ty2 = (_max.Y - ray.Origin.Y) * ray.InverseDirection.Y;
+            if (t0 > interval.Min)
+            {
+                interval.Min = t0;
+            }
 
-        tMin = Math.Max(tMin, Math.Min(ty1, ty2));
-        tMax = Math.Min(tMax, Math.Max(ty1, ty2));
-
-        var tz1 = (_min.Z - ray.Origin.Z) * ray.InverseDirection.Z;
-        var tz2 = (_max.Z - ray.Origin.Z) * ray.InverseDirection.Z;
-
-        tMin = Math.Max(tMin, Math.Min(tz1, tz2));
-        tMax = Math.Min(tMax, Math.Max(tz1, tz2));
-
-        return tMax >= tMin && tMax >= 0.0;
+            if (t1 < interval.Max)
+            {
+                interval.Max = t1;
+            }
+   
+            if (interval.Max <= interval.Min)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public bool IntersectSse(in Ray ray, float tMin, float tMax)
+    /// <summary>
+    /// get the interval along the requested axis, just for compatibility with the book
+    /// </summary>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Interval Axis(int axis)
     {
-        var invDir = Vector128.Create(ray.InverseDirection.X, ray.InverseDirection.Y,
-            ray.InverseDirection.Z, 0.0f);
-        var org = Vector128.Create(ray.Origin.X, ray.Origin.Y, ray.Origin.Z, 0.0f);
-        var minVec = Vector128.Create(_min.X, _min.Y, _min.Z, 0.0f);
-        var maxVec = Vector128.Create(_max.X, _max.Y, _max.Z, 0.0f);
+        return axis switch
+        {
+            0 => ExtentX,
+            1 => ExtentY,
+            _ => ExtentZ
+        };
+    }
+
+    // public bool IntersectAvx(in Ray ray, in Interval interval)
+    // {
+    //     var invDir = Vector256.Create(ray.InverseDirection.AsVector128(),
+    //         ray.InverseDirection.AsVector128());
+    //     var org = Vector256.Create(ray.Origin.AsVector128(), ray.Origin.AsVector128());
+    //     var minMax = Vector256.Create(ExtentX.Min, ExtentY.Min, ExtentZ.Min, 0.0f,
+    //         ExtentX.Max, ExtentY.Max, ExtentZ.Max, 0.0f);
+    //
+    //     var t = Avx.Multiply(Avx.Subtract(minMax, org), invDir);
+    //     
+    //     var t0 = Avx.ExtractVector128(t, 0);
+    //     var t1 = Avx.ExtractVector128(t, 128);
+    //     var min = Sse.Min(t0, t1);
+    //     var max = Sse.Max(t0, t1);
+    //    
+    //     // compares min0 and min1 and min1 and min2
+    //     // shuffle again and compare to get overall min/max in first component
+    //     var minStage0 = Sse.Max(Sse.Shuffle(min, min, ShuffleMask), min);
+    //     var gTMin = Sse.Max(Sse.Shuffle(minStage0, minStage0, ShuffleMask), minStage0).GetElement(0);
+    //     var maxStage0 = Sse.Min(Sse.Shuffle(max, max, ShuffleMask), max);
+    //     var gTMax = Sse.Min(Sse.Shuffle(maxStage0, maxStage0, ShuffleMask), maxStage0).GetElement(0);
+    //
+    //     gTMin = MathF.Max(interval.Min, gTMin);
+    //     gTMax = MathF.Min(interval.Max, gTMax);
+    //     return gTMax >= gTMin && gTMax > 0;
+    // }
+    
+    public bool IntersectSse(in Ray ray, in Interval interval)
+    {
+        var invDir = ray.InverseDirection.AsVector128();
+        var org = ray.Origin.AsVector128();
+        var minVec = Vector128.Create(ExtentX.Min, ExtentY.Min, ExtentZ.Min, 0.0f);
+        var maxVec = Vector128.Create(ExtentX.Max, ExtentY.Max, ExtentZ.Max, 0.0f);
 
         var t0 = Sse.Multiply(Sse.Subtract(minVec, org), invDir);
         var t1 = Sse.Multiply(Sse.Subtract(maxVec, org), invDir);
-
+        
         var min = Sse.Min(t0, t1);
         var max = Sse.Max(t0, t1);
-
+       
         // compares min0 and min1 and min1 and min2
         // shuffle again and compare to get overall min/max in first component
         var minStage0 = Sse.Max(Sse.Shuffle(min, min, ShuffleMask), min);
@@ -104,29 +191,9 @@ public class BoundingBox
         var maxStage0 = Sse.Min(Sse.Shuffle(max, max, ShuffleMask), max);
         var gTMax = Sse.Min(Sse.Shuffle(maxStage0, maxStage0, ShuffleMask), maxStage0).GetElement(0);
 
-        gTMin = Math.Max(tMin, gTMin);
-        gTMax = Math.Min(tMax, gTMax);
+        gTMin = MathF.Max(interval.Min, gTMin);
+        gTMax = MathF.Min(interval.Max, gTMax);
         return gTMax >= gTMin && gTMax > 0;
-    }
-
-    /// <summary>unite two bounding boxes by computing the minimal box that fully contains both input parameters</summary>
-    /// <param name="boxA">bounding box object</param>
-    /// <param name="boxB">bounding box object</param>
-    /// <returns>Box = boxA U boxB </returns>
-    public static BoundingBox Union(BoundingBox boxA, BoundingBox boxB)
-    {
-        return new(Vector3.Min(boxA._min, boxB._min), Vector3.Max(boxA._max, boxB._max));
-    }
-
-    /// <summary>compute the intersection of two bounding boxes</summary>
-    /// <param name="boxA">bounding box object</param>
-    /// <param name="boxB">bounding box object</param>
-    /// <returns>box = boxA n BoxB</returns>
-    public static BoundingBox Intersect(BoundingBox boxA, BoundingBox boxB)
-    {
-        return new(
-            Vector3.Max(boxA._min, boxB._min),
-            Vector3.Min(boxA._max, boxB._max));
     }
 
     /// <summary>
@@ -134,12 +201,7 @@ public class BoundingBox
     ///     used for union loops
     /// </summary>
     /// <returns>inverted, maximal empty bounding box :)</returns>
-    public static BoundingBox CreateMaxEmptyBox()
-    {
-        return new(
-            new Vector3(float.MaxValue, float.MaxValue, float.MaxValue),
-            new Vector3(float.MinValue, float.MinValue, float.MinValue));
-    }
+    public static BoundingBox CreateMaxEmptyBox() => new(Interval.Empty, Interval.Empty, Interval.Empty);
 
     /// <summary>
     ///     from pbrt book. used for bin projection, given p as a primitive centroid and this as the centroid bounds of
@@ -149,7 +211,7 @@ public class BoundingBox
     /// <returns></returns>
     public Vector3 Offset(Vector3 p)
     {
-        var o = p - _min;
+        var o = new Vector3(p.X - ExtentX.Min, p.Y - ExtentY.Min, p.Z - ExtentZ.Min);
         var ext = GetExtent();
 
         // avoid division by zero
@@ -161,10 +223,16 @@ public class BoundingBox
 
     public BoundingBox Transform(Matrix4x4 transform)
     {
-        var transformedMin = Vector3.Transform(_min, transform);
-        var transformedMax = Vector3.Transform(_max, transform);
-        return new BoundingBox(
-            Vector3.Min(transformedMin, transformedMax),
-            Vector3.Max(transformedMin, transformedMax));
+        throw new NotImplementedException();
+        // var transformedMin = Vector3.Transform(_min, transform);
+        // var transformedMax = Vector3.Transform(_max, transform);
+        // return new BoundingBox(
+        //     Vector3.Min(transformedMin, transformedMax),
+        //     Vector3.Max(transformedMin, transformedMax));
+    }
+
+    public override string ToString()
+    {
+        return $"Box[{ExtentX}, {ExtentY}, {ExtentZ}]";
     }
 }

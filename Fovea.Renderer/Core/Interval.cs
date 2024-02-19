@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace Fovea.Renderer.Core;
@@ -35,6 +36,15 @@ public struct Interval
         Max = max;
     }
 
+    /// <summary>
+    /// creates a new interval as the union of two other intervals
+    /// </summary>
+    /// <param name="left">interval object</param>
+    /// <param name="right">interval object</param>
+    public Interval(Interval left, Interval right):this(MathF.Min(left.Min, right.Min), MathF.Max(left.Max, right.Max))
+    {
+    }
+
     public float Size => Max - Min;
     
     /// <summary>
@@ -48,6 +58,12 @@ public struct Interval
         return Min <= t && t <= Max;
     }
 
+    public Interval Expand(float delta) 
+    {
+        var padding = delta/2;
+        return new Interval(Min - padding, Max + padding);
+    }
+    
     /// <summary>
     /// tests if this interval contains t without t being exactly on the interval
     /// i.e. t \in ]min, max[
@@ -70,6 +86,8 @@ public struct Interval
     {
         return new Interval(1e-4f, float.PositiveInfinity);
     }
+
+    public override string ToString() => $"[{Min:F} <=> {Max:F}]";
 
     public static readonly Interval Universe = new Interval(float.NegativeInfinity, float.PositiveInfinity);
     public static readonly Interval Empty = new Interval(float.PositiveInfinity, float.NegativeInfinity);

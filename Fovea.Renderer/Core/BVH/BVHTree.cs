@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Fovea.Renderer.Extensions;
 using Fovea.Renderer.VectorMath;
+using Microsoft.Extensions.Logging;
 
 namespace Fovea.Renderer.Core.BVH;
 
@@ -12,6 +13,8 @@ namespace Fovea.Renderer.Core.BVH;
 /// </summary>
 public class BVHTree : IPrimitive
 {
+    private static readonly ILogger<BVHTree> Log = Logging.GetLogger<BVHTree>();
+    
     /// <summary>max recursion/tree depth</summary>
     private const int MaxDepth = 32;
 
@@ -80,12 +83,15 @@ public class BVHTree : IPrimitive
                 leafCount++;
             }
         }
-
-        Console.WriteLine("*** tree stats ***");
-        Console.WriteLine(
-            $"Primitive count = {primCount}"); // more a self check, should exactly match the scene primitive count since we don't duplicate things
-        Console.WriteLine(
-            $"Inner Nodes {inner}, Leaf nodes {leafCount}, max leaf size {maxLeafSize}, total node count {_nodes.Length}");
+        
+        // more a self check, should exactly match the scene primitive count since we don't duplicate things
+        Log.LogInformation("Primitive count = {PrimCount}, max. leaf size = {MaxLeafSize}", primCount, maxLeafSize);
+        Log.LogInformation("Inner nodes {InnerNodeCount}, Leaf nodes {LeafNodeCount}, total node count {TotalNode}",
+            inner, leafCount, _nodes.Length);
+        if (_nodes.Length > 0)
+        {
+            Log.LogInformation("root aabb {RootAABB}", _nodes[0].Box);
+        }
     }
 
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
@@ -103,9 +109,9 @@ public class BVHTree : IPrimitive
             var nodeIndex = nodeStack[--pointer];
             var node = _nodes[nodeIndex];
 
-            if (!node.Box.IntersectSse(ray, 0, hitRecord.RayT))
+            if (!node.Box.IntersectSse(ray, rayInterval))
                 continue;
-
+                        
             if (node.Count > 0)
             {
                 for (var p = node.OtherNodeFirstPrim; p < node.OtherNodeFirstPrim + node.Count; ++p)

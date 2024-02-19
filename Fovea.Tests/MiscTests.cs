@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using Fovea.Renderer.Core;
 using NUnit.Framework;
 
 namespace Fovea.Tests;
@@ -29,5 +30,16 @@ public class MiscTests
         }
 
         image.Should().AllSatisfy(p => p.Should().Be(1));
+    }
+
+    [TestCase(-0.5f, 1.5f, 0.5f, 2.0f, -0.5f, 2.0f)]
+    [TestCase(1f, 2f, -2f, -1f, -2f, 2f)]
+    public void IntervalUnion(float leftMin, float leftMax, float rightMin, float rightMax, float unionMin, float unionMax)
+    {
+        var a = new Interval(leftMin, leftMax);
+        var b = new Interval(rightMin, rightMax);
+        var union = new Interval(a, b);
+        union.Min.Should().Be(unionMin);
+        union.Max.Should().Be(unionMax);
     }
 }
