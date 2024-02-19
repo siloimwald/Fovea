@@ -1,9 +1,11 @@
 ﻿using Fovea.Renderer.Materials;
+using Fovea.Renderer.Parser;
+using Fovea.Renderer.Parser.Yaml;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Fovea.Renderer.Core;
 
-public struct RGBColor(float r, float g, float b) : ITexture
+public struct RGBColor(float r, float g, float b) : ITexture, ITextureGenerator
 {
     public float R { get; init; } = r;
     public float G { get; init; } = g;
@@ -38,6 +40,8 @@ public struct RGBColor(float r, float g, float b) : ITexture
     }
 
     public static readonly RGBColor White = new RGBColor(1, 1, 1);
+    
+    public ITexture Generate(ParserContext _) => this;
 }
 
 // for the time being, ease the transition, eventually replace RGBColor

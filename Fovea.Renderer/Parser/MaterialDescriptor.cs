@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Materials;
 using YamlDotNet.Serialization;
@@ -7,6 +8,9 @@ namespace Fovea.Renderer.Parser;
 
 // a collection of parser entities/descriptors that map to materials
 
+[JsonDerivedType(typeof(MatteDescriptor), "matte")]
+[JsonDerivedType(typeof(MetalDescriptor), "metal")]
+[JsonDerivedType(typeof(DielectricDescriptor), "glass")]
 public interface IMaterialGenerator
 {
     IMaterial Generate(IDictionary<string, ITexture> textures);
@@ -17,7 +21,7 @@ public abstract class MaterialDescriptorBase
     /// <summary>
     /// string reference to the texture map within the yaml file
     /// </summary>
-    [YamlMember(Alias = "texture")]
+    [JsonPropertyName("texture")]
     public string TextureReference { get; init; } = string.Empty;
 
     protected ITexture GetTextureOrFail(IDictionary<string, ITexture> textures)

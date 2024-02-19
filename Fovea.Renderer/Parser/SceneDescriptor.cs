@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.AccessControl;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
 using Fovea.Renderer.Parser.Yaml;
@@ -35,7 +34,7 @@ public class SceneDescriptor
     /// </summary>
     public List<IPrimitiveGenerator> Primitives { get; init; } = [];
 
-    public List<IPrimitiveGenerator> Lights { get; init; } = [];
+    // public List<IPrimitiveGenerator> Lights { get; init; } = [];
     
     public CameraDescriptor Camera { get; init; }
 
@@ -58,14 +57,14 @@ public class SceneDescriptor
                 return acc;
             });
 
-        var lightSources = Lights.Aggregate(new List<IPrimitive>(), (acc, prim) =>
-        {
-            acc.AddRange(prim.Generate(materials, context));
-            return acc;
-        });
+        // var lightSources = Lights.Aggregate(new List<IPrimitive>(), (acc, prim) =>
+        // {
+        //     acc.AddRange(prim.Generate(materials, context));
+        //     return acc;
+        // });
         
         // light sources also need to show up as regular primitives
-        primList.AddRange(lightSources);
+        // primList.AddRange(lightSources);
 
         if (Options == null)
         {
@@ -78,7 +77,7 @@ public class SceneDescriptor
             World = new BVHTree(primList),
             Background = new RGBColor(0.2f, 0.2f, 0.2f),
             Options = Options,
-            Lights = new PrimitiveList(lightSources), // crashes with BVH and single item
+            // Lights = new PrimitiveList(lightSources), // crashes with BVH and single item
             Camera = new PerspectiveCamera(Camera, Options)
         };
     }

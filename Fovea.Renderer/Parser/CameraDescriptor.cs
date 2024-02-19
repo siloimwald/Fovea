@@ -1,5 +1,4 @@
-﻿using Fovea.Renderer.Core;
-using Fovea.Renderer.Viewing;
+﻿using Fovea.Renderer.Viewing;
 
 namespace Fovea.Renderer.Parser;
 
@@ -20,4 +19,5 @@ public class CameraDescriptor
         LookFrom = Vector3.UnitZ,
         UpDirection = Vector3.UnitY
     };
+    
 }

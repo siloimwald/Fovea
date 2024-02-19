@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Mesh;
 using Fovea.Renderer.Parser.Yaml;
@@ -11,7 +12,8 @@ namespace Fovea.Renderer.Parser;
 
 public abstract class PrimitiveDescriptorBase
 {
-    [YamlMember(Alias = "material")] public string MaterialReference { get; init; } = string.Empty;
+    [JsonPropertyName("material")]
+    public string MaterialReference { get; init; } = string.Empty;
 
     protected IMaterial GetMaterialOrFail(IDictionary<string, IMaterial> materials)
     {

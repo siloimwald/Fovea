@@ -367,9 +367,9 @@ public static class DemoSceneCreator
     {
         var textures = new Dictionary<string, ITextureGenerator>()
         {
-            ["ground"] = new ColorTextureDescriptor { Color = new RGBColor(0.5f, 0.5f, 0.5f) },
-            ["leftSphere"] = new ColorTextureDescriptor { Color = new RGBColor(0.4f, 0.2f, 0.1f) },
-            ["rightSphere"] = new ColorTextureDescriptor { Color = new RGBColor(0.7f, 0.6f, 0.5f) }
+            ["ground"] = new RGBColor(0.5f, 0.5f, 0.5f),
+            ["leftSphere"] = new RGBColor(0.4f, 0.2f, 0.1f),
+            ["rightSphere"] = new RGBColor(0.7f, 0.6f, 0.5f) 
         };
 
         var materials = new Dictionary<string, IMaterialGenerator>
@@ -411,8 +411,7 @@ public static class DemoSceneCreator
             if (materialRnd < 0.8f) // matte
             {
                 var textureName = $"tex{textureSuffix++}";
-                textures[textureName] = new ColorTextureDescriptor
-                    { Color = Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor() };
+                textures[textureName] = Sampler.Instance.RandomColor() * Sampler.Instance.RandomColor();
                 materials.Add(materialName, new MatteDescriptor { TextureReference = textureName });
 
                 if (withMovingSpheres)
@@ -432,7 +431,7 @@ public static class DemoSceneCreator
             else if (materialRnd < 0.95f) // metal
             {
                 var textureName = $"tex{textureSuffix++}";
-                textures[textureName] = new ColorTextureDescriptor { Color = Sampler.Instance.RandomColor(0.5f) };
+                textures[textureName] = Sampler.Instance.RandomColor(0.5f);
                 materials.Add(materialName, new MetalDescriptor { Fuzzy = Sampler.Instance.Random(0, 0.05f), TextureReference = textureName });
             }
             else // glass

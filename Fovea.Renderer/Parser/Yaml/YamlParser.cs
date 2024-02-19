@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Fovea.Renderer.Core;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Core;
@@ -26,6 +27,15 @@ public class YamlParser
             .Build();
     }
 
+    public static readonly JsonSerializerOptions JsonOptions =
+        new JsonSerializerOptions
+        {
+            IncludeFields = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true 
+        };
+    
+    
     public static ISerializer GetSerializer()
     {
         var serializerBuilder =
@@ -42,17 +52,16 @@ public class YamlParser
     public static Scene ParseFile(string fileName)
     {
         var fullPath = Path.GetFullPath(Path.GetDirectoryName(fileName)!);
-        using var stream = File.OpenText(fileName);
-        return Parse(stream, new ParserContext
+        var fileContent = File.ReadAllText(fileName);
+        return Parse(fileContent, new ParserContext
         {
             SceneFileLocation = fullPath
         });
     }
 
-    private static Scene Parse(TextReader streamReader, ParserContext context)
+    private static Scene Parse(string fileContent, ParserContext context)
     {
-        var parser = GetDeserializer();
-        var sceneDescriptor = parser.Deserialize<SceneDescriptor>(streamReader);
+        var sceneDescriptor = JsonSerializer.Deserialize<SceneDescriptor>(fileContent, JsonOptions);
         // try to do some hardening and sanity checking
 
         if (sceneDescriptor.Materials.Count == 0)
@@ -89,8 +98,7 @@ public class YamlParser
             ("!sphere", typeof(SphereDescriptor)),
             ("!t", typeof(ImageTextureDescriptor)),
             ("!noise", typeof(NoiseTextureDescriptor)),
-            ("!diffLight", typeof(DiffuseLightDescriptor)),
-            ("!ct", typeof(ColorTextureDescriptor)), // meh, directly to RGB would be neat
+            ("!diffLight", typeof(DiffuseLightDescriptor))
         };
     }
 }
