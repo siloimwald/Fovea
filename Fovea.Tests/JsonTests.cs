@@ -234,6 +234,28 @@ public class JsonTests
     }
     
     [Test]
+    public void BoxParsing()
+    {
+        const string boxJson = """
+                                {
+                                    "$type": "box",
+                                    "pointA": { "x": 2, "y": -2 },
+                                    "pointB": { "x": 1, "y": -4, "z": 1},
+                                    "material": "blupp"
+                                }
+                                """;
+        
+        var box = 
+            JsonSerializer.Deserialize<IPrimitiveGenerator>(boxJson, YamlParser.JsonOptions);
+
+        box.Should().BeOfType<BoxDescriptor>();
+        var qd = box as BoxDescriptor;
+        qd!.PointA.Should().Be(new Vector3(2, -2, 0));
+        qd.PointB.Should().Be(new Vector3(1, -4, 1));
+        qd.MaterialReference.Should().Be("blupp");
+    }
+    
+    [Test]
     public void SimpleSceneParsing()
     {
         var scene = JsonSerializer.Deserialize<SceneDescriptor>(SimpleSceneJson, YamlParser.JsonOptions);

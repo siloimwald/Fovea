@@ -53,6 +53,17 @@ public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     }
 }
 
+public class BoxDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
+{
+    public Vector3 PointA { get; init; }
+    public Vector3 PointB { get; init; }
+    
+    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
+    {
+        return [BoxProducer.MakeBox(PointA, PointB, GetMaterialOrFail(materials))];
+    }
+}
+
 /// <summary>
 /// a sphere
 /// </summary>

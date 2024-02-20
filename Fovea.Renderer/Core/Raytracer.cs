@@ -133,7 +133,7 @@ public class Raytracer
                     }
                     
                     // ReSharper disable once AccessToDisposedClosure
-                    image[px, imageHeight - py - 1] = new RgbaVector(color.R, color.G, color.B);                    
+                    image[px, py] = new RgbaVector(color.R, color.G, color.B);                    
                 }
 
                 Interlocked.Add(ref pixelDone, max - offset);

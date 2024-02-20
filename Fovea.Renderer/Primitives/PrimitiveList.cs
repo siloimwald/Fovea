@@ -50,4 +50,6 @@ public class PrimitiveList(List<IPrimitive> prims) : IPrimitive
     {
         prims.Add(p);
     }
+
+    public void AddRange(IEnumerable<IPrimitive> primitives) => prims.AddRange(primitives);
 }
