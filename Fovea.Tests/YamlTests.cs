@@ -107,50 +107,6 @@ public class YamlTests
         movingSphereDescriptor.Center1.Should().Be(new Vector3(2, 4, -2));
     }   
 
-    // attempt at parsing a arbitrary box (made up of 6 faces with 2 triangles each)
-    [Test]
-    public void QuadParsing()
-    {
-        const string yaml = """
-                            extentMin: { x: -20, y: 10.4 }
-                            extentMax: { x: 4, y: -69.42 }
-                            axis: 'bla'
-                            position: 4
-                            material: 'yellow'
-                            flipNormals: true
-                            asMesh: true
-                            """;
-        var deserializer = YamlParser.GetDeserializer();
-        var quadDescriptor = deserializer.Deserialize<QuadDescriptor>(yaml);
-        quadDescriptor.Axis.Should().Be("bla");
-        quadDescriptor.ExtentMin.Should().Be(new Vector2(-20f, 10.4f));
-        quadDescriptor.Position.Should().Be(4);
-        quadDescriptor.ExtentMax.Should().Be(new Vector2(4f, -69.42f));
-        quadDescriptor.MaterialReference.Should().Be("yellow");
-        quadDescriptor.FlipNormals.Should().BeTrue();
-        quadDescriptor.AsMesh.Should().BeTrue();
-    }
-
-    [Test]
-    public void CompoundSceneList()
-    {
-        const string yaml = """
-                            [
-                             !quad { extentMin: { x: -20, y: 10.4 }, extentMax: { x: 4, y: -69.42 }, axis: 'bla' },
-                             !sphere { center: { x: 128, y: -1, z: -10.12 }, radius: 42.69 }
-                            ]
-                            """;
-        var deserializer = YamlParser.GetDeserializer();
-        var scene = deserializer.Deserialize<List<IPrimitiveGenerator>>(yaml);
-        scene.Should().HaveCount(2);
-        scene[0].Should().BeOfType<QuadDescriptor>();
-        scene[1].Should().BeOfType<SphereDescriptor>();
-        (scene[0] as QuadDescriptor)!.Axis.Should().Be("bla");
-        (scene[1] as SphereDescriptor)!.Radius.Should().Be(42.69f);
-    }
-
-
-
     [Test]
     public void DeserializeKeepsTags()
     {

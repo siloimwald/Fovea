@@ -38,32 +38,18 @@ public class MeshProducerBase : PrimitiveDescriptorBase
 }
 
 /// <summary>
-/// axis aligned quad (producing two triangles)
+/// quad/parallelogram
 /// </summary>
-public class QuadDescriptor : MeshProducerBase, IPrimitiveGenerator
+public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 {
-    public Vector2 ExtentMin { get; init; }
-    public Vector2 ExtentMax { get; init; }
-    public float Position { get; init; }
-    public string Axis { get; init; } = "Y";
+    public Vector3 Point { get; init; }
+    public Vector3 AxisU { get; init; }
+    public Vector3 AxisV { get; init; }
 
     public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
-        var axis = Axis.ToUpper() switch
-        {
-            "X" => VectorMath.Axis.X,
-            "Y" => VectorMath.Axis.Y,
-            _ => VectorMath.Axis.Z
-        };
-
-        var min = Vector2.Min(ExtentMin, ExtentMax);
-        var max = Vector2.Max(ExtentMin, ExtentMax);
         var material = GetMaterialOrFail(materials);
-
-        var mesh = QuadProducer.Produce(min.X, max.X, min.Y, max.Y, Position, axis);
-        return AsMesh
-            ? mesh.CreateMeshTriangles(material, FlipNormals)
-            : mesh.CreateSingleTriangles(material, FlipNormals);
+        return [new Quad(Point, AxisU, AxisV, material)];
     }
 }
 

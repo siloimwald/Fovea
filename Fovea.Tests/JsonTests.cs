@@ -209,6 +209,30 @@ public class JsonTests
     }
 
     [Test]
+    public void QuadParsing()
+    {
+        const string quadJson = """
+                                {
+                                    "$type": "quad",
+                                    "point": { "x": 2, "y": -2 },
+                                    "axisU": { "x": 1 },
+                                    "axisV": { "y": 1 },
+                                    "material": "bla"
+                                }
+                                """;
+        
+        var quad = 
+            JsonSerializer.Deserialize<IPrimitiveGenerator>(quadJson, YamlParser.JsonOptions);
+
+        quad.Should().BeOfType<QuadDescriptor>();
+        var qd = quad as QuadDescriptor;
+        qd!.Point.Should().Be(new Vector3(2, -2, 0));
+        qd.AxisU.Should().Be(new Vector3(1, 0, 0));
+        qd.AxisV.Should().Be(new Vector3(0, 1, 0));
+        qd.MaterialReference.Should().Be("bla");
+    }
+    
+    [Test]
     public void SimpleSceneParsing()
     {
         var scene = JsonSerializer.Deserialize<SceneDescriptor>(SimpleSceneJson, YamlParser.JsonOptions);

@@ -173,7 +173,18 @@ public class BoundingBox
     /// <returns>padded box</returns>
     public BoundingBox Padded(float delta = 0.0001f)
     {
-        throw new NotImplementedException();
+        var paddedMin = Min;
+        var paddedMax = Max;
+        var ext = GetExtent();
+
+        for (var axis = 0; axis < 3; ++axis)
+        {
+            if (!(ext[axis] < delta)) continue;
+            paddedMin[axis] -= delta;
+            paddedMax[axis] += delta;
+        }
+
+        return new BoundingBox(paddedMin, paddedMax);
     }
     
     public override string ToString()
