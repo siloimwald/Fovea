@@ -16,9 +16,12 @@ namespace Fovea.Renderer.Parser;
 public class SceneDescriptor
 {
     private static readonly ILogger<SceneDescriptor> Log = Logging.GetLogger<SceneDescriptor>();
-    
-    public RenderOptions Options { get; set; } 
 
+    /// <summary>
+    /// non scene related render options
+    /// </summary>
+    public RenderOptions Options { get; set; } 
+    
     /// <summary>
     /// reusable map of texture definitions, keyed by string to make referencing them easier
     /// </summary>
@@ -34,6 +37,8 @@ public class SceneDescriptor
     /// </summary>
     public List<IPrimitiveGenerator> Primitives { get; init; } = [];
 
+    public RGBColor Background { get; init; } = new(0.7f, 0.8f, 1f);
+    
     // public List<IPrimitiveGenerator> Lights { get; init; } = [];
     
     public CameraDescriptor Camera { get; init; }
@@ -75,7 +80,7 @@ public class SceneDescriptor
         return new Scene
         {
             World = new BVHTree(primList),
-            Background = new RGBColor(0.2f, 0.2f, 0.2f),
+            Background = Background,
             Options = Options,
             // Lights = new PrimitiveList(lightSources), // crashes with BVH and single item
             Camera = new PerspectiveCamera(Camera, Options)

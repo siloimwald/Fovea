@@ -11,8 +11,6 @@ public class DiffuseLight(ITexture color) : IMaterial
 
     public RGBColor Emitted(in Ray ray, in HitRecord hitRecord)
     {
-        return hitRecord.IsFrontFace
-            ? color.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint)
-            : new RGBColor();
+        return color.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
     }
 }

@@ -39,7 +39,8 @@ public struct RGBColor(float r, float g, float b) : ITexture, ITextureGenerator
         return this;
     }
 
-    public static readonly RGBColor White = new RGBColor(1, 1, 1);
+    public static readonly RGBColor White = new(1, 1, 1);
+    public static readonly RGBColor Black = new();
     
     public ITexture Generate(ParserContext _) => this;
 }

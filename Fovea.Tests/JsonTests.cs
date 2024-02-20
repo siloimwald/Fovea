@@ -16,6 +16,7 @@ public class JsonTests
                                             "options": {
                                                 "samples": 250
                                             },
+                                           "background": { "r": 2, "b": 0.4 },
                                            "materials": {
                                               "blue": { "$type": "matte", "texture": "blue" },
                                               "green_metal": { "$type": "metal", "texture": "greenish", "fuzzy": 0.5 }
@@ -237,6 +238,7 @@ public class JsonTests
     {
         var scene = JsonSerializer.Deserialize<SceneDescriptor>(SimpleSceneJson, YamlParser.JsonOptions);
 
+        scene.Background.Should().Be(new RGBColor(2, 0, 0.4f));
         scene.Materials.Should().ContainKeys("blue", "green_metal");
         scene.Textures.Should().ContainKeys("blue", "greenish");
         scene.Materials["green_metal"].Should().BeOfType<MetalDescriptor>();
@@ -244,4 +246,20 @@ public class JsonTests
         greenMetal!.Fuzzy.Should().Be(0.5f);
         greenMetal.TextureReference.Should().Be("greenish");
     }
+    
+    [Test]
+    public void DiffuseLightParsing()
+    {
+        const string diffLightJson = """
+                                     {
+                                        "$type": "diffuseLight",
+                                        "texture": "blurp"  
+                                     }
+                                     """;
+        var diffLight = JsonSerializer.Deserialize<IMaterialGenerator>(diffLightJson, YamlParser.JsonOptions);
+        diffLight.Should().BeOfType<DiffuseLightDescriptor>();
+        (diffLight as DiffuseLightDescriptor)!.TextureReference.Should().Be("blurp");
+    }
+
+    
 }

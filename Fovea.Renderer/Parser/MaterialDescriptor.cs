@@ -11,6 +11,7 @@ namespace Fovea.Renderer.Parser;
 [JsonDerivedType(typeof(MatteDescriptor), "matte")]
 [JsonDerivedType(typeof(MetalDescriptor), "metal")]
 [JsonDerivedType(typeof(DielectricDescriptor), "glass")]
+[JsonDerivedType(typeof(DiffuseLightDescriptor), "diffuseLight")]
 public interface IMaterialGenerator
 {
     IMaterial Generate(IDictionary<string, ITexture> textures);

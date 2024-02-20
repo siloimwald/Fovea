@@ -149,13 +149,5 @@ public class YamlTests
         mesh.Normalize.Should().BeTrue();
     }
 
-    [Test]
-    public void DiffuseLightParsing()
-    {
-        const string yaml = "!diffLight { texture: 'fooWhite' }";
-        var deserializer = YamlParser.GetDeserializer();
-        var light = deserializer.Deserialize<DiffuseLightDescriptor>(yaml);
-        light.TextureReference.Should().Be("fooWhite");
-    }
 
 }

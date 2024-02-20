@@ -18,23 +18,26 @@ public class Raytracer
     private RGBColor ColorRayBook1(in Ray ray, Scene scene, int depth)
     {
         if (depth <= 0)
-            return new RGBColor(0.0f);
+            return RGBColor.Black;
         
         var hitRecord = new HitRecord();
 
         if (scene.World.Hit(ray, new Interval(1e-3f, float.PositiveInfinity), ref hitRecord))
         {
+
+            var colorFromEmission = hitRecord.Material.Emitted(ray, hitRecord);
+            
             var scatterResult = new ScatterResult();
             if (hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
             {
-                return scatterResult.Attenuation * ColorRayBook1(scatterResult.OutRay, scene, depth - 1);
+                return colorFromEmission + 
+                    scatterResult.Attenuation * ColorRayBook1(scatterResult.OutRay, scene, depth - 1);
             }
-            return new RGBColor();
+
+            return colorFromEmission;
         }
 
-        var unitDir = Vector3.Normalize(ray.Direction);
-        var a = 0.5f * (unitDir.Y + 1.0f);
-        return RGBColor.White * (1.0f - a) + new RGBColor(0.5f, 0.7f, 1.0f) * a;
+        return scene.Background;
     }
     
     private RGBColor ColorRay(Ray ray, Scene scene, int depth)

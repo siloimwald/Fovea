@@ -1,0 +1,74 @@
+﻿{
+  "options": {
+    "numSamples": 100,
+    "imageWidth": 640,
+    "imageHeight": 480,
+    "maxDepth": 50,
+    "outputFile": "output.png"
+  },
+  "background": { "r":0, "g": 0, "b": 0 },
+  "materials": {
+    "perlin": { "$type": "matte", "texture": "perlin" },
+    "diffLight": { "$type": "diffuseLight", "texture": "diffLight" }
+  },
+  "textures": {
+    "perlin": {
+      "$type": "noise",
+      "scale": 4
+    },
+    "diffLight": {
+      "$type": "color",
+      "r": 4, "g": 4, "b": 4
+    }
+  },
+  "primitives": [
+    {
+      "$type": "sphere",
+      "center": { "y": -1000 },
+      "radius": 1000,
+      "material": "perlin"
+    },
+    {
+      "$type": "sphere",
+      "center": {
+        "y": 2
+      },
+      "radius": 2,
+      "material": "perlin"
+    },
+    {
+      "$type": "sphere",
+      "center": { "y": 7 },
+      "radius": 2,
+      "material": "diffLight"
+    },
+    {
+      "$type": "quad",
+      "point": { "x": 3, "y": 1, "z": -2 },
+      "axisU": { "x": 2 },
+      "axisV": { "y": 2 },
+      "material": "diffLight"
+    }
+    
+  ],
+  "camera": {
+    "fieldOfView": 20,
+    "focusDistance": 10,
+    "defocusAngle": 0,
+    "orientation": {
+      "lookFrom": {
+        "x": 26, "y": 3, "z": 6
+      },
+      "lookAt": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "upDirection": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      }
+    }
+  }
+}

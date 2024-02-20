@@ -9,7 +9,6 @@ public interface IMaterial
     /// <returns>true if ScatterResult contents should be used (and are set)</returns>
     bool Scatter(in Ray rayIn,
         HitRecord hitRecord,
-        
         ref ScatterResult scatterResult);
 
     /// <summary>emitted color for this material, if any. defaults to black</summary>
