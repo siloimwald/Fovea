@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json.Serialization;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Mesh;
@@ -26,15 +25,6 @@ public abstract class PrimitiveDescriptorBase
     }
 }
 
-public class MeshProducerBase : PrimitiveDescriptorBase
-{
-    public bool FlipNormals { get; init; }
-
-    /// <summary>
-    /// produce MeshTriangles instead of normal once, required for UV support
-    /// </summary>
-    public bool AsMesh { get; init; }
-}
 
 /// <summary>
 /// quad/parallelogram
@@ -87,43 +77,28 @@ public class SphereDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     }
 }
 
-/// <summary>
-/// take a primitive and flip its normals
-/// </summary>
-public class FlipFaceDescriptor : IPrimitiveGenerator
-{
-    public IPrimitiveGenerator Primitive { get; set; }
-
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
-    {
-        // not great, not terrible
-        var innerPrim = Primitive.Generate(materials, context);
-        return innerPrim.Select(p => new FlipFace(p)).ToList<IPrimitive>();
-    }
-}
 
 public class MeshFileDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 {
     /// <summary>
     /// obj file
     /// </summary>
-    public string FileName { get; set; }
+    public string FileName { get; init; }
 
-    public bool FlipNormals { get; set; }
+    public bool FlipNormals { get; init; }
 
     /// <summary>
     /// transform whole mesh into unit cube
     /// </summary>
-    public bool Normalize { get; set; }
+    public bool Normalize { get; init; }
 
     /// <summary>
     /// generate per vertex normals, i.e. smoothed mesh
     /// </summary>
-    public bool VertexNormals { get; set; }
+    public bool VertexNormals { get; init; }
 
     public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
     {
-        // TODO: pass some context so this is relative to the scene file location, not the cwd
         var mesh = ObjReader.ReadObjFile(Path.Combine(context.SceneFileLocation, FileName), Normalize);
         return mesh.CreateMeshTriangles(GetMaterialOrFail(materials), FlipNormals, VertexNormals);
     }

@@ -193,6 +193,7 @@ public class JsonTests
         const string objFileScene =
             """
             {
+                "$type": "meshFile",
                 "fileName": "foo.obj",
                 "normalize": true,
                 "vertexNormals": true,
@@ -200,8 +201,10 @@ public class JsonTests
             }
             """;
 
-        var mesh = JsonSerializer.Deserialize<MeshFileDescriptor>(objFileScene, JsonParser.JsonOptions);
-        mesh.FileName.Should().Be("foo.obj");
+        var meshPrim = JsonSerializer.Deserialize<IPrimitiveGenerator>(objFileScene, JsonParser.JsonOptions);
+        meshPrim.Should().BeOfType<MeshFileDescriptor>();
+        var mesh = meshPrim as MeshFileDescriptor;
+        mesh!.FileName.Should().Be("foo.obj");
         mesh.VertexNormals.Should().BeTrue();
         mesh.FlipNormals.Should().BeTrue();
         mesh.Normalize.Should().BeTrue();

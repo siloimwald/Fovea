@@ -8,6 +8,7 @@ namespace Fovea.Renderer.Parser;
 [JsonDerivedType(typeof(SphereDescriptor), "sphere")]
 [JsonDerivedType(typeof(QuadDescriptor), "quad")]
 [JsonDerivedType(typeof(BoxDescriptor), "box")]
+[JsonDerivedType(typeof(MeshFileDescriptor), "meshFile")]
 public interface IPrimitiveGenerator
 {
     List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context);

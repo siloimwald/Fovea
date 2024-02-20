@@ -1,0 +1,103 @@
+﻿{
+  "options": {
+    "numSamples": 100,
+    "imageWidth": 640,
+    "imageHeight": 480,
+    "maxDepth": 50,
+    "outputFile": "output.png"
+  },
+  "materials": {
+    "teapot": {
+      "$type": "metal",
+      "texture": "teapot",
+      "fuzzy": 0.3
+    },
+    "ground": {
+      "$type": "matte",
+      "texture": "ground"
+    },
+    "light": {
+      "$type": "diffuseLight",
+      "texture": "light"
+    }
+  },
+  "textures": {
+    "teapot": {
+      "$type": "color",
+      "r": 0.8,
+      "g": 0.85,
+      "b": 0.88
+    },
+    "ground": {
+      "$type": "image",
+      "fileName": "assets/cb.jpg"
+    },
+    "light": {
+      "$type": "color",
+      "r": 6,
+      "g": 6,
+      "b": 6
+    }
+  },
+  "primitives": [
+    {
+      "$type": "meshFile",
+      "fileName": "assets/teapot.obj",
+      "material": "teapot",
+      "normalize": true,
+      "vertexNormals": true
+    },
+    {
+      "$type": "quad",
+      "point": {
+        "x": -3,
+        "y": 5,
+        "z": -3
+      },
+      "axisU": {
+        "z": 6
+      },
+      "axisV": {
+        "z": 6
+      },
+      "material": "light"
+    },
+    {
+      "$type": "quad",
+      "point": {
+        "x": -2,
+        "y": -0.335,
+        "z": -2
+      },
+      "axisU": {
+        "x": 4
+      },
+      "axisV": {
+        "z": 4
+      },
+      "material": "ground"
+    }
+  ],
+  "camera": {
+    "fieldOfView": 40,
+    "focusDistance": 10,
+    "defocusAngle": 0,
+    "orientation": {
+      "lookFrom": {
+        "x": -1,
+        "y": 1.5,
+        "z": -3
+      },
+      "lookAt": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "upDirection": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      }
+    }
+  }
+}
