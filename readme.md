@@ -1,14 +1,20 @@
 
-#### (current state notes)
+#### work in progress
 
 Currently in the process of adapting this to version 4 of the books,
-some things are broken (notably, depth of field). Replaced custom Vec3/Point3 implementations with
-the `System.Numerics` Vector3 variants, leads to some artifacts.
+some things are broken. Current head/top commit is roughly end of second book.
 
-The current state requires .NET 8 and uses C# 12 features. Although the latter very sparsely, for now.
+changes to previous iteration:
 
-- short term goal, wrap things up and be on par with book version 4
-- long term: add (back in again) CSG through signed distance trickery as the next feature
+- Replaced custom Vec3/Point3 implementations with the `System.Numerics` Vector3 variants
+- json scene file format instead of hard coding scenes
+- 3rd party image library instead of self made, easier to support texture files in different formats
+- requires .NET 8 and uses C# 12 features. Although the latter very sparsely, for now.
+
+long term goals
+
+- add (back in again) CSG through signed distance trickery as the next feature
+- experimental tree structures (i.e. swap bvh to kd tree from scene file level)
 
 ### Ray Tracing in One Weekend (and more)
 
@@ -24,19 +30,14 @@ In addition to the books
 - cylinders and disks, because why not
 - slightly more fancy BVH, IIRC based on the (also excellent) [PBR Book](https://pbr-book.org/), using a SAH approach with binning
 - triangle (mesh) support, either as standalone triangles or as a mesh
-- instead of the whole xy/xz/.. rect stuff, i've added sort of factory methods to produce
-quads/boxes from triangles. i.e. the cornell box is actually all triangles except for the sphere.
-- added a yaml scene file parser, does not yet cover all capabilities
+- added a json scene file parser, does not yet cover all capabilities
 
-Compile and run:
-Should probably compile and run fine with any recent dotnet core. (currently NET7)
-The command line executable accepts two parameters:
-- -s samples
-- -w image width (the height is derived from the aspect ratio)
-- the output file is fixed as "output.png"
-- i.e. run something like `dotnet run -p Fovea.CmdLine -c Release -- -s 10 -w 800`
+With dotnet 8 sdk installed, run either one of the contained scene files or look at the parameters
+(which basically override scene settings related to render speed and image sized)
+- `dotnet run --project .\Fovea.CmdLine\ -c Release -- --help`
+- `dotnet run --project .\Fovea.CmdLine\ -c Release -- -s .\scenes\finalSceneBookOne.json` (or any other scene file)
 
-Fancy picture time
+Fancy picture time (still from book 3 iteration)
 
 Teapot mesh with interpolated normals. The whole scene is enclosed with a sphere with a forest
 scene texture used for lighting. 
