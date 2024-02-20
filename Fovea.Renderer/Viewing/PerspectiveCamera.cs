@@ -1,4 +1,3 @@
-using System;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser;
 using Fovea.Renderer.Sampling;

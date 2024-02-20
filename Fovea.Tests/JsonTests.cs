@@ -4,7 +4,7 @@ using System.Text.Json;
 using FluentAssertions;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser;
-using Fovea.Renderer.Parser.Yaml;
+using Fovea.Renderer.Parser.Json;
 using NUnit.Framework;
 
 namespace Fovea.Tests;
@@ -81,11 +81,9 @@ public class JsonTests
                                   }
                                   """;
 
-
-        // var deserializer = YamlParser.GetDeserializer();
         var sphereDescriptor = JsonSerializer
             .Deserialize<SphereDescriptor>(sphereJson,
-                YamlParser.JsonOptions);
+                JsonParser.JsonOptions);
 
         sphereDescriptor.Radius.Should().BeApproximately(42.69f, 1e-4f);
         sphereDescriptor.Center.Should().Be(new Vector3(128, -1, -10.12f));
@@ -102,7 +100,7 @@ public class JsonTests
                                     }
                                     """;
         var movingSphereDescriptor = JsonSerializer.Deserialize<SphereDescriptor>(movingSphere,
-            YamlParser.JsonOptions);
+            JsonParser.JsonOptions);
 
         movingSphereDescriptor.IsMoving.Should().BeTrue();
         movingSphereDescriptor.Center1.Should().Be(new Vector3(2, 4, -2));
@@ -121,7 +119,7 @@ public class JsonTests
             """;
 
         var textureList = JsonSerializer.Deserialize<List<ITextureGenerator>>(textureListJons,
-            YamlParser.JsonOptions);
+            JsonParser.JsonOptions);
 
         textureList.Should().HaveCount(3);
         textureList[0].Should().BeOfType<RGBColor>();
@@ -145,7 +143,7 @@ public class JsonTests
             """;
 
         var materials = JsonSerializer.Deserialize<List<IMaterialGenerator>>(materialList,
-            YamlParser.JsonOptions);
+            JsonParser.JsonOptions);
 
         materials.Should().HaveCount(3);
         (materials[0] as MatteDescriptor)!.TextureReference.Should().Be("yellow");
@@ -167,7 +165,7 @@ public class JsonTests
             }
             """;
 
-        var opts = JsonSerializer.Deserialize<RenderOptions>(renderOpts, YamlParser.JsonOptions);
+        var opts = JsonSerializer.Deserialize<RenderOptions>(renderOpts, JsonParser.JsonOptions);
         opts.NumSamples.Should().Be(500);
         opts.ImageWidth.Should().Be(320);
         opts.ImageHeight.Should().Be(200);
@@ -182,7 +180,7 @@ public class JsonTests
                                    }
                                    """;
 
-        opts = JsonSerializer.Deserialize<RenderOptions>(renderOpts2, YamlParser.JsonOptions);
+        opts = JsonSerializer.Deserialize<RenderOptions>(renderOpts2, JsonParser.JsonOptions);
         opts.NumSamples.Should().Be(500);
         opts.ImageWidth.Should().Be(800);
         opts.ImageHeight.Should().Be(200);
@@ -202,7 +200,7 @@ public class JsonTests
             }
             """;
 
-        var mesh = JsonSerializer.Deserialize<MeshFileDescriptor>(objFileScene, YamlParser.JsonOptions);
+        var mesh = JsonSerializer.Deserialize<MeshFileDescriptor>(objFileScene, JsonParser.JsonOptions);
         mesh.FileName.Should().Be("foo.obj");
         mesh.VertexNormals.Should().BeTrue();
         mesh.FlipNormals.Should().BeTrue();
@@ -223,7 +221,7 @@ public class JsonTests
                                 """;
         
         var quad = 
-            JsonSerializer.Deserialize<IPrimitiveGenerator>(quadJson, YamlParser.JsonOptions);
+            JsonSerializer.Deserialize<IPrimitiveGenerator>(quadJson, JsonParser.JsonOptions);
 
         quad.Should().BeOfType<QuadDescriptor>();
         var qd = quad as QuadDescriptor;
@@ -246,7 +244,7 @@ public class JsonTests
                                 """;
         
         var box = 
-            JsonSerializer.Deserialize<IPrimitiveGenerator>(boxJson, YamlParser.JsonOptions);
+            JsonSerializer.Deserialize<IPrimitiveGenerator>(boxJson, JsonParser.JsonOptions);
 
         box.Should().BeOfType<BoxDescriptor>();
         var qd = box as BoxDescriptor;
@@ -258,7 +256,7 @@ public class JsonTests
     [Test]
     public void SimpleSceneParsing()
     {
-        var scene = JsonSerializer.Deserialize<SceneDescriptor>(SimpleSceneJson, YamlParser.JsonOptions);
+        var scene = JsonSerializer.Deserialize<SceneDescriptor>(SimpleSceneJson, JsonParser.JsonOptions);
 
         scene.Background.Should().Be(new RGBColor(2, 0, 0.4f));
         scene.Materials.Should().ContainKeys("blue", "green_metal");
@@ -278,7 +276,7 @@ public class JsonTests
                                         "texture": "blurp"  
                                      }
                                      """;
-        var diffLight = JsonSerializer.Deserialize<IMaterialGenerator>(diffLightJson, YamlParser.JsonOptions);
+        var diffLight = JsonSerializer.Deserialize<IMaterialGenerator>(diffLightJson, JsonParser.JsonOptions);
         diffLight.Should().BeOfType<DiffuseLightDescriptor>();
         (diffLight as DiffuseLightDescriptor)!.TextureReference.Should().Be("blurp");
     }

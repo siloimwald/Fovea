@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using Fovea.Renderer.Core;
-using Fovea.Renderer.Materials;
 using Fovea.Renderer.Parser;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.Viewing;

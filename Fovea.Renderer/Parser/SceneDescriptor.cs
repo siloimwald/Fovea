@@ -2,15 +2,14 @@
 using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
-using Fovea.Renderer.Parser.Yaml;
-using Fovea.Renderer.Primitives;
+using Fovea.Renderer.Parser.Json;
 using Fovea.Renderer.Viewing;
 using Microsoft.Extensions.Logging;
 
 namespace Fovea.Renderer.Parser;
 
 /// <summary>
-/// scene descriptor is the parent parser node for our yaml scene file
+/// scene descriptor is the parent parser node for our json scene file
 /// and sticks it all together
 /// </summary>
 public class SceneDescriptor

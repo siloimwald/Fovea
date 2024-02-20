@@ -1,4 +1,4 @@
-﻿namespace Fovea.Renderer.Parser.Yaml;
+﻿namespace Fovea.Renderer.Parser.Json;
 
 /// <summary>
 /// global context properties while parsing

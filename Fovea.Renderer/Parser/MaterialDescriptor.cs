@@ -2,7 +2,6 @@
 using System.Text.Json.Serialization;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Materials;
-using YamlDotNet.Serialization;
 
 namespace Fovea.Renderer.Parser;
 
@@ -20,7 +19,7 @@ public interface IMaterialGenerator
 public abstract class MaterialDescriptorBase
 {
     /// <summary>
-    /// string reference to the texture map within the yaml file
+    /// string reference to the texture map within the json file
     /// </summary>
     [JsonPropertyName("texture")]
     public string TextureReference { get; init; } = string.Empty;
@@ -45,7 +44,7 @@ public class MatteDescriptor : MaterialDescriptorBase, IMaterialGenerator
 
 public class DielectricDescriptor : IMaterialGenerator
 {
-    [YamlMember(Alias = "ior")]
+    [JsonPropertyName("ior")]
     public float IOR { get; init; }
 
     public IMaterial Generate(IDictionary<string, ITexture> textures) => new Dielectric(IOR);

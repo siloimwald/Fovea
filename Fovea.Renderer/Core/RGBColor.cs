@@ -1,6 +1,6 @@
 ﻿using Fovea.Renderer.Materials;
 using Fovea.Renderer.Parser;
-using Fovea.Renderer.Parser.Yaml;
+using Fovea.Renderer.Parser.Json;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Fovea.Renderer.Core;

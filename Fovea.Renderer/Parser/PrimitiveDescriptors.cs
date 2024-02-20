@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Mesh;
-using Fovea.Renderer.Parser.Yaml;
+using Fovea.Renderer.Parser.Json;
 using Fovea.Renderer.Primitives;
-using YamlDotNet.Serialization;
 
 namespace Fovea.Renderer.Parser;
 
@@ -71,7 +70,7 @@ public class SphereDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 {
     public Vector3 Center { get; init; }
     public Vector3? Center1 { get; init; }
-    [YamlIgnore]
+    [JsonIgnore]
     public bool IsMoving => Center1.HasValue;
     public float Radius { get; init; }
 

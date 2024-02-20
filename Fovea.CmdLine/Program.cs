@@ -1,7 +1,7 @@
 ﻿using System;
 using CommandLine;
 using Fovea.Renderer.Core;
-using Fovea.Renderer.Parser.Yaml;
+using Fovea.Renderer.Parser.Json;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp.Diagnostics;
 
@@ -20,7 +20,7 @@ internal class Program
 
                 try
                 {
-                    var scene = YamlParser.ParseFile(opts.SceneFile);
+                    var scene = JsonParser.ParseFile(opts.SceneFile);
                     var renderer = new Raytracer();
 
                     // not great, but does the job. allow optional parameters to override
