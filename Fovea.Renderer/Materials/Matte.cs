@@ -11,13 +11,16 @@ public class Matte(ITexture albedo) : IMaterial
         
         scatterResult.IsSpecular = false;
         scatterResult.Attenuation = albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
-        scatterResult.Pdf = new CosinePDF(hitRecord.Normal);
+        // scatterResult.Pdf = new CosinePDF(hitRecord.Normal);
 
+        var outDirection = hitRecord.Normal + Sampler.Instance.RandomOnUnitSphere();
+
+        if (MathF.Abs(outDirection.X) < 1e-6f && MathF.Abs(outDirection.Y) < 1e-6f && MathF.Abs(outDirection.Z) < 1e-6f)
+            outDirection = hitRecord.Normal;
+        
         // book 1 drop in
         scatterResult.OutRay = 
-            new Ray(hitRecord.HitPoint,
-                hitRecord.Normal + Sampler.Instance.RandomCosineDirection(),
-                rayIn.Time);
+            new Ray(hitRecord.HitPoint, outDirection, rayIn.Time);
         
         return true;
     }
