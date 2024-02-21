@@ -5,7 +5,9 @@ using FluentAssertions;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser;
 using Fovea.Renderer.Parser.Json;
+using Fovea.Renderer.VectorMath;
 using NUnit.Framework;
+using SixLabors.ImageSharp.Formats.Png;
 
 namespace Fovea.Tests;
 
@@ -284,5 +286,61 @@ public class JsonTests
         (diffLight as DiffuseLightDescriptor)!.TextureReference.Should().Be("blurp");
     }
 
+    [Test]
+    public void TransformsParsing()
+    {
+        const string transforms = """
+                                  [
+                                  { "$type": "translate", "x": 5, "y": -1 },
+                                  { "$type": "scale", "x": 2, "y": 2, "z": 2 },
+                                  { "$type": "rotate", "axis": "z", "by": 90.0 }
+                                  ]
+                                  """;
+
+        var transformList = JsonSerializer
+            .Deserialize<List<ITransformationDescriptor>>(transforms, JsonParser.JsonOptions);
+
+        transformList.Should().HaveCount(3);
+        transformList[0].Should().BeOfType<TranslationDescriptor>();
+        transformList[1].Should().BeOfType<ScalingDescriptor>();
+        transformList[2].Should().BeOfType<RotationDescriptor>();
+
+        (transformList[0] as TranslationDescriptor)!.X.Should().Be(5);
+        (transformList[1] as ScalingDescriptor)!.Y.Should().Be(2);
+        (transformList[2] as RotationDescriptor)!.Axis.Should().Be(Axis.Z);
+        (transformList[2] as RotationDescriptor)!.Angle.Should().Be(90);
+        
+        var forwardMatrix = transformList.GetTransformation();
+        var p = new Vector3(-2, 1, 0);
+        var pTransformed = Vector3.Transform(p, forwardMatrix);
+        var dist = (new Vector3(0, 6, 0) - pTransformed).LengthSquared();
+        dist.Should().BeLessThan(1e-5f);
+    }
+
+    [Test]
+    public void InstanceParsing()
+    {
+        const string instanceJson = """
+                                    { "$type": "instance",
+                                       "blueprint": "shoe",
+                                       "material": "red",
+                                       "transforms": 
+                                               [
+                                            { "$type": "translate", "x": 5, "y": -1 },
+                                            { "$type": "scale", "x": 2, "y": 2, "z": 2 },
+                                            { "$type": "rotate", "axis": "z", "by": 90.0 }
+                                            ]
+                                    }
+                                    """;
+
+        var instanceDescriptor = JsonSerializer.Deserialize<IPrimitiveGenerator>(
+            instanceJson, JsonParser.JsonOptions);
+
+        instanceDescriptor.Should().BeOfType<InstanceDescriptor>();
+        var instance = instanceDescriptor as InstanceDescriptor;
+        instance!.BlueprintName.Should().Be("shoe");
+        instance!.MaterialReference.Should().Be("red");
+        instance.Transforms.Should().HaveCount(3);
+    }
     
 }

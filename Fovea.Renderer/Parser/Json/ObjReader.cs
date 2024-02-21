@@ -6,7 +6,7 @@ using System.Linq;
 using Fovea.Renderer.Mesh;
 using Fovea.Renderer.VectorMath;
 
-namespace Fovea.Renderer.Parser;
+namespace Fovea.Renderer.Parser.Json;
 
 /// <summary>
 ///     basic wavefront obj reading support. For now this ignores groups, normals and texture coordinates everything

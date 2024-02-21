@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
 using Fovea.Renderer.Parser.Json;
@@ -37,8 +38,11 @@ public class SceneDescriptor
     public List<IPrimitiveGenerator> Primitives { get; init; } = [];
 
     public RGBColor Background { get; init; } = new(0.7f, 0.8f, 1f);
-    
-    // public List<IPrimitiveGenerator> Lights { get; init; } = [];
+
+    /// <summary>
+    /// instance-able objects, instances provide transformation and different material
+    /// </summary>
+    public Dictionary<string, IPrimitiveGenerator> Blueprints { get; init; } = new();
     
     public CameraDescriptor Camera { get; init; }
 
@@ -55,20 +59,25 @@ public class SceneDescriptor
             ks => ks.Key,
             vs => vs.Value.Generate(textures));
 
+        // slight hack so blueprints/instancing fits into the existing interface
+        // needs more work to actually instance whole meshes (idea: whole mesh is one bvh on its own...)
+        context.Blueprints = new Dictionary<string, IPrimitive>();
+        foreach (var (key, val) in Blueprints)
+        {
+            var prims = val.Generate(null, context);
+            if (prims.Count > 1)
+            {
+                Log.LogWarning("blueprints generating more than one primitive not supported yet");
+            }
+
+            context.Blueprints[key] = prims[0];
+        }
+        
         var primList = Primitives.Aggregate(new List<IPrimitive>(), (acc, prim) =>
             {
                 acc.AddRange(prim.Generate(materials, context));
                 return acc;
             });
-
-        // var lightSources = Lights.Aggregate(new List<IPrimitive>(), (acc, prim) =>
-        // {
-        //     acc.AddRange(prim.Generate(materials, context));
-        //     return acc;
-        // });
-        
-        // light sources also need to show up as regular primitives
-        // primList.AddRange(lightSources);
 
         if (Options == null)
         {

@@ -15,6 +15,10 @@ public abstract class PrimitiveDescriptorBase
 
     protected IMaterial GetMaterialOrFail(IDictionary<string, IMaterial> materials)
     {
+        // blueprint
+        if (materials == null)
+            return null;
+        
         if (materials.TryGetValue(MaterialReference, out var material))
         {
             return material;
@@ -103,3 +107,4 @@ public class MeshFileDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
         return mesh.CreateMeshTriangles(GetMaterialOrFail(materials), FlipNormals, VertexNormals);
     }
 }
+

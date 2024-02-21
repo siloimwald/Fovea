@@ -6,87 +6,176 @@
     "maxDepth": 50,
     "outputFile": "output.png"
   },
-  "background": { "x": 0, "y": 0, "z": 0 },
+  "background": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
   "textures": {
     "red": {
       "$type": "color",
-      "r": 0.65, "g": 0.05, "b": 0.05
-    },   
+      "r": 0.65,
+      "g": 0.05,
+      "b": 0.05
+    },
     "white": {
       "$type": "color",
-      "r": 0.73, "g": 0.73, "b": 0.73
-    },   
+      "r": 0.73,
+      "g": 0.73,
+      "b": 0.73
+    },
     "green": {
       "$type": "color",
-      "r": 0.12, "g": 0.45, "b": 0.15
-    },   
+      "r": 0.12,
+      "g": 0.45,
+      "b": 0.15
+    },
     "light": {
       "$type": "color",
-      "r": 15, "g": 15, "b": 15
+      "r": 15,
+      "g": 15,
+      "b": 15
     }
   },
   "materials": {
-    "green": {"$type":"matte", "texture": "green"},
-    "red": {"$type":"matte", "texture": "red"},
-    "white": {"$type":"matte", "texture": "white"},
-    "light": {"$type":"diffuseLight", "texture": "light"}
+    "green": {
+      "$type": "matte",
+      "texture": "green"
+    },
+    "red": {
+      "$type": "matte",
+      "texture": "red"
+    },
+    "white": {
+      "$type": "matte",
+      "texture": "white"
+    },
+    "light": {
+      "$type": "diffuseLight",
+      "texture": "light"
+    }
   },
   "primitives": [
     {
-        "$type": "box",
-      "pointA": { "x": 130, "z": 65 },
-      "pointB": { "x": 295, "y": 165, "z": 230 },
-      "material": "white"
+      "$type": "instance",
+      "material": "white",
+      "blueprint": "leftBox",
+      "transforms": [
+        { "$type": "rotate", "by": 15, "axis": "Y" },
+        { "$type": "translate", "x": 265, "z": 295 }
+      ]
     },
     {
-        "$type": "box",
-      "pointA": { "x": 265, "z": 295 },
-      "pointB": { "x": 430, "y": 330, "z": 460 },
-      "material": "white"
+      "$type": "instance",
+      "material": "white",
+      "blueprint": "rightBox",
+      "transforms": [
+        { "$type": "rotate", "by": -18, "axis": "Y" },
+        { "$type": "translate", "x": 130, "z": 65 }
+      ]
     },
     {
       "$type": "quad",
-      "point": { "x": 555 }, "axisU": { "y": 555 }, "axisV": { "z": 555 },
+      "point": {
+        "x": 555
+      },
+      "axisU": {
+        "y": 555
+      },
+      "axisV": {
+        "z": 555
+      },
       "material": "green"
     },
     {
       "$type": "quad",
-      "axisU": { "y": 555 }, "axisV": { "z": 555 },
+      "axisU": {
+        "y": 555
+      },
+      "axisV": {
+        "z": 555
+      },
       "material": "red"
     },
     {
       "$type": "quad",
-      "point": {"x": 343, "y": 554, "z": 332 },
-      "axisU": { "x": -130 }, "axisV": { "z": -105 },
+      "point": {
+        "x": 343,
+        "y": 554,
+        "z": 332
+      },
+      "axisU": {
+        "x": -130
+      },
+      "axisV": {
+        "z": -105
+      },
       "material": "light"
     },
-
     {
       "$type": "quad",
-      "axisU": { "x": 555 }, "axisV": { "z": 555 },
+      "axisU": {
+        "x": 555
+      },
+      "axisV": {
+        "z": 555
+      },
       "material": "white"
     },
     {
       "$type": "quad",
-      "point": { "x": 555, "y": 555, "z": 555 },
-      "axisU": { "x": -555 }, "axisV": { "z": -555 },
+      "point": {
+        "x": 555,
+        "y": 555,
+        "z": 555
+      },
+      "axisU": {
+        "x": -555
+      },
+      "axisV": {
+        "z": -555
+      },
       "material": "white"
     },
     {
       "$type": "quad",
-     "point": { "z": 555 },
-      "axisU": { "x": 555 }, "axisV": { "y": 555 },
+      "point": {
+        "z": 555
+      },
+      "axisU": {
+        "x": 555
+      },
+      "axisV": {
+        "y": 555
+      },
       "material": "white"
     }
-    
-    
-    
   ],
+  "blueprints": {
+    "leftBox": {
+      "$type": "box",
+      "pointB": {
+        "x": 165,
+        "y": 330,
+        "z": 165
+      }
+    },
+    "rightBox": {
+      "$type": "box",
+      "pointB": {
+        "x": 165,
+        "y": 165,
+        "z": 165
+      }
+    }
+  },
   "camera": {
     "fieldOfView": 40,
     "orientation": {
       "lookFrom": {
-        "x": 278, "y": 278, "z": -800
+        "x": 278,
+        "y": 278,
+        "z": -800
       },
       "lookAt": {
         "x": 278,
@@ -100,6 +189,4 @@
       }
     }
   }
-
-
 }

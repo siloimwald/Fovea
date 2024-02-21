@@ -9,41 +9,41 @@ namespace Fovea.Renderer.Primitives;
 /// </summary>
 public class Instance : IPrimitive
 {
-    private readonly IPrimitive _instance;
+    private readonly IPrimitive _blueprint;
+    private readonly IMaterial _material;
     private readonly Matrix4x4 _inverseTransform;
     private readonly Matrix4x4 _transform;
+    private readonly Matrix4x4 _normalTransform;
 
-    public Instance(IPrimitive instance, Matrix4x4 transform, Matrix4x4 inverseTransform)
+    public Instance(IPrimitive blueprint, 
+                    Matrix4x4 transform, 
+                    Matrix4x4 inverseTransform,
+                    IMaterial material)
     {
-        _instance = instance;
+        _blueprint = blueprint;
         _transform = transform;
         _inverseTransform = inverseTransform;
-    }
-
-    public Instance(IPrimitive instance, Transform transformation)
-            
-    {
-        var (forward, inverse, _) = transformation.Build();
-        _instance = instance;
-        _transform = forward;
-        _inverseTransform = inverse;
+        _normalTransform = Matrix4x4.Transpose(inverseTransform);
+        _material = material;
     }
 
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
     {
             
         var inverseOrg = Vector3.Transform(ray.Origin, _inverseTransform);
-        var inverseDir = Vector3.Transform(ray.Direction, _inverseTransform);
-            
+        // judging from the code, TransformNormal should be named transform direction... i guess
+        var inverseDir = Vector3.TransformNormal(ray.Direction, _inverseTransform);
+        
         var transformedRay = new Ray(inverseOrg, inverseDir);
             
-        if (!_instance.Hit(transformedRay, rayInterval, ref hitRecord))
+        if (!_blueprint.Hit(transformedRay, rayInterval, ref hitRecord))
             return false;
 
         hitRecord.HitPoint = Vector3.Transform(hitRecord.HitPoint, _transform);
+        hitRecord.Material = _material;
         // normal needs the transposed of the inverse
-        // if a scaling is involved we need to re-normalize
-        var n = Vector3.Normalize(Vector3.TransformNormal(hitRecord.Normal, _inverseTransform));
+        // if a scaling is involved we need to re-normalize?
+        var n = Vector3.Normalize(Vector3.TransformNormal(hitRecord.Normal, _normalTransform));
         // use untransformed ray here
         hitRecord.SetFaceNormal(ray, n);
         return true;
@@ -51,6 +51,6 @@ public class Instance : IPrimitive
 
     public BoundingBox GetBoundingBox(float t0, float t1)
     {
-        return _instance.GetBoundingBox(t0, t1).Transform(_transform);
+        return _blueprint.GetBoundingBox(t0, t1).Transform(_transform);
     }
 }
