@@ -13,19 +13,11 @@ public abstract class PrimitiveDescriptorBase
     [JsonPropertyName("material")]
     public string MaterialReference { get; init; } = string.Empty;
 
-    protected IMaterial GetMaterialOrFail(IDictionary<string, IMaterial> materials)
+    protected IMaterial GetMaterial(Dictionary<string, IMaterial> materials)
     {
-        // blueprint
-        if (materials == null)
-            return null;
-        
-        if (materials.TryGetValue(MaterialReference, out var material))
-        {
-            return material;
-        }
-
-        throw new SceneReferenceNotFoundException(
-            $"{this.GetType().Name} did not find referenced material {MaterialReference}");
+        // blueprint has material dictionary null
+        return materials?.GetValueOrDefault(MaterialReference, null);
+        // not finding the material is fine, i.e. for the constant medium boundary
     }
 }
 
@@ -39,9 +31,9 @@ public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public Vector3 AxisU { get; init; }
     public Vector3 AxisV { get; init; }
 
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
+    public List<IPrimitive> Generate(ParserContext context)
     {
-        var material = GetMaterialOrFail(materials);
+        var material = GetMaterial(context.Materials);
         return [new Quad(Point, AxisU, AxisV, material)];
     }
 }
@@ -51,9 +43,9 @@ public class BoxDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public Vector3 PointA { get; init; }
     public Vector3 PointB { get; init; }
     
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
+    public List<IPrimitive> Generate(ParserContext context)
     {
-        return [BoxProducer.MakeBox(PointA, PointB, GetMaterialOrFail(materials))];
+        return [BoxProducer.MakeBox(PointA, PointB, GetMaterial(context.Materials))];
     }
 }
 
@@ -68,9 +60,9 @@ public class SphereDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public bool IsMoving => Center1.HasValue;
     public float Radius { get; init; }
 
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
+    public List<IPrimitive> Generate(ParserContext context)
     {
-        var material = GetMaterialOrFail(materials);
+        var material = GetMaterial(context.Materials);
         // this is where C# 12 comes in handy ;)
         return
         [
@@ -101,10 +93,22 @@ public class MeshFileDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     /// </summary>
     public bool VertexNormals { get; init; }
 
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
+    public List<IPrimitive> Generate(ParserContext context)
     {
         var mesh = ObjReader.ReadObjFile(Path.Combine(context.SceneFileLocation, FileName), Normalize);
-        return mesh.CreateMeshTriangles(GetMaterialOrFail(materials), FlipNormals, VertexNormals);
+        return mesh.CreateMeshTriangles(GetMaterial(context.Materials), FlipNormals, VertexNormals);
     }
 }
 
+public class ConstantMediumDescriptor : MaterialDescriptorBase, IPrimitiveGenerator
+{
+    public float Density { get; init; }
+    public IPrimitiveGenerator Boundary { get; init; }
+    
+    public List<IPrimitive> Generate(ParserContext context)
+    {
+        var boundary = Boundary.Generate(context);
+        // TODO: fix this
+        return [new ConstantMedium(boundary[0], Density, GetTextureOrFail(context.Textures))];
+    }
+}

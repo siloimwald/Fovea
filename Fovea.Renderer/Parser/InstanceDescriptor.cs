@@ -74,7 +74,10 @@ public class InstanceDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public List<ITransformationDescriptor> Transforms { get; init; } = [];
     [JsonPropertyName("blueprint")]
     public string BlueprintName { get; init; } = string.Empty;
-    public List<IPrimitive> Generate(IDictionary<string, IMaterial> materials, ParserContext context)
+    
+    public bool UseParentMaterial { get; set; }
+    
+    public List<IPrimitive> Generate(ParserContext context)
     {
         var forwardMatrix = Transforms.GetTransformation();
         Matrix4x4.Invert(forwardMatrix, out var inverse);
@@ -83,6 +86,7 @@ public class InstanceDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
             throw new SceneReferenceNotFoundException($"missing referenced blueprint {BlueprintName}");
         }
 
-        return [new Instance(blueprint, forwardMatrix, inverse, GetMaterialOrFail(materials))];
+        return [new Instance(blueprint, forwardMatrix, inverse,
+            GetMaterial(context.Materials), UseParentMaterial)];
     }
 }

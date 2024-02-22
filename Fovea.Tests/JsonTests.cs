@@ -7,7 +7,6 @@ using Fovea.Renderer.Parser;
 using Fovea.Renderer.Parser.Json;
 using Fovea.Renderer.VectorMath;
 using NUnit.Framework;
-using SixLabors.ImageSharp.Formats.Png;
 
 namespace Fovea.Tests;
 
@@ -324,6 +323,7 @@ public class JsonTests
                                     { "$type": "instance",
                                        "blueprint": "shoe",
                                        "material": "red",
+                                       "useParentMaterial": true,
                                        "transforms": 
                                                [
                                             { "$type": "translate", "x": 5, "y": -1 },
@@ -340,7 +340,30 @@ public class JsonTests
         var instance = instanceDescriptor as InstanceDescriptor;
         instance!.BlueprintName.Should().Be("shoe");
         instance!.MaterialReference.Should().Be("red");
+        instance!.UseParentMaterial.Should().BeTrue();
         instance.Transforms.Should().HaveCount(3);
+    }
+
+    [Test]
+    public void ConstantMediumParsing()
+    {
+        const string mediumJson = """
+                                  {
+                                    "$type": "constantMedium",
+                                    "texture": "foo",
+                                    "boundary": { "$type": "sphere", "radius": 2, "center": { "x": -2 } },
+                                    "density": 0.2
+                                  }
+                                  """;
+
+        var medium = JsonSerializer.Deserialize<IPrimitiveGenerator>(mediumJson,
+            JsonParser.JsonOptions);
+
+        medium.Should().BeOfType<ConstantMediumDescriptor>();
+        var mediumDescriptor = medium as ConstantMediumDescriptor;
+        mediumDescriptor!.TextureReference.Should().Be("foo");
+        mediumDescriptor.Boundary.Should().BeOfType<SphereDescriptor>();
+        mediumDescriptor.Density.Should().Be(0.2f);
     }
     
 }

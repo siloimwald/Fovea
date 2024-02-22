@@ -1,0 +1,214 @@
+﻿{
+  "options": {
+    "numSamples": 100,
+    "imageWidth": 640,
+    "imageHeight": 480,
+    "maxDepth": 50,
+    "outputFile": "output.png"
+  },
+  "background": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "textures": {
+    "red": {
+      "$type": "color",
+      "r": 0.65,
+      "g": 0.05,
+      "b": 0.05
+    },
+    "white": {
+      "$type": "color",
+      "r": 0.73,
+      "g": 0.73,
+      "b": 0.73
+    },
+    "whiteSmoke": {
+      "$type": "color",
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "blackSmoke": {
+      "$type": "color",
+      "r": 0,
+      "g": 0,
+      "b": 0
+    },
+    "green": {
+      "$type": "color",
+      "r": 0.12,
+      "g": 0.45,
+      "b": 0.15
+    },
+    "light": {
+      "$type": "color",
+      "r": 7,
+      "g": 7,
+      "b": 7
+    }
+  },
+  "materials": {
+    "green": {
+      "$type": "matte",
+      "texture": "green"
+    },
+    "red": {
+      "$type": "matte",
+      "texture": "red"
+    },
+    "white": {
+      "$type": "matte",
+      "texture": "white"
+    },
+    "light": {
+      "$type": "diffuseLight",
+      "texture": "light"
+    }
+  },
+  "primitives": [
+    {
+      "$type": "instance",
+      "blueprint": "leftBox",
+      "useParentMaterial": true,
+      "transforms": [
+        { "$type": "rotate", "by": 15, "axis": "Y" },
+        { "$type": "translate", "x": 265, "z": 295 }
+      ]
+    },
+    {
+      "$type": "instance",
+      "blueprint": "rightBox",
+      "useParentMaterial": true,
+      "transforms": [
+        { "$type": "rotate", "by": -18, "axis": "Y" },
+        { "$type": "translate", "x": 130, "z": 65 }
+      ]
+    },
+    {
+      "$type": "quad",
+      "point": {
+        "x": 555
+      },
+      "axisU": {
+        "y": 555
+      },
+      "axisV": {
+        "z": 555
+      },
+      "material": "green"
+    },
+    {
+      "$type": "quad",
+      "axisU": {
+        "y": 555
+      },
+      "axisV": {
+        "z": 555
+      },
+      "material": "red"
+    },
+    {
+      "$type": "quad",
+      "point": {
+        "x": 113,
+        "y": 554,
+        "z": 127
+      },
+      "axisU": {
+        "x": 330
+      },
+      "axisV": {
+        "z": 305
+      },
+      "material": "light"
+    },
+    {
+      "$type": "quad",
+      "axisU": {
+        "x": 555
+      },
+      "axisV": {
+        "z": 555
+      },
+      "material": "white"
+    },
+    {
+      "$type": "quad",
+      "point": {
+        "x": 555,
+        "y": 555,
+        "z": 555
+      },
+      "axisU": {
+        "x": -555
+      },
+      "axisV": {
+        "z": -555
+      },
+      "material": "white"
+    },
+    {
+      "$type": "quad",
+      "point": {
+        "z": 555
+      },
+      "axisU": {
+        "x": 555
+      },
+      "axisV": {
+        "y": 555
+      },
+      "material": "white"
+    }
+  ],
+  "blueprints": {
+    "leftBox": {
+      "$type": "constantMedium",
+      "density": 0.01,
+      "texture": "blackSmoke",
+      "boundary": {
+        "$type": "box",
+        "pointB": {
+          "x": 165,
+          "y": 330,
+          "z": 165
+        }
+      }
+    },
+    "rightBox": {
+      "$type": "constantMedium",
+      "density": 0.01,
+      "texture": "whiteSmoke",
+      "boundary": {
+        "$type": "box",
+        "pointB": {
+          "x": 165,
+          "y": 165,
+          "z": 165
+        }
+      }
+    }
+  },
+  "camera": {
+    "fieldOfView": 40,
+    "orientation": {
+      "lookFrom": {
+        "x": 278,
+        "y": 278,
+        "z": -800
+      },
+      "lookAt": {
+        "x": 278,
+        "y": 278,
+        "z": 0
+      },
+      "upDirection": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      }
+    }
+  }
+}

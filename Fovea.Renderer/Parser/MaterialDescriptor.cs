@@ -32,7 +32,7 @@ public abstract class MaterialDescriptorBase
         }
 
         throw new SceneReferenceNotFoundException(
-            $"{this.GetType().Name} did not find referenced material {TextureReference}");
+            $"{this.GetType().Name} did not find referenced texture {TextureReference}");
     }
 }
 

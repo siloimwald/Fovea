@@ -22,8 +22,8 @@ public class ConstantMedium(IPrimitive boundary, float density, ITexture color) 
         if (!boundary.Hit(ray, Interval.HalfOpenWithOffset() with { Min = hr1.RayT + 0.001f}, ref hr2))
             return false;
 
-        hr1.RayT = Math.Max(hr1.RayT, rayInterval.Min);
-        hr2.RayT = Math.Min(hr2.RayT, rayInterval.Max);
+        hr1.RayT = MathF.Max(hr1.RayT, rayInterval.Min);
+        hr2.RayT = MathF.Min(hr2.RayT, rayInterval.Max);
 
         if (hr1.RayT >= hr2.RayT)
             return false;

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Materials;
 
 namespace Fovea.Renderer.Parser.Json;
 
 /// <summary>
-/// global context properties while parsing
+/// global context properties while parsing, provides access to global scene data while creating
+/// primitives, materials and the like
 /// </summary>
 public class ParserContext
 {
@@ -17,4 +19,7 @@ public class ParserContext
     /// generated blueprints with null material
     /// </summary>
     public Dictionary<string, IPrimitive> Blueprints { get; set; }
+    
+    public Dictionary<string, IMaterial> Materials { get; set; }
+    public Dictionary<string, ITexture> Textures { get; set; }
 }

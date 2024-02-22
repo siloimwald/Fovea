@@ -59,12 +59,17 @@ public class SceneDescriptor
             ks => ks.Key,
             vs => vs.Value.Generate(textures));
 
+        // pass materials and texture into context
+        // note that blueprints might use these as well
+        context.Materials = materials;
+        context.Textures = textures;
+        
         // slight hack so blueprints/instancing fits into the existing interface
         // needs more work to actually instance whole meshes (idea: whole mesh is one bvh on its own...)
         context.Blueprints = new Dictionary<string, IPrimitive>();
         foreach (var (key, val) in Blueprints)
         {
-            var prims = val.Generate(null, context);
+            var prims = val.Generate(context);
             if (prims.Count > 1)
             {
                 Log.LogWarning("blueprints generating more than one primitive not supported yet");
@@ -73,9 +78,12 @@ public class SceneDescriptor
             context.Blueprints[key] = prims[0];
         }
         
+ 
+        
+        // generate all the primitives
         var primList = Primitives.Aggregate(new List<IPrimitive>(), (acc, prim) =>
             {
-                acc.AddRange(prim.Generate(materials, context));
+                acc.AddRange(prim.Generate(context));
                 return acc;
             });
 
