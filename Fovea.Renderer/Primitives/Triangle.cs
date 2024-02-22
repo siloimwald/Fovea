@@ -37,7 +37,7 @@ public class Triangle : IPrimitive
         return true; // hit at t0
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
         var vb = _vertexA + _edgeAB;
         var vc = _vertexA + _edgeAC;

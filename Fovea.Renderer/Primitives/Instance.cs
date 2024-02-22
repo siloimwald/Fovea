@@ -57,8 +57,8 @@ public class Instance : IPrimitive
         return true;
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
-        return _blueprint.GetBoundingBox(t0, t1).Transform(_transform);
+        return _blueprint.GetBoundingBox().Transform(_transform);
     }
 }

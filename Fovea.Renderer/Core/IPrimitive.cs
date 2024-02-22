@@ -12,10 +12,8 @@ public interface IPrimitive
     bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord);
 
     /// <summary>retrieve bounding box for primitive</summary>
-    /// <param name="t0">ray time parameter lower bound</param>
-    /// <param name="t1">ray time parameter upper bound</param>
     /// <returns></returns>
-    BoundingBox GetBoundingBox(float t0, float t1);
+    BoundingBox GetBoundingBox();
 
     /// <summary>pdf evaluated for the given direction</summary>
     /// <param name="origin">point looking from</param>

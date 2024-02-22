@@ -46,7 +46,7 @@ public class MeshTriangle(TriangleMesh mesh, int faceIndex) : IPrimitive
         return true; // hit at t0
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
         var (f0, f1, f2) = mesh.Faces[faceIndex];
         var (va, vb, vc) = (mesh.Vertices[f0], mesh.Vertices[f1], mesh.Vertices[f2]);

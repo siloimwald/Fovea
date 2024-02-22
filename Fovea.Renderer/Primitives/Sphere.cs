@@ -45,11 +45,18 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
         return true;
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
-        return _isMoving
-            ? BoundingBox.Union(SphereBox(CenterAtTime(t0), radius), SphereBox(CenterAtTime(t1), radius))
-            : SphereBox(center, radius);
+        var rVec = new Vector3(radius, radius, radius);
+        if (_isMoving)
+        {
+            return BoundingBox.Union(
+                new BoundingBox(center - rVec, center + rVec),
+                new BoundingBox(_centerVec + center - rVec, _centerVec + center - rVec));
+        }
+
+        return new BoundingBox(center - rVec, center + rVec);
+
     }
 
     public float PdfValue(Vector3 origin, Vector3 direction)
@@ -105,11 +112,6 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
         return true;
     }
 
-    public static BoundingBox SphereBox(Vector3 center, float radius)
-    {
-        return new(center - new Vector3(radius, radius, radius),
-            center + new Vector3(radius, radius, radius));
-    }
 
     /// <summary>
     /// linearly interpolate sphere center depending on time

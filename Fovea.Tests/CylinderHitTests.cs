@@ -127,7 +127,7 @@ public class CylinderHitTests
     public void TestCylinderBox()
     {
         var cyl = new Cylinder(-5, 1, 5, null);
-        var box = cyl.GetBoundingBox(0, 1);
+        var box = cyl.GetBoundingBox();
         box.GetExtent().Should().Be(new Vector3(10, 10, 6));
         box.GetCentroid().Should().Be(new Vector3(0, 0, -2));
     }

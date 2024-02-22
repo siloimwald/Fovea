@@ -11,7 +11,7 @@ public class BoxTests
     public void TestSphereBox()
     {
         var s = new Sphere(new Vector3(1, 1, 1), 2, null);
-        var bBox = s.GetBoundingBox(0, 1);
+        var bBox = s.GetBoundingBox();
         bBox.GetArea().Should().Be(6 * 4 * 4);
         bBox.GetCentroid().Should().Be(Vector3.One);
     }

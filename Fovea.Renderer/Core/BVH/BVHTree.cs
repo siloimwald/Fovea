@@ -34,9 +34,7 @@ public class BVHTree : IPrimitive
 
     /// <summary>build a bvh structure for the given primitives using 'sah binning' as a splitting strategy</summary>
     /// <param name="primitives">list of scene primitives</param>
-    /// <param name="time0">ray time parameter lower bound</param>
-    /// <param name="time1">ray time parameter upper bound</param>
-    public BVHTree(List<IPrimitive> primitives, float time0 = 0, float time1 = 1)
+    public BVHTree(List<IPrimitive> primitives)
     {
         _nodes = new BVHNode[2 * primitives.Count - 1];
         var primitiveBoxes = new List<BoundingBox>(primitives.Count);
@@ -46,7 +44,7 @@ public class BVHTree : IPrimitive
         // precompute bounding boxes for all primitives and compute scene bounds along the way
         foreach (var t in primitives)
         {
-            var primBox = t.GetBoundingBox(time0, time1);
+            var primBox = t.GetBoundingBox();
             primitiveBoxes.Add(primBox);
             sceneBounds = BoundingBox.Union(sceneBounds, primBox);
         }
@@ -132,7 +130,7 @@ public class BVHTree : IPrimitive
         return hit;
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
         return _nodes[0]?.Box; // root node box
     }

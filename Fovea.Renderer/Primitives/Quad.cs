@@ -67,7 +67,7 @@ public class Quad : IPrimitive
         return true;
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
         // the point opposite to point
         var q2 = _point + _uDirection + _vDirection;

@@ -26,11 +26,11 @@ public class PrimitiveList(List<IPrimitive> prims) : IPrimitive
     }
 
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
         return
             prims
-                .Select(p => p.GetBoundingBox(t0, t1))
+                .Select(p => p.GetBoundingBox())
                 .Aggregate(BoundingBox.CreateMaxEmptyBox(), BoundingBox.Union);
     }
 

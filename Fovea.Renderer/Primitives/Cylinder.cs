@@ -52,7 +52,7 @@ public class Cylinder(float zMin, float zMax, float radius, IMaterial material)
         return true;
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
         var min = new Vector3(-radius, -radius, _zMin);
         var max = new Vector3(radius, radius, _zMax);

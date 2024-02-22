@@ -47,8 +47,5 @@ public class ConstantMedium(IPrimitive boundary, float density, ITexture color) 
         return true;
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
-    {
-        return boundary.GetBoundingBox(t0, t1);
-    }
+    public BoundingBox GetBoundingBox() => boundary.GetBoundingBox();
 }

@@ -37,7 +37,7 @@ public class Disk(Vector3 center, Vector3 normal, float radius, IMaterial materi
         return true;
     }
 
-    public BoundingBox GetBoundingBox(float t0, float t1)
+    public BoundingBox GetBoundingBox()
     {
         return new(center - new Vector3(radius, radius, radius),
             center + new Vector3(radius, radius, radius));

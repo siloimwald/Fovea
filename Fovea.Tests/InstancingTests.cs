@@ -47,7 +47,7 @@ public class InstancingTests
             Vector3.UnitZ
         );
         hr = new HitRecord(); // reset stuff
-        var boxFoo = instance.GetBoundingBox(0, 1);
+        var boxFoo = instance.GetBoundingBox();
         var hasHit = instance.Hit(ray, new Interval(1e-3f, float.PositiveInfinity), ref hr);
         
         hasHit.Should().BeTrue();
