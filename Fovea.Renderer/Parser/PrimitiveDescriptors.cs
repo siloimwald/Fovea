@@ -5,19 +5,27 @@ using Fovea.Renderer.Core;
 using Fovea.Renderer.Mesh;
 using Fovea.Renderer.Parser.Json;
 using Fovea.Renderer.Primitives;
+using Microsoft.Extensions.Logging;
 
 namespace Fovea.Renderer.Parser;
 
 public abstract class PrimitiveDescriptorBase
 {
+    private static readonly ILogger<PrimitiveDescriptorBase> Log = Logging.GetLogger<PrimitiveDescriptorBase>();
+    
     [JsonPropertyName("material")]
     public string MaterialReference { get; init; } = string.Empty;
 
-    protected IMaterial GetMaterial(Dictionary<string, IMaterial> materials)
+    protected IMaterial GetMaterial(IDictionary<string, IMaterial> materials)
     {
-        // blueprint has material dictionary null
-        return materials?.GetValueOrDefault(MaterialReference, null);
-        // not finding the material is fine, i.e. for the constant medium boundary
+        var foundMaterial = materials.TryGetValue(MaterialReference, out var material);
+        if (foundMaterial)
+            return material;
+        
+        Log.LogWarning("material ({Reference}) not found for {Descriptor}",
+            MaterialReference, GetType().Name);
+        // or some pink drop in?
+        return null;
     }
 }
 
@@ -27,9 +35,9 @@ public abstract class PrimitiveDescriptorBase
 /// </summary>
 public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 {
-    public Vector3 Point { get; init; }
-    public Vector3 AxisU { get; init; }
-    public Vector3 AxisV { get; init; }
+    public required Vector3 Point { get; init; }
+    public required Vector3 AxisU { get; init; }
+    public required Vector3 AxisV { get; init; }
 
     public List<IPrimitive> Generate(ParserContext context)
     {
@@ -40,8 +48,8 @@ public class QuadDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 
 public class BoxDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 {
-    public Vector3 PointA { get; init; }
-    public Vector3 PointB { get; init; }
+    public required Vector3 PointA { get; init; }
+    public required Vector3 PointB { get; init; }
     
     public List<IPrimitive> Generate(ParserContext context)
     {
@@ -54,11 +62,11 @@ public class BoxDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 /// </summary>
 public class SphereDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
 {
-    public Vector3 Center { get; init; }
+    public required Vector3 Center { get; init; }
     public Vector3? Center1 { get; init; }
     [JsonIgnore]
     public bool IsMoving => Center1.HasValue;
-    public float Radius { get; init; }
+    public required float Radius { get; init; }
 
     public List<IPrimitive> Generate(ParserContext context)
     {

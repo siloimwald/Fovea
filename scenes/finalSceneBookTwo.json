@@ -1,0 +1,5847 @@
+{
+  "options": {
+    "numSamples": 200,
+    "imageWidth": 800,
+    "imageHeight": 600,
+    "maxDepth": 50,
+    "outputFile": "output.png"
+  },
+  "textures": {
+    "ground": {
+      "$type": "color",
+      "r": 0.48,
+      "g": 0.83,
+      "b": 0.53
+    },
+    "diffLight": {
+      "$type": "color",
+      "r": 7,
+      "g": 7,
+      "b": 7
+    },
+    "moving": {
+      "$type": "color",
+      "r": 0.7,
+      "g": 0.3,
+      "b": 0.1
+    },
+    "earth": {
+      "$type": "image",
+      "fileName": "assets/earth.jpg"
+    },
+    "metal": {
+      "$type": "color",
+      "r": 0.8,
+      "g": 0.8,
+      "b": 0.8
+    },
+    "cluster": {
+      "$type": "color",
+      "r": 0.73,
+      "g": 0.73,
+      "b": 0.73
+    },
+    "noise": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "smokeA": {
+      "$type": "color",
+      "r": 0.2,
+      "g": 0.4,
+      "b": 0.9
+    },
+    "white": {
+      "$type": "color",
+      "r": 1,
+      "g": 1,
+      "b": 1
+    }
+  },
+  "materials": {
+    "ground": {
+      "$type": "matte",
+      "texture": "ground"
+    },
+    "diffLight": {
+      "$type": "diffuseLight",
+      "texture": "diffLight"
+    },
+    "glass": {
+      "$type": "glass",
+      "ior": 1.5
+    },
+    "earth": {
+      "$type": "matte",
+      "texture": "earth"
+    },
+    "metal": {
+      "$type": "metal",
+      "fuzzy": 1,
+      "texture": "metal"
+    },
+    "moving": {
+      "$type": "matte",
+      "texture": "moving"
+    },
+    "cluster": {
+      "$type": "matte",
+      "texture": "cluster"
+    },
+    "noise": {
+      "$type": "matte",
+      "texture": "noise"
+    }
+  },
+  "primitives": [
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -900,
+        "y": 57.966583,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -900,
+        "y": 84.00741,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -900,
+        "y": 96.193214,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -900,
+        "y": 7.597066,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -900,
+        "y": 75.97985,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -900,
+        "y": 31.299896,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -900,
+        "y": 76.74142,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -900,
+        "y": 61.694206,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -900,
+        "y": 6.4113746,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -900,
+        "y": 74.33067,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -900,
+        "y": 20.430054,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -900,
+        "y": 3.7806818,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -900,
+        "y": 31.454803,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -900,
+        "y": 49.241158,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -900,
+        "y": 96.909874,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -900,
+        "y": 32.814964,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -900,
+        "y": 2.4800012,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -900,
+        "y": 89.31632,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -900,
+        "y": 63.593163,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -1000,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -900,
+        "y": 70.16012,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -800,
+        "y": 63.20771,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -800,
+        "y": 64.26236,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -800,
+        "y": 70.770935,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -800,
+        "y": 12.634911,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -800,
+        "y": 36.791363,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -800,
+        "y": 26.202984,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -800,
+        "y": 22.489452,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -800,
+        "y": 90.47655,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -800,
+        "y": 67.907814,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -800,
+        "y": 9.003319,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -800,
+        "y": 82.28487,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -800,
+        "y": 51.760372,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -800,
+        "y": 34.901657,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -800,
+        "y": 80.30172,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -800,
+        "y": 85.70164,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -800,
+        "y": 39.56364,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -800,
+        "y": 17.99702,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -800,
+        "y": 14.797415,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -800,
+        "y": 61.691177,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -900,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -800,
+        "y": 58.580112,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -700,
+        "y": 71.96937,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -700,
+        "y": 71.531685,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -700,
+        "y": 49.909134,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -700,
+        "y": 95.87275,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -700,
+        "y": 52.133842,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -700,
+        "y": 25.966515,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -700,
+        "y": 50.779976,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -700,
+        "y": 45.70612,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -700,
+        "y": 87.572914,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -700,
+        "y": 71.68513,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -700,
+        "y": 2.400113,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -700,
+        "y": 30.766672,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -700,
+        "y": 76.30577,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -700,
+        "y": 47.69113,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -700,
+        "y": 81.40087,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -700,
+        "y": 4.465599,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -700,
+        "y": 88.78511,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -700,
+        "y": 26.036186,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -700,
+        "y": 90.71482,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -800,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -700,
+        "y": 69.37672,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -600,
+        "y": 78.49715,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -600,
+        "y": 96.6981,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -600,
+        "y": 55.352623,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -600,
+        "y": 42.878563,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -600,
+        "y": 54.472454,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -600,
+        "y": 88.040794,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -600,
+        "y": 88.790596,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -600,
+        "y": 16.246708,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -600,
+        "y": 43.61536,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -600,
+        "y": 59.775146,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -600,
+        "y": 71.18497,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -600,
+        "y": 42.97037,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -600,
+        "y": 48.166912,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -600,
+        "y": 61.88637,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -600,
+        "y": 98.86077,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -600,
+        "y": 98.8127,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -600,
+        "y": 39.07831,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -600,
+        "y": 28.371334,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -600,
+        "y": 81.60154,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -700,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -600,
+        "y": 58.030643,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -500,
+        "y": 6.729514,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -500,
+        "y": 33.46208,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -500,
+        "y": 17.806429,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -500,
+        "y": 61.625637,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -500,
+        "y": 36.845673,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -500,
+        "y": 53.77783,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -500,
+        "y": 27.141607,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -500,
+        "y": 69.74483,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -500,
+        "y": 22.178186,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -500,
+        "y": 85.34651,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -500,
+        "y": 59.19932,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -500,
+        "y": 21.307,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -500,
+        "y": 7.7023697,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -500,
+        "y": 67.121765,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -500,
+        "y": 32.889786,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -500,
+        "y": 46.96725,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -500,
+        "y": 92.394714,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -500,
+        "y": 47.780033,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -500,
+        "y": 40.19896,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -600,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -500,
+        "y": 11.984725,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -400,
+        "y": 42.197247,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -400,
+        "y": 16.037626,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -400,
+        "y": 12.659837,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -400,
+        "y": 3.931589,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -400,
+        "y": 58.149982,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -400,
+        "y": 24.030985,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -400,
+        "y": 6.980545,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -400,
+        "y": 4.6082325,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -400,
+        "y": 5.9896297,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -400,
+        "y": 80.0446,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -400,
+        "y": 57.628056,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -400,
+        "y": 93.01141,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -400,
+        "y": 20.35436,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -400,
+        "y": 89.82955,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -400,
+        "y": 25.287914,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -400,
+        "y": 6.02162,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -400,
+        "y": 41.657978,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -400,
+        "y": 28.563286,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -400,
+        "y": 88.138,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -500,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -400,
+        "y": 93.82459,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -300,
+        "y": 59.274548,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -300,
+        "y": 17.035198,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -300,
+        "y": 86.15458,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -300,
+        "y": 51.985474,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -300,
+        "y": 18.729378,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -300,
+        "y": 36.57304,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -300,
+        "y": 54.61322,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -300,
+        "y": 6.535084,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -300,
+        "y": 75.86919,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -300,
+        "y": 51.68153,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -300,
+        "y": 49.486374,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -300,
+        "y": 81.44527,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -300,
+        "y": 77.348816,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -300,
+        "y": 77.856995,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -300,
+        "y": 13.151146,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -300,
+        "y": 18.319881,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -300,
+        "y": 12.490238,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -300,
+        "y": 41.80363,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -300,
+        "y": 28.54885,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -400,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -300,
+        "y": 34.432907,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -200,
+        "y": 84.42009,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -200,
+        "y": 67.80769,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -200,
+        "y": 35.268467,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -200,
+        "y": 37.133312,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -200,
+        "y": 56.586815,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -200,
+        "y": 20.638325,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -200,
+        "y": 27.198042,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -200,
+        "y": 50.651695,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -200,
+        "y": 7.1980724,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -200,
+        "y": 74.960144,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -200,
+        "y": 1.883776,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -200,
+        "y": 72.49554,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -200,
+        "y": 66.1388,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -200,
+        "y": 34.692783,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -200,
+        "y": 17.713238,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -200,
+        "y": 29.296667,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -200,
+        "y": 99.829384,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -200,
+        "y": 33.515358,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -200,
+        "y": 17.999245,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -300,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -200,
+        "y": 9.758158,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": -100,
+        "y": 33.602196,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": -100,
+        "y": 14.973845,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": -100,
+        "y": 87.67557,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": -100,
+        "y": 92.97353,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": -100,
+        "y": 23.24146,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": -100,
+        "y": 37.418186,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": -100,
+        "y": 81.0358,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": -100,
+        "y": 4.8712444,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": -100,
+        "y": 66.95411,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": -100,
+        "y": 75.17576,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": -100,
+        "y": 19.966543,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": -100,
+        "y": 57.057007,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": -100,
+        "y": 93.84429,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": -100,
+        "y": 26.243973,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": -100,
+        "y": 61.279964,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": -100,
+        "y": 33.200504,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": -100,
+        "y": 26.175322,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": -100,
+        "y": 25.71174,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": -100,
+        "y": 96.1157,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -200,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": -100,
+        "y": 86.27828,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 0,
+        "y": 50.585365,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 0,
+        "y": 80.48135,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 0,
+        "y": 9.471173,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 0,
+        "y": 57.132965,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 0,
+        "y": 53.53253,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 0,
+        "y": 28.920187,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 0,
+        "y": 43.185463,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 0,
+        "y": 86.77959,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 0,
+        "y": 95.231445,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 0,
+        "y": 69.49928,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 0,
+        "y": 67.237686,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 0,
+        "y": 60.427147,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 0,
+        "y": 10.461904,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 0,
+        "y": 12.073696,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 0,
+        "y": 27.371002,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 0,
+        "y": 77.71843,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 0,
+        "y": 80.08871,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 0,
+        "y": 79.1384,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 0,
+        "y": 8.179844,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": -100,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 0,
+        "y": 31.385763,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 100,
+        "y": 1.4342437,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 100,
+        "y": 25.84348,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 100,
+        "y": 96.19797,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 100,
+        "y": 92.26108,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 100,
+        "y": 26.443697,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 100,
+        "y": 39.90504,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 100,
+        "y": 2.8576682,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 100,
+        "y": 76.33859,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 100,
+        "y": 96.96501,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 100,
+        "y": 98.45427,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 100,
+        "y": 81.30108,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 100,
+        "y": 2.5586674,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 100,
+        "y": 30.356647,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 100,
+        "y": 26.299294,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 100,
+        "y": 74.15186,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 100,
+        "y": 94.07565,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 100,
+        "y": 44.88732,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 100,
+        "y": 81.35961,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 100,
+        "y": 96.59082,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 0,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 100,
+        "y": 55.323013,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 200,
+        "y": 11.979664,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 200,
+        "y": 44.741947,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 200,
+        "y": 55.013546,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 200,
+        "y": 15.102054,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 200,
+        "y": 91.7683,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 200,
+        "y": 63.878407,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 200,
+        "y": 31.20038,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 200,
+        "y": 82.00927,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 200,
+        "y": 89.81321,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 200,
+        "y": 100.86686,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 200,
+        "y": 80.36697,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 200,
+        "y": 80.923,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 200,
+        "y": 55.112953,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 200,
+        "y": 3.999425,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 200,
+        "y": 98.11147,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 200,
+        "y": 53.667953,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 200,
+        "y": 30.995895,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 200,
+        "y": 55.51278,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 200,
+        "y": 56.345833,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 100,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 200,
+        "y": 30.468138,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 300,
+        "y": 77.475655,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 300,
+        "y": 49.478794,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 300,
+        "y": 77.85123,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 300,
+        "y": 39.159378,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 300,
+        "y": 27.23027,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 300,
+        "y": 17.361464,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 300,
+        "y": 34.2991,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 300,
+        "y": 19.189352,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 300,
+        "y": 90.88168,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 300,
+        "y": 41.445847,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 300,
+        "y": 46.500523,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 300,
+        "y": 87.40975,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 300,
+        "y": 36.76958,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 300,
+        "y": 26.388777,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 300,
+        "y": 93.56773,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 300,
+        "y": 67.76193,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 300,
+        "y": 49.129093,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 300,
+        "y": 18.816235,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 300,
+        "y": 82.213776,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 200,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 300,
+        "y": 57.219875,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 400,
+        "y": 4.692585,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 400,
+        "y": 88.609825,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 400,
+        "y": 57.462486,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 400,
+        "y": 100.16056,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 400,
+        "y": 85.27115,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 400,
+        "y": 18.181873,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 400,
+        "y": 73.10741,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 400,
+        "y": 55.124348,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 400,
+        "y": 49.583454,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 400,
+        "y": 81.43903,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 400,
+        "y": 47.333252,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 400,
+        "y": 93.20888,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 400,
+        "y": 65.66712,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 400,
+        "y": 31.337376,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 400,
+        "y": 70.96234,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 400,
+        "y": 7.351203,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 400,
+        "y": 75.60108,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 400,
+        "y": 93.11869,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 400,
+        "y": 15.022362,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 300,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 400,
+        "y": 57.12148,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 500,
+        "y": 98.303215,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 500,
+        "y": 39.847076,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 500,
+        "y": 7.7411065,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 500,
+        "y": 53.61395,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 500,
+        "y": 70.17064,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 500,
+        "y": 67.221466,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 500,
+        "y": 28.991909,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 500,
+        "y": 86.08148,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 500,
+        "y": 58.389008,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 500,
+        "y": 91.9643,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 500,
+        "y": 39.195305,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 500,
+        "y": 2.3548434,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 500,
+        "y": 45.20696,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 500,
+        "y": 18.989927,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 500,
+        "y": 79.97213,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 500,
+        "y": 52.57117,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 500,
+        "y": 44.44433,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 500,
+        "y": 32.337673,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 500,
+        "y": 65.49728,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 400,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 500,
+        "y": 10.502202,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 600,
+        "y": 82.36377,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 600,
+        "y": 76.52238,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 600,
+        "y": 21.824898,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 600,
+        "y": 80.85351,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 600,
+        "y": 79.42941,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 600,
+        "y": 39.555344,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 600,
+        "y": 79.231636,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 600,
+        "y": 91.413216,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 600,
+        "y": 94.17967,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 600,
+        "y": 36.266514,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 600,
+        "y": 72.522064,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 600,
+        "y": 32.957825,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 600,
+        "y": 99.16236,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 600,
+        "y": 88.68211,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 600,
+        "y": 48.093086,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 600,
+        "y": 69.84392,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 600,
+        "y": 83.60974,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 600,
+        "y": 84.478516,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 600,
+        "y": 38.545692,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 500,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 600,
+        "y": 85.304634,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 700,
+        "y": 11.1982355,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 700,
+        "y": 42.837357,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 700,
+        "y": 77.4551,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 700,
+        "y": 73.66026,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 700,
+        "y": 61.16935,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 700,
+        "y": 33.090122,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 700,
+        "y": 32.413532,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 700,
+        "y": 92.86103,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 700,
+        "y": 60.75097,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 700,
+        "y": 2.2888372,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 700,
+        "y": 82.588326,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 700,
+        "y": 100.37869,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 700,
+        "y": 82.76868,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 700,
+        "y": 41.061718,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 700,
+        "y": 26.937153,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 700,
+        "y": 95.40678,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 700,
+        "y": 55.20293,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 700,
+        "y": 89.88224,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 700,
+        "y": 51.690506,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 600,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 700,
+        "y": 28.615517,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 800,
+        "y": 1.7278383,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 800,
+        "y": 86.04236,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 800,
+        "y": 6.5146575,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 800,
+        "y": 70.8056,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 800,
+        "y": 6.5151463,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 800,
+        "y": 21.394867,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 800,
+        "y": 26.571758,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 800,
+        "y": 3.38446,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 800,
+        "y": 14.636875,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 800,
+        "y": 24.96059,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 800,
+        "y": 25.399466,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 800,
+        "y": 19.491823,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 800,
+        "y": 78.07878,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 800,
+        "y": 11.325021,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 800,
+        "y": 85.98755,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 800,
+        "y": 46.855408,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 800,
+        "y": 54.345753,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 800,
+        "y": 6.1039515,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 800,
+        "y": 24.616266,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 700,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 800,
+        "y": 6.2042127,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 900,
+        "y": 15.748126,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 900,
+        "y": 86.05907,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 900,
+        "y": 91.464066,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 900,
+        "y": 2.0181606,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 900,
+        "y": 86.285515,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 900,
+        "y": 85.64567,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 900,
+        "y": 72.46636,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 900,
+        "y": 89.709816,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 900,
+        "y": 15.659232,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 900,
+        "y": 81.240944,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 900,
+        "y": 87.6908,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 900,
+        "y": 76.07915,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 900,
+        "y": 42.81262,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 900,
+        "y": 7.0772123,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 900,
+        "y": 38.057228,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 900,
+        "y": 61.75038,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 900,
+        "y": 70.3843,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 900,
+        "y": 15.127678,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 900,
+        "y": 45.990135,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 800,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 900,
+        "y": 97.363945,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -1000
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 93.68898,
+        "z": -900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -900
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 11.246378,
+        "z": -800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -800
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 76.466385,
+        "z": -700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -700
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 85.38401,
+        "z": -600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -600
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 23.489363,
+        "z": -500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -500
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 24.225218,
+        "z": -400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -400
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 63.775238,
+        "z": -300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -300
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 96.20622,
+        "z": -200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -200
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 93.39563,
+        "z": -100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": -100
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 69.10438,
+        "z": 0
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 0
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 52.691853,
+        "z": 100
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 100
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 51.845325,
+        "z": 200
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 200
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 75.1402,
+        "z": 300
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 300
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 24.16882,
+        "z": 400
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 400
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 7.561619,
+        "z": 500
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 500
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 4.895414,
+        "z": 600
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 600
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 27.56765,
+        "z": 700
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 700
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 10.702021,
+        "z": 800
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 800
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 30.613853,
+        "z": 900
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "box",
+      "pointA": {
+        "x": 900,
+        "y": 0,
+        "z": 900
+      },
+      "pointB": {
+        "x": 1000,
+        "y": 82.10238,
+        "z": 1000
+      },
+      "material": "ground"
+    },
+    {
+      "$type": "quad",
+      "point": {
+        "x": 123,
+        "y": 554,
+        "z": 147
+      },
+      "axisU": {
+        "x": 300,
+        "y": 0,
+        "z": 0
+      },
+      "axisV": {
+        "x": 0,
+        "y": 0,
+        "z": 265
+      },
+      "material": "diffLight"
+    },
+    {
+      "$type": "sphere",
+      "center": {
+        "x": 400,
+        "y": 400,
+        "z": 400
+      },
+      "center1": {
+        "x": 430,
+        "y": 400,
+        "z": 400
+      },
+      "radius": 50,
+      "material": "moving"
+    },
+    {
+      "$type": "sphere",
+      "center": {
+        "x": 260,
+        "y": 150,
+        "z": 45
+      },
+      "center1": null,
+      "radius": 50,
+      "material": "glass"
+    },
+    {
+      "$type": "sphere",
+      "center": {
+        "x": 0,
+        "y": 150,
+        "z": 145
+      },
+      "center1": null,
+      "radius": 50,
+      "material": "metal"
+    },
+    {
+      "$type": "sphere",
+      "center": {
+        "x": 400,
+        "y": 200,
+        "z": 400
+      },
+      "center1": null,
+      "radius": 100,
+      "material": "earth"
+    },
+    {
+      "$type": "sphere",
+      "center": {
+        "x": 220,
+        "y": 280,
+        "z": 300
+      },
+      "center1": null,
+      "radius": 80,
+      "material": "noise"
+    },
+    {
+      "$type": "sphere",
+      "center": {
+        "x": 360,
+        "y": 150,
+        "z": 145
+      },
+      "center1": null,
+      "radius": 70,
+      "material": "glass"
+    },
+    {
+      "$type": "constantMedium",
+      "density": 0.02,
+      "boundary": {
+        "$type": "sphere",
+        "center": {
+          "x": 360,
+          "y": 150,
+          "z": 145
+        },
+        "center1": null,
+        "radius": 70,
+        "material": "glass"
+      },
+      "texture": "smokeA"
+    },
+    {
+      "$type": "constantMedium",
+      "density": 0.0001,
+      "boundary": {
+        "$type": "sphere",
+        "center": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "center1": null,
+        "radius": 5000,
+        "material": "glass"
+      },
+      "texture": "white"
+    }
+  ],
+  "background": {
+    "r": 0,
+    "g": 0,
+    "b": 0
+  },
+  "blueprints": {},
+  "camera": {
+    "fieldOfView": 40,
+    "focusDistance": 10,
+    "defocusAngle": 0,
+    "orientation": {
+      "lookFrom": {
+        "x": 478,
+        "y": 278,
+        "z": -600
+      },
+      "lookAt": {
+        "x": 278,
+        "y": 278,
+        "z": 0
+      },
+      "upDirection": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      }
+    }
+  }
+}

@@ -45,14 +45,14 @@ public class MatteDescriptor : MaterialDescriptorBase, IMaterialGenerator
 public class DielectricDescriptor : IMaterialGenerator
 {
     [JsonPropertyName("ior")]
-    public float IOR { get; init; }
+    public required float IOR { get; init; }
 
     public IMaterial Generate(IDictionary<string, ITexture> textures) => new Dielectric(IOR);
 }
 
 public class MetalDescriptor : MaterialDescriptorBase, IMaterialGenerator
 {
-    public float Fuzzy { get; init; }
+    public float Fuzzy { get; init; } = 1.0f;
 
     public IMaterial Generate(IDictionary<string, ITexture> textures)
         => new Metal(GetTextureOrFail(textures), Fuzzy);
