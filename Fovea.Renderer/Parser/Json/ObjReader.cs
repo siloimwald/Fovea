@@ -88,8 +88,6 @@ public static class ObjReader
                             float.NegativeInfinity)),
                     (acc, p) => (Vector3.Min(acc.currentMin, p), Vector3.Max(acc.currentMax, p)));
 
-                Console.WriteLine($"bounds {min} {max}");
-
                 var box = new BoundingBox(min, max);
                 // move things into origin by moving the inverse of the old centroid
                 var translate = box.GetCentroid();

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
+using Fovea.Renderer.Parser.Descriptors.Materials;
+using Fovea.Renderer.Parser.Descriptors.Primitives;
+using Fovea.Renderer.Parser.Descriptors.Textures;
 using Fovea.Renderer.Parser.Json;
 using Fovea.Renderer.Viewing;
 using Microsoft.Extensions.Logging;
@@ -69,24 +71,13 @@ public class SceneDescriptor
         context.Blueprints = new Dictionary<string, IPrimitive>();
         foreach (var (key, val) in Blueprints)
         {
-            var prims = val.Generate(context);
-            if (prims.Count > 1)
-            {
-                Log.LogWarning("blueprints generating more than one primitive not supported yet");
-            }
-
-            context.Blueprints[key] = prims[0];
+            context.Blueprints[key] = val.Generate(context);
         }
         
- 
-        
         // generate all the primitives
-        var primList = Primitives.Aggregate(new List<IPrimitive>(), (acc, prim) =>
-            {
-                acc.AddRange(prim.Generate(context));
-                return acc;
-            });
-
+        var primList = Primitives.Select(p => p.Generate(context))
+            .ToList();
+        
         if (Options == null)
         {
             Log.LogWarning("no options defined, use defaults");

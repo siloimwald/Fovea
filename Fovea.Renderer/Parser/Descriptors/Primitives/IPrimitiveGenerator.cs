@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser.Json;
 
-namespace Fovea.Renderer.Parser;
+namespace Fovea.Renderer.Parser.Descriptors.Primitives;
 
 [JsonDerivedType(typeof(SphereDescriptor), "sphere")]
 [JsonDerivedType(typeof(QuadDescriptor), "quad")]
@@ -16,5 +15,5 @@ namespace Fovea.Renderer.Parser;
 [JsonDerivedType(typeof(CylinderDescriptor), "cylinder")]
 public interface IPrimitiveGenerator
 {
-    List<IPrimitive> Generate(ParserContext context);
+    IPrimitive Generate(ParserContext context);
 }

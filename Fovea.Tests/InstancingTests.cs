@@ -2,7 +2,7 @@
 using System.Numerics;
 using FluentAssertions;
 using Fovea.Renderer.Core;
-using Fovea.Renderer.Parser;
+using Fovea.Renderer.Parser.Descriptors.Transforms;
 using Fovea.Renderer.Primitives;
 using NUnit.Framework;
 

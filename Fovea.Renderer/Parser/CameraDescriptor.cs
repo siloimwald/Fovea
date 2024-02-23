@@ -3,7 +3,7 @@
 namespace Fovea.Renderer.Parser;
 
 /// <summary>
-/// book 1 level currently
+/// book 2 level
 /// </summary>
 public class CameraDescriptor
 {

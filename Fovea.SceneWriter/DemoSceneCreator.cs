@@ -1,6 +1,10 @@
 ﻿using System.Numerics;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser;
+using Fovea.Renderer.Parser.Descriptors.Materials;
+using Fovea.Renderer.Parser.Descriptors.Primitives;
+using Fovea.Renderer.Parser.Descriptors.Textures;
+using Fovea.Renderer.Parser.Descriptors.Transforms;
 using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 using Fovea.Renderer.Viewing;
@@ -19,10 +23,6 @@ public static class DemoSceneCreator
             DemoSceneId.DiskTestScene => GetDiskTestScene(),
             DemoSceneId.CylinderTest => GetCylinderTestScene(),
             _ => GetFinalSceneBookOne(false)
-            // DemoScenes.ObjFileTest => GetObjFileTestScene(),
-            // DemoScenes.TextureDemo => GetTextureTestScene(),
-            // DemoScenes.PerlinNoise => GetPerlinNoiseTestScene(),
-            // _ => GetCornellBoxScene()
         };
     }
 

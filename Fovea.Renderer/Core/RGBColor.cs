@@ -1,11 +1,11 @@
 ﻿using Fovea.Renderer.Materials;
-using Fovea.Renderer.Parser;
+using Fovea.Renderer.Parser.Descriptors.Textures;
 using Fovea.Renderer.Parser.Json;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Fovea.Renderer.Core;
 
-public struct RGBColor(float r, float g, float b) : ITexture, ITextureGenerator
+public readonly struct RGBColor(float r, float g, float b) : ITexture, ITextureGenerator
 {
     public float R { get; init; } = r;
     public float G { get; init; } = g;

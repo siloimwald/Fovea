@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Core.BVH;
