@@ -144,7 +144,8 @@ public class MeshFileDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public List<IPrimitive> Generate(ParserContext context)
     {
         var mesh = ObjReader.ReadObjFile(Path.Combine(context.SceneFileLocation, FileName), Normalize);
-        return mesh.CreateMeshTriangles(GetMaterial(context.Materials), FlipNormals, VertexNormals);
+        var prims = mesh.CreateMeshTriangles(GetMaterial(context.Materials), FlipNormals, VertexNormals);
+        return [new BVHTree(prims)];
     }
 }
 
