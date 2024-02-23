@@ -2,7 +2,7 @@
 #### work in progress
 
 Currently in the process of adapting this to version 4 of the books,
-some things are broken. Current head/top commit is roughly end of second book.
+some things are broken. Current state: Book 2 done, some book 3 leftovers from the previous version are still in.
 
 changes to previous iteration:
 
@@ -15,8 +15,9 @@ long term goals
 
 - add (back in again) CSG through signed distance trickery as the next feature
 - experimental tree structures (i.e. swap bvh to kd tree from scene file level)
+- some ui to see render progress
 
-### Ray Tracing in One Weekend (and more)
+### Ray Tracing in One (Many) Weekend(s) (and more)
 
 C# implementation of Peter Shirley's excellent free books on ray and path tracing
 with some own additions. [Take me to the books!](https://raytracing.github.io/)
@@ -29,13 +30,17 @@ In addition to the books
 - more general instancing support through transformation matrices
 - cylinders and disks, because why not
 - slightly more fancy BVH, IIRC based on the (also excellent) [PBR Book](https://pbr-book.org/), using a SAH approach with binning
+- Bounding box intersection with SSE Instructions, might not be the best, but it is faster than the regular method
 - triangle (mesh) support, either as standalone triangles or as a mesh
-- added a json scene file parser, does not yet cover all capabilities
+- a json scene file parser
 
 With dotnet 8 sdk installed, run either one of the contained scene files or look at the parameters
 (which basically override scene settings related to render speed and image sized)
 - `dotnet run --project .\Fovea.CmdLine\ -c Release -- --help`
 - `dotnet run --project .\Fovea.CmdLine\ -c Release -- -s .\scenes\finalSceneBookOne.json` (or any other scene file)
+
+There is also a scene writer, which allows you to write out programmatically 
+generated scenes into json. See `Fovea.SceneWriter` directory.
 
 Fancy picture time (still from book 3 iteration)
 

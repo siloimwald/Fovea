@@ -52,7 +52,7 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
         {
             return BoundingBox.Union(
                 new BoundingBox(center - rVec, center + rVec),
-                new BoundingBox(_centerVec + center - rVec, _centerVec + center - rVec));
+                new BoundingBox(_centerVec + center - rVec, _centerVec + center + rVec));
         }
 
         return new BoundingBox(center - rVec, center + rVec);
@@ -64,8 +64,7 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
         var hr = new HitRecord();
         if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hr))
             return 0;
-
-        // TODO: no time parameter here        
+     
         var cosTheta = Sqrt(1.0f - radius * radius / (center - origin).LengthSquared());
         var solidAngle = 2.0f * PI * (1.0f - cosTheta);
         return (1.0f / solidAngle);
@@ -73,7 +72,6 @@ public class Sphere(Vector3 center, float radius, IMaterial material) : IPrimiti
 
     public Vector3 RandomDirection(Vector3 origin)
     {
-        // TODO: no time parameter here        
         var dir = center - origin;
         var distanceSquared = dir.LengthSquared();
         var r1 = Sampler.Instance.Random01();

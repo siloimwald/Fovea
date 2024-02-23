@@ -78,7 +78,7 @@ public class BookBVHNode : IPrimitive
     
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
     {
-        if (!_box.Intersect(ray, rayInterval))
+        if (!_box.IntersectSse(ray, rayInterval))
             return false;
 
         var hitLeft = _left.Hit(ray, rayInterval, ref hitRecord);
