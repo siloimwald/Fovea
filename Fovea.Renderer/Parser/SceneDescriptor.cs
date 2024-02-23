@@ -95,7 +95,7 @@ public class SceneDescriptor
         
         return new Scene
         {
-            World = new BookBVHNode(primList, 0, primList.Count),
+            World = new BVHTree(primList),
             Background = Background,
             Options = Options,
             // Lights = new PrimitiveList(lightSources), // crashes with BVH and single item

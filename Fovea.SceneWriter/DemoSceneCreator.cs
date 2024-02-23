@@ -2,6 +2,7 @@
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser;
 using Fovea.Renderer.Sampling;
+using Fovea.Renderer.VectorMath;
 using Fovea.Renderer.Viewing;
 
 namespace Fovea.SceneWriter;
@@ -147,54 +148,62 @@ public static class DemoSceneCreator
         });
         
         // sphere cluster right top
-        
-        // var transform = new Transformation().Rotate(15, Axis.Y).Translate(-100, 270, 395);
-        // var transform = new Transform().WithRotation(Axis.Y, 15).WithTranslation(-100, 270, 395);
-        // var (sphereTransform, sphereInverse, _) = transform.Build();
-        // prims.AddRange(Enumerable.Range(0, 1000).Select(_ =>
-        // {
-        //     var x = Sampler.Instance.RandomInt(0, 165);
-        //     var y = Sampler.Instance.RandomInt(0, 165);
-        //     var z = Sampler.Instance.RandomInt(0, 165);
-        //
-        //     return new Instance(
-        //         new Sphere(new Vector3(x, y, z), 10, white),
-        //         sphereTransform, sphereInverse);
-        // }));
-        
-        // // moving sphere top left
-        // var center1 = new Vector3(400, 400, 200);
-        // prims.Add(new MovingSphere(center1, 0, center1 + new Vector3(30, 0, 0), 1, 50,
-        //     new Lambertian(0.7f, 0.3f, 0.1f)));
-        //
-        // // glass sphere
-        // prims.Add(new Sphere(new Vector3(260, 150, 45), 50, new Dielectric(1.5f)));
-        // // metal sphere
-        // prims.Add(new Sphere(new Vector3(0, 150, 145), 50, new Metal(0.8f, 0.8f, 0.9f, 1.0f)));
-        //
-        // // earth ball
-        // prims.Add(new Sphere(new Vector3(400, 200, 400), 100,
-        //     new Lambertian(new ImageTexture(@"Assets\earth.jpg"))));
-        // // perlin noise ball
-        // prims.Add(new Sphere(new Vector3(220, 280, 300), 80, new Lambertian(new NoiseTexture(0.1f))));
-        //
-        // // isotropic material does not work as of now with the whole general path tracer
-        //
-        // // var boundary = new Sphere(new Point3(360, 150, 145), 70, new Dielectric(1.5));
-        // // prims.Add(boundary);
-        // // prims.Add(new ConstantMedium(boundary, 0.2, new RGBColor(0.2, 0.4, 0.9)));
-        // // // some english fog to cover everything :)
-        // // boundary = new Sphere(new Point3(), 5000, new Dielectric(1.5));
-        // // prims.Add(new ConstantMedium(boundary, 0.0001, new RGBColor(1, 1, 1)));
-        //
+        // book example puts those into their own bvh (for good reason i guess)
+        // clever bit here from the book, instance the whole bvh for a rotation/translation
+        // to move the whole sphere block (instead of instancing a single base sphere for example
+        // or transforming each directly)
    
-  
+        var spheres = Enumerable.Range(0, 1000).Select(_ =>
+        {
+            var x = Sampler.Instance.RandomInt(0, 165);
+            var y = Sampler.Instance.RandomInt(0, 165);
+            var z = Sampler.Instance.RandomInt(0, 165);
+            return new SphereDescriptor
+            {
+                Center = new Vector3(x, y, z),
+                Radius = 10,
+                MaterialReference = "cluster"
+            };
+
+        });
+
+        var subNode = new SubNodeDescriptor
+        {
+            Children = spheres.ToList<IPrimitiveGenerator>()
+        };
+
+        prims.Add(new InstanceDescriptor
+        {
+            UseParentMaterial = true,
+            MaterialReference = "cluster", // silences a parser warning
+            Transforms =
+            [
+                new RotationDescriptor
+                {
+                    Axis = Axis.Y,
+                    Angle = 15
+                },
+
+                new TranslationDescriptor
+                {
+                    X = -100,
+                    Y = 270,
+                    Z = 395
+                }
+            ],
+            BlueprintName = "cluster"
+        });
+        
         return new SceneDescriptor
         {
             Primitives = prims,
             Textures = textures,
             Materials = materials,
             Background = RGBColor.Black,
+            Blueprints = new Dictionary<string, IPrimitiveGenerator>
+            {
+                ["cluster"] = subNode
+            },
             Camera = new CameraDescriptor
             {
                 Orientation = new Orientation

@@ -11,6 +11,7 @@ namespace Fovea.Renderer.Parser;
 [JsonDerivedType(typeof(MeshFileDescriptor), "meshFile")]
 [JsonDerivedType(typeof(InstanceDescriptor), "instance")]
 [JsonDerivedType(typeof(ConstantMediumDescriptor), "constantMedium")]
+[JsonDerivedType(typeof(SubNodeDescriptor), "subNode")]
 public interface IPrimitiveGenerator
 {
     List<IPrimitive> Generate(ParserContext context);

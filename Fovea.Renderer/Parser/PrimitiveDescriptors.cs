@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json.Serialization;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Core.BVH;
 using Fovea.Renderer.Mesh;
 using Fovea.Renderer.Parser.Json;
 using Fovea.Renderer.Primitives;
@@ -54,6 +56,20 @@ public class BoxDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
     public List<IPrimitive> Generate(ParserContext context)
     {
         return [BoxProducer.MakeBox(PointA, PointB, GetMaterial(context.Materials))];
+    }
+}
+
+/// <summary>
+/// groups children into own bvh structure
+/// </summary>
+public class SubNodeDescriptor : IPrimitiveGenerator
+{
+    public required List<IPrimitiveGenerator> Children { get; init; }
+    
+    public List<IPrimitive> Generate(ParserContext context)
+    {
+        var children = Children.SelectMany(c => c.Generate(context)).ToList();
+        return [new BVHTree(children)];
     }
 }
 
