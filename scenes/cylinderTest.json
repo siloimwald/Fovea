@@ -1,0 +1,1075 @@
+{
+  "options": {
+    "numSamples": 100,
+    "imageWidth": 800,
+    "imageHeight": 600,
+    "maxDepth": 50,
+    "outputFile": "output.png"
+  },
+  "textures": {
+    "cyl0": {
+      "$type": "color",
+      "r": 0.9095975,
+      "g": 0.75178134,
+      "b": 0.589418
+    },
+    "cyl15": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl30": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl45": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl60": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl75": {
+      "$type": "color",
+      "r": 0.9725028,
+      "g": 0.74249357,
+      "b": 0.90747654
+    },
+    "cyl90": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl105": {
+      "$type": "color",
+      "r": 0.9332844,
+      "g": 0.74864686,
+      "b": 0.9840126
+    },
+    "cyl120": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl135": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl150": {
+      "$type": "color",
+      "r": 0.56004167,
+      "g": 0.72120357,
+      "b": 0.9301888
+    },
+    "cyl165": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl180": {
+      "$type": "color",
+      "r": 0.7370157,
+      "g": 0.916177,
+      "b": 0.9422641
+    },
+    "cyl195": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl210": {
+      "$type": "color",
+      "r": 0.98668253,
+      "g": 0.7560713,
+      "b": 0.8514372
+    },
+    "cyl225": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl240": {
+      "$type": "color",
+      "r": 0.74113715,
+      "g": 0.8289099,
+      "b": 0.87827295
+    },
+    "cyl255": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl270": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl285": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl300": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl315": {
+      "$type": "noise",
+      "scale": 0.1
+    },
+    "cyl330": {
+      "$type": "color",
+      "r": 0.513916,
+      "g": 0.8411856,
+      "b": 0.7440052
+    },
+    "cyl345": {
+      "$type": "noise",
+      "scale": 0.1
+    }
+  },
+  "materials": {
+    "cyl0": {
+      "$type": "matte",
+      "texture": "cyl0"
+    },
+    "cyl15": {
+      "$type": "matte",
+      "texture": "cyl15"
+    },
+    "cyl30": {
+      "$type": "matte",
+      "texture": "cyl30"
+    },
+    "cyl45": {
+      "$type": "matte",
+      "texture": "cyl45"
+    },
+    "cyl60": {
+      "$type": "matte",
+      "texture": "cyl60"
+    },
+    "cyl75": {
+      "$type": "matte",
+      "texture": "cyl75"
+    },
+    "cyl90": {
+      "$type": "matte",
+      "texture": "cyl90"
+    },
+    "cyl105": {
+      "$type": "matte",
+      "texture": "cyl105"
+    },
+    "cyl120": {
+      "$type": "matte",
+      "texture": "cyl120"
+    },
+    "cyl135": {
+      "$type": "matte",
+      "texture": "cyl135"
+    },
+    "cyl150": {
+      "$type": "matte",
+      "texture": "cyl150"
+    },
+    "cyl165": {
+      "$type": "matte",
+      "texture": "cyl165"
+    },
+    "cyl180": {
+      "$type": "matte",
+      "texture": "cyl180"
+    },
+    "cyl195": {
+      "$type": "matte",
+      "texture": "cyl195"
+    },
+    "cyl210": {
+      "$type": "matte",
+      "texture": "cyl210"
+    },
+    "cyl225": {
+      "$type": "matte",
+      "texture": "cyl225"
+    },
+    "cyl240": {
+      "$type": "matte",
+      "texture": "cyl240"
+    },
+    "cyl255": {
+      "$type": "matte",
+      "texture": "cyl255"
+    },
+    "cyl270": {
+      "$type": "matte",
+      "texture": "cyl270"
+    },
+    "cyl285": {
+      "$type": "matte",
+      "texture": "cyl285"
+    },
+    "cyl300": {
+      "$type": "matte",
+      "texture": "cyl300"
+    },
+    "cyl315": {
+      "$type": "matte",
+      "texture": "cyl315"
+    },
+    "cyl330": {
+      "$type": "matte",
+      "texture": "cyl330"
+    },
+    "cyl345": {
+      "$type": "matte",
+      "texture": "cyl345"
+    }
+  },
+  "primitives": [
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": -90,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 0,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl0"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": -75,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 15,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl15"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": -60,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 30,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl30"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": -45,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 45,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl45"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": -30,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 60,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl60"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": -15,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 75,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl75"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 0,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 90,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl90"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 15,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 105,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl105"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 30,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 120,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl120"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 45,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 135,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl135"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 60,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 150,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl150"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 75,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 165,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl165"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 90,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 180,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl180"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 105,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 195,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl195"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 120,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 210,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl210"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 135,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 225,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl225"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 150,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 240,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl240"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 165,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 255,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl255"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 180,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 270,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl270"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 195,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 285,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl285"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 210,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 300,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl300"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 225,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 315,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl315"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 240,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 330,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl330"
+    },
+    {
+      "$type": "instance",
+      "transforms": [
+        {
+          "$type": "rotate",
+          "by": 255,
+          "axis": "X",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "$type": "translate",
+          "x": 0,
+          "y": 5,
+          "z": -5
+        },
+        {
+          "$type": "rotate",
+          "by": 345,
+          "axis": "Z",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "blueprint": "cylinder",
+      "useParentMaterial": false,
+      "material": "cyl345"
+    }
+  ],
+  "background": {
+    "r": 0.7,
+    "g": 0.8,
+    "b": 1
+  },
+  "blueprints": {
+    "cylinder": {
+      "$type": "cylinder",
+      "min": -1,
+      "max": 1,
+      "radius": 0.3,
+      "material": ""
+    }
+  },
+  "camera": {
+    "fieldOfView": 80,
+    "focusDistance": 10,
+    "defocusAngle": 0,
+    "orientation": {
+      "lookFrom": {
+        "x": -3,
+        "y": 0,
+        "z": 4
+      },
+      "lookAt": {
+        "x": -2,
+        "y": 0,
+        "z": 0
+      },
+      "upDirection": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      }
+    }
+  }
+}

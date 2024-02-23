@@ -73,6 +73,30 @@ public class SubNodeDescriptor : IPrimitiveGenerator
     }
 }
 
+public class DiskDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
+{
+    public required Vector3 Center { get; init; }
+    public required Vector3 Normal { get; init; }
+    public required float Radius { get; init; }
+    
+    public List<IPrimitive> Generate(ParserContext context)
+    {
+        return [new Disk(Center, Normal, Radius, GetMaterial(context.Materials))];
+    }
+}
+
+public class CylinderDescriptor : PrimitiveDescriptorBase, IPrimitiveGenerator
+{
+    public required float Min { get; init; }
+    public required float Max { get; init; }
+    public required float Radius { get; init; }
+    
+    public List<IPrimitive> Generate(ParserContext context)
+    {
+        return [new Cylinder(Min, Max, Radius, GetMaterial(context.Materials))];
+    }
+}
+
 /// <summary>
 /// a sphere
 /// </summary>

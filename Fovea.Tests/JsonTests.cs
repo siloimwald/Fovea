@@ -223,8 +223,8 @@ public class JsonTests
                                     "material": "bla"
                                 }
                                 """;
-        
-        var quad = 
+
+        var quad =
             JsonSerializer.Deserialize<IPrimitiveGenerator>(quadJson, JsonParser.JsonOptions);
 
         quad.Should().BeOfType<QuadDescriptor>();
@@ -234,20 +234,20 @@ public class JsonTests
         qd.AxisV.Should().Be(new Vector3(0, 1, 0));
         qd.MaterialReference.Should().Be("bla");
     }
-    
+
     [Test]
     public void BoxParsing()
     {
         const string boxJson = """
-                                {
-                                    "$type": "box",
-                                    "pointA": { "x": 2, "y": -2 },
-                                    "pointB": { "x": 1, "y": -4, "z": 1},
-                                    "material": "blupp"
-                                }
-                                """;
-        
-        var box = 
+                               {
+                                   "$type": "box",
+                                   "pointA": { "x": 2, "y": -2 },
+                                   "pointB": { "x": 1, "y": -4, "z": 1},
+                                   "material": "blupp"
+                               }
+                               """;
+
+        var box =
             JsonSerializer.Deserialize<IPrimitiveGenerator>(boxJson, JsonParser.JsonOptions);
 
         box.Should().BeOfType<BoxDescriptor>();
@@ -256,7 +256,7 @@ public class JsonTests
         qd.PointB.Should().Be(new Vector3(1, -4, 1));
         qd.MaterialReference.Should().Be("blupp");
     }
-    
+
     [Test]
     public void SimpleSceneParsing()
     {
@@ -270,14 +270,14 @@ public class JsonTests
         greenMetal!.Fuzzy.Should().Be(0.5f);
         greenMetal.TextureReference.Should().Be("greenish");
     }
-    
+
     [Test]
     public void DiffuseLightParsing()
     {
         const string diffLightJson = """
                                      {
                                         "$type": "diffuseLight",
-                                        "texture": "blurp"  
+                                        "texture": "blurp"
                                      }
                                      """;
         var diffLight = JsonSerializer.Deserialize<IMaterialGenerator>(diffLightJson, JsonParser.JsonOptions);
@@ -308,7 +308,7 @@ public class JsonTests
         (transformList[1] as ScalingDescriptor)!.Y.Should().Be(2);
         (transformList[2] as RotationDescriptor)!.Axis.Should().Be(Axis.Z);
         (transformList[2] as RotationDescriptor)!.Angle.Should().Be(90);
-        
+
         var forwardMatrix = transformList.GetTransformation();
         var p = new Vector3(-2, 1, 0);
         var pTransformed = Vector3.Transform(p, forwardMatrix);
@@ -324,7 +324,7 @@ public class JsonTests
                                        "blueprint": "shoe",
                                        "material": "red",
                                        "useParentMaterial": true,
-                                       "transforms": 
+                                       "transforms":
                                                [
                                             { "$type": "translate", "x": 5, "y": -1 },
                                             { "$type": "scale", "x": 2, "y": 2, "z": 2 },
@@ -365,5 +365,41 @@ public class JsonTests
         mediumDescriptor.Boundary.Should().BeOfType<SphereDescriptor>();
         mediumDescriptor.Density.Should().Be(0.2f);
     }
-    
+
+    [Test]
+    public void CylinderParsing()
+    {
+        const string cylinderJson = """
+                                    {
+                                        "$type": "cylinder",
+                                        "max": -2,
+                                        "min": 2,
+                                        "radius": 14
+                                    }
+                                    """;
+        var cylinder = JsonSerializer.Deserialize<IPrimitiveGenerator>(cylinderJson, JsonParser.JsonOptions);
+        cylinder.Should().BeOfType<CylinderDescriptor>();
+        (cylinder as CylinderDescriptor)!.Max.Should().Be(-2);
+        (cylinder as CylinderDescriptor)!.Min.Should().Be(2);
+        (cylinder as CylinderDescriptor)!.Radius.Should().Be(14);
+    }
+
+    [Test]
+    public void DiskParsing()
+    {
+        const string diskJson = """
+                                {
+                                    "$type": "disk",
+                                    "normal": { "z": 1 },
+                                    "center": { "x": 2, "y": 4, "z": -2 },
+                                    "radius": 42
+                                }
+                                """;
+
+        var disk = JsonSerializer.Deserialize<IPrimitiveGenerator>(diskJson, JsonParser.JsonOptions);
+        disk.Should().BeOfType<DiskDescriptor>();
+        (disk as DiskDescriptor)!.Normal.Should().Be(Vector3.UnitZ);
+        (disk as DiskDescriptor)!.Center.Should().Be(new Vector3(2, 4, -2));
+        (disk as DiskDescriptor)!.Radius.Should().Be(42);
+    }
 }

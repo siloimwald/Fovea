@@ -4,6 +4,13 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives;
 
+/// <summary>
+/// cylinder along the z axis
+/// </summary>
+/// <param name="zMin">z min coordinate</param>
+/// <param name="zMax">z max coordinate</param>
+/// <param name="radius">radius of caps in z plane</param>
+/// <param name="material">material</param>
 public class Cylinder(float zMin, float zMax, float radius, IMaterial material)
     : IPrimitive
 {

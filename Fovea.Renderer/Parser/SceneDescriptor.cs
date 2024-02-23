@@ -25,12 +25,12 @@ public class SceneDescriptor
     /// <summary>
     /// reusable map of texture definitions, keyed by string to make referencing them easier
     /// </summary>
-    public Dictionary<string, ITextureGenerator> Textures { get; init; } = new();
+    public required Dictionary<string, ITextureGenerator> Textures { get; init; } = new();
 
     /// <summary>
     /// reusable map of materials, same as textures
     /// </summary>
-    public Dictionary<string, IMaterialGenerator> Materials { get; init; } = new();
+    public required Dictionary<string, IMaterialGenerator> Materials { get; init; } = new();
 
     /// <summary>
     /// scene objects

@@ -1,0 +1,198 @@
+{
+  "options": {
+    "numSamples": 100,
+    "imageWidth": 800,
+    "imageHeight": 600,
+    "maxDepth": 50,
+    "outputFile": "output.png"
+  },
+  "textures": {
+    "ground": {
+      "$type": "color",
+      "r": 0.3,
+      "g": 0.3,
+      "b": 0.3
+    },
+    "disk": {
+      "$type": "color",
+      "r": 0.8,
+      "g": 0.8,
+      "b": 0.2
+    }
+  },
+  "materials": {
+    "ground": {
+      "$type": "matte",
+      "texture": "ground"
+    },
+    "disk": {
+      "$type": "matte",
+      "texture": "disk"
+    }
+  },
+  "primitives": [
+    {
+      "$type": "disk",
+      "center": {
+        "x": -2,
+        "y": 2,
+        "z": 0
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "radius": 1,
+      "material": "disk"
+    },
+    {
+      "$type": "disk",
+      "center": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "normal": {
+        "x": 0,
+        "y": 1,
+        "z": 1
+      },
+      "radius": 1,
+      "material": "disk"
+    },
+    {
+      "$type": "disk",
+      "center": {
+        "x": 2,
+        "y": 2,
+        "z": 0
+      },
+      "normal": {
+        "x": 0,
+        "y": -1,
+        "z": 1
+      },
+      "radius": 1,
+      "material": "disk"
+    },
+    {
+      "$type": "disk",
+      "center": {
+        "x": -2,
+        "y": 4,
+        "z": 0
+      },
+      "normal": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "radius": 1,
+      "material": "disk"
+    },
+    {
+      "$type": "disk",
+      "center": {
+        "x": 0,
+        "y": 4,
+        "z": 0
+      },
+      "normal": {
+        "x": 0,
+        "y": 1,
+        "z": -1
+      },
+      "radius": 1,
+      "material": "disk"
+    },
+    {
+      "$type": "disk",
+      "center": {
+        "x": 2,
+        "y": 4,
+        "z": 0
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "radius": 1,
+      "material": "disk"
+    },
+    {
+      "$type": "disk",
+      "center": {
+        "x": -2,
+        "y": 0,
+        "z": 0
+      },
+      "normal": {
+        "x": 1,
+        "y": 1,
+        "z": 0
+      },
+      "radius": 1,
+      "material": "disk"
+    },
+    {
+      "$type": "disk",
+      "center": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "normal": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "radius": 1,
+      "material": "disk"
+    },
+    {
+      "$type": "disk",
+      "center": {
+        "x": 2,
+        "y": 0,
+        "z": 0
+      },
+      "normal": {
+        "x": -1,
+        "y": 1,
+        "z": 0
+      },
+      "radius": 1,
+      "material": "disk"
+    }
+  ],
+  "background": {
+    "r": 0.7,
+    "g": 0.8,
+    "b": 1
+  },
+  "blueprints": {},
+  "camera": {
+    "fieldOfView": 80,
+    "focusDistance": 10,
+    "defocusAngle": 0,
+    "orientation": {
+      "lookFrom": {
+        "x": 0,
+        "y": 2,
+        "z": 4
+      },
+      "lookAt": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "upDirection": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      }
+    }
+  }
+}

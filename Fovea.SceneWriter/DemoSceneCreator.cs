@@ -16,12 +16,12 @@ public static class DemoSceneCreator
             DemoSceneId.FinalSceneBookOne => GetFinalSceneBookOne(false),
             DemoSceneId.FinalSceneBookOneMovingSpheres => GetFinalSceneBookOne(true),
             DemoSceneId.FinalSceneBookTwo => GetFinalSceneBookTwo(),
+            DemoSceneId.DiskTestScene => GetDiskTestScene(),
+            DemoSceneId.CylinderTest => GetCylinderTestScene(),
             _ => GetFinalSceneBookOne(false)
             // DemoScenes.ObjFileTest => GetObjFileTestScene(),
-            // DemoScenes.CylinderTest => GetCylinderTestScene(),
             // DemoScenes.TextureDemo => GetTextureTestScene(),
             // DemoScenes.PerlinNoise => GetPerlinNoiseTestScene(),
-            // DemoScenes.DiskTestScene => GetDiskTestScene(),
             // _ => GetCornellBoxScene()
         };
     }
@@ -125,7 +125,7 @@ public static class DemoSceneCreator
             Center = new Vector3(360, 150, 145), Radius = 70,
             MaterialReference = "glass"
         };
-        
+
         prims.Add(boundaryShape);
         prims.Add(new ConstantMediumDescriptor
         {
@@ -146,13 +146,13 @@ public static class DemoSceneCreator
             TextureReference = "white",
             Density = 0.0001f
         });
-        
+
         // sphere cluster right top
         // book example puts those into their own bvh (for good reason i guess)
         // clever bit here from the book, instance the whole bvh for a rotation/translation
         // to move the whole sphere block (instead of instancing a single base sphere for example
         // or transforming each directly)
-   
+
         var spheres = Enumerable.Range(0, 1000).Select(_ =>
         {
             var x = Sampler.Instance.RandomInt(0, 165);
@@ -164,7 +164,6 @@ public static class DemoSceneCreator
                 Radius = 10,
                 MaterialReference = "cluster"
             };
-
         });
 
         var subNode = new SubNodeDescriptor
@@ -193,7 +192,7 @@ public static class DemoSceneCreator
             ],
             BlueprintName = "cluster"
         });
-        
+
         return new SceneDescriptor
         {
             Primitives = prims,
@@ -226,82 +225,209 @@ public static class DemoSceneCreator
     }
 
 
-    //
-    // private static Scene GetDiskTestScene()
-    // {
-    //     var mat = new Lambertian(0.7f, 0.8f, 0.2f);
-    //
-    //     var prims = new List<IPrimitive>
-    //     {
-    //         new Sphere(new Vector3(0, -1000, 0), 999, new Lambertian(0.3f, 0.3f, 0.3f)),
-    //         new Disk(new Vector3(-2, 2, 0), new Vector3(0, 0, 1), 1, mat),
-    //         new Disk(new Vector3(0, 2, 0), new Vector3(0, 1, 1), 1, mat),
-    //         new Disk(new Vector3(2, 2, 0), new Vector3(0, -1, 1), 1, mat),
-    //
-    //         new Disk(new Vector3(-2, 4, 0), new Vector3(0, 1, 0), 1, mat),
-    //         new Disk(new Vector3(0, 4, 0), new Vector3(0, 1, -1), 1, mat),
-    //         new Disk(new Vector3(2, 4, 0), new Vector3(0, 0, -1), 1, mat),
-    //
-    //         new Disk(new Vector3(-2, 0, 0), new Vector3(1, 1, 0), 1, mat),
-    //         new Disk(new Vector3(0, 0, 0), new Vector3(0, 1, 0), 1, mat),
-    //         new Disk(new Vector3(2, 0, 0), new Vector3(-1, 1, 0), 1, mat)
-    //     };
-    //
-    //     // Camera
-    //     var orientation = new Orientation
-    //     {
-    //         LookFrom = new Vector3(0, 2, 4),
-    //         LookAt = new Vector3(0, 2, 0),
-    //         UpDirection = new Vector3(0, 1, 0)
-    //     };
-    //
-    //     var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-    //     var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 70.0f, .1f, focusDist);
-    //
-    //     return new Scene
-    //     {
-    //         World = new BVHTree(prims),
-    //         Camera = cam
-    //     };
-    // }
-    //
+    private static SceneDescriptor GetDiskTestScene()
+    {
+        
+
+        var textures = new Dictionary<string, ITextureGenerator>
+        {
+            ["ground"] = new RGBColor(0.3f, 0.3f, 0.3f),
+            ["disk"] = new RGBColor(0.8f, 0.8f, .2f)
+        };
+
+        var materials = new Dictionary<string, IMaterialGenerator>
+        {
+            ["ground"] = new MatteDescriptor { TextureReference = "ground" },
+            ["disk"] = new MatteDescriptor { TextureReference = "disk" }
+
+        };
+        
+        var prims = new List<IPrimitiveGenerator>
+        {
+            new DiskDescriptor
+            {
+                Center = new Vector3(-2, 2, 0),
+                Normal = new Vector3(0, 0, 1),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+            new DiskDescriptor
+            {
+                Center = new Vector3(0, 2, 0),
+                Normal = new Vector3(0, 1, 1),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+            new DiskDescriptor
+            {
+                Center = new Vector3(2, 2, 0),
+                Normal = new Vector3(0, -1, 1),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+
+            new DiskDescriptor
+            {
+                Center = new Vector3(-2, 4, 0),
+                Normal = new Vector3(0, 1, 0),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+            new DiskDescriptor
+            {
+                Center = new Vector3(0, 4, 0),
+                Normal = new Vector3(0, 1, -1),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+            new DiskDescriptor
+            {
+                Center = new Vector3(2, 4, 0),
+                Normal = new Vector3(0, 0, -1),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+
+            new DiskDescriptor
+            {
+                Center = new Vector3(-2, 0, 0),
+                Normal = new Vector3(1, 1, 0),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+            new DiskDescriptor
+            {
+                Center = new Vector3(0, 0, 0),
+                Normal = new Vector3(0, 1, 0),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+            new DiskDescriptor
+            {
+                Center = new Vector3(2, 0, 0),
+                Normal = new Vector3(-1, 1, 0),
+                Radius = 1,
+                MaterialReference = "disk"
+            },
+        };
+
+        // Camera
+        var orientation = new Orientation
+        {
+            LookFrom = new Vector3(0, 2, 4),
+            LookAt = new Vector3(0, 2, 0),
+            UpDirection = new Vector3(0, 1, 0)
+        };
+        
+        return new SceneDescriptor
+        {
+            Textures = textures,
+            Materials = materials,
+            Primitives = prims,
+            Options = new RenderOptions
+            {
+                ImageHeight = 600,
+                ImageWidth = 800,
+                NumSamples = 100
+            },
+            Camera = new CameraDescriptor
+            {
+                Orientation = orientation,
+                FieldOfView = 80,
+            }
+        };
+    }
+    
 
 
-    //
-    // private static Scene GetCylinderTestScene()
-    // {
-    //     var prims = new List<IPrimitive>();
-    //
-    //     for (var a = 0; a < 360; a += 15)
-    //     {
-    //         var m = new Metal(Sampler.Instance.RandomColor(0.5f), Sampler.Instance.Random(0.0f, 0.05f));
-    //         var cyl = new Cylinder(-1, 1, 0.3f, m);
-    //         var tr = new Transform()
-    //             .WithRotation(Axis.X, -90 + a)
-    //             .WithTranslation(0, 5, -5)
-    //             .WithRotation(Axis.Z, a);
-    //             
-    //         prims.Add(new Instance(cyl, tr));
-    //     }
-    //
-    //     // Camera
-    //     var orientation = new Orientation
-    //     {
-    //         LookFrom = new Vector3(-3, 0, 4),
-    //         LookAt = new Vector3(-2, 0, 0),
-    //         UpDirection = new Vector3(0, 1, 0)
-    //     };
-    //
-    //     var focusDist = (orientation.LookFrom - orientation.LookAt).Length();
-    //     var cam = new PerspectiveCamera(orientation, DefaultAspectRatio, 75.0f, .1f, focusDist);
-    //
-    //     return new Scene
-    //     {
-    //         World = new BVHTree(prims),
-    //         Camera = cam
-    //     };
-    // }
-    //
+    
+    private static SceneDescriptor GetCylinderTestScene()
+    {
+        var textures = new Dictionary<string, ITextureGenerator>();
+        var materials = new Dictionary<string, IMaterialGenerator>();
+                
+        var prims = new List<IPrimitiveGenerator>();
+    
+        var cylinderBlueprint = new CylinderDescriptor
+        {
+            Max = 1,
+            Min = -1,
+            Radius = 0.3f
+        };
+        
+        for (var a = 0; a < 360; a += 15)
+        {
+            var cylinderName = $"cyl{a}";
+            ITextureGenerator texture =
+                Sampler.Instance.Random01() < 0.5f
+                    ? Sampler.Instance.RandomColor(0.5f)
+                    : new NoiseTextureDescriptor { Scale = 0.1f };
+            
+            var mat = new MatteDescriptor
+            {
+                TextureReference = cylinderName
+            };
+            
+            textures[cylinderName] = texture;
+            materials[cylinderName] = mat;
+
+            prims.Add(new InstanceDescriptor
+            {
+                MaterialReference = cylinderName,
+                BlueprintName = "cylinder",
+                Transforms =
+                [
+                    new RotationDescriptor
+                    {
+                        Axis = Axis.X,
+                        Angle = -90 + a
+                    },
+                    new TranslationDescriptor
+                    {
+                        Y = 5,
+                        Z = -5
+                    },
+                    new RotationDescriptor
+                    {
+                        Axis = Axis.Z,
+                        Angle = a
+                    }
+                ]
+            });
+            
+        }
+    
+        // Camera
+        var orientation = new Orientation
+        {
+            LookFrom = new Vector3(-3, 0, 4),
+            LookAt = new Vector3(-2, 0, 0),
+            UpDirection = new Vector3(0, 1, 0)
+        };
+        
+        return new SceneDescriptor
+        {
+            Textures = textures,
+            Materials = materials,
+            Primitives = prims,
+            Blueprints = new Dictionary<string, IPrimitiveGenerator>
+            {
+                ["cylinder"] = cylinderBlueprint
+            },
+            Options = new RenderOptions
+            {
+                ImageHeight = 600,
+                ImageWidth = 800,
+                NumSamples = 100
+            },
+            Camera = new CameraDescriptor
+            {
+                Orientation = orientation,
+                FieldOfView = 80,
+            }
+        };
+    }
+    
 
 
     private static SceneDescriptor GetFinalSceneBookOne(bool withMovingSpheres)
