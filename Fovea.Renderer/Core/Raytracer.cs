@@ -15,7 +15,7 @@ public class Raytracer
     
     private static readonly ILogger<Raytracer> Log = Logging.GetLogger<Raytracer>();
 
-    private RGBColor ColorRayBook1(in Ray ray, Scene scene, int depth)
+    private RGBColor ColorRayBookOneAndTwo(in Ray ray, Scene scene, int depth)
     {
         if (depth <= 0)
             return RGBColor.Black;
@@ -31,7 +31,7 @@ public class Raytracer
             if (hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
             {
                 return colorFromEmission + 
-                    scatterResult.Attenuation * ColorRayBook1(scatterResult.OutRay, scene, depth - 1);
+                    scatterResult.Attenuation * ColorRayBookOneAndTwo(scatterResult.OutRay, scene, depth - 1);
             }
 
             return colorFromEmission;
@@ -118,6 +118,7 @@ public class Raytracer
         {
             var pixelBufferStart = taskNum * pixelPerThread;
             var increment = pixelPerThread * threadCount;
+            var sqrtSpp = (int)MathF.Sqrt(scene.Options.NumSamples);
             for (var offset = pixelBufferStart; offset < totalPixels; offset += increment)
             {
                 var max = Math.Min(offset + pixelPerThread, totalPixels);
@@ -125,11 +126,14 @@ public class Raytracer
                 {
                     var py = Math.DivRem(p, imageWidth, out var px);
                     var color = new RGBColor();
-                    for (var s = 0; s < scene.Options.NumSamples; ++s)
-                    {
-                        var ray = scene.Camera.ShootRay(px, py);
-                        // color += ColorRay(ray, scene, scene.Options.MaxDepth);
-                        color += ColorRayBook1(ray, scene, scene.Options.MaxDepth);
+                    
+                    for (var sj = 0; sj < sqrtSpp ; sj++) {
+                        for (var si = 0; si < sqrtSpp; si++) {
+                            // ray r = get_ray(i, j, s_i, s_j);
+                            var ray = scene.Camera.ShootRay(px, py, si, sj);
+                            // pixel_color += ray_color(r, max_depth, world);
+                            color += ColorRayBookOneAndTwo(ray, scene, scene.Options.MaxDepth);
+                        }
                     }
                     
                     // ReSharper disable once AccessToDisposedClosure

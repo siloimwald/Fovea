@@ -1,3 +1,4 @@
+using System;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Parser;
 using Fovea.Renderer.Sampling;
@@ -24,6 +25,7 @@ public class PerspectiveCamera
     private readonly bool _useDepthOfField;
     
     private readonly Vector3 _pixelZeroZero;
+    private readonly float _oneOverSqrtSpp;
     
     public PerspectiveCamera(CameraDescriptor cameraDescriptor,
         RenderOptions renderOptions)
@@ -35,6 +37,8 @@ public class PerspectiveCamera
         var h = Tan(theta / 2.0f);
         var viewportHeight = 2.0f * h * cameraDescriptor.FocusDistance;
         var viewportWidth = aspectRatio * viewportHeight;
+
+        _oneOverSqrtSpp = 1.0f / Sqrt(Max(1, renderOptions.NumSamples));
         
         _wAxis = Vector3.Normalize(cameraDescriptor.Orientation.LookFrom - cameraDescriptor.Orientation.LookAt);
         _uAxis = Vector3.Normalize(Vector3.Cross(cameraDescriptor.Orientation.UpDirection, _wAxis));
@@ -61,20 +65,20 @@ public class PerspectiveCamera
         _useDepthOfField = cameraDescriptor.DefocusAngle > 0;
     }
 
-    public Ray ShootRay(int px, int py)
+    public Ray ShootRay(int px, int py, int si, int sj)
     {
         var pixelCenter = _pixelZeroZero + _pixelDeltaU * px + _pixelDeltaV * py;
-        var pixelSample = pixelCenter + PixelSampleSquare();
+        var pixelSample = pixelCenter + PixelSampleSquare(si, sj);
         var origin = _useDepthOfField ? DefocusDiskSample() : _center;
         var dir = pixelSample - origin;
         var rayTime = Sampler.Instance.Random01();
         return new Ray(origin, dir, rayTime);
     }
 
-    private Vector3 PixelSampleSquare()
+    private Vector3 PixelSampleSquare(int si, int sj)
     {
-        var r1 = -0.5f + Sampler.Instance.Random01();
-        var r2 = -0.5f + Sampler.Instance.Random01();
+        var r1 = -0.5f + _oneOverSqrtSpp * (si + Sampler.Instance.Random01());
+        var r2 = -0.5f + _oneOverSqrtSpp * (sj + Sampler.Instance.Random01());
         return r1 * _pixelDeltaU + r2 * _pixelDeltaV;
     }
 
