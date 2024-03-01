@@ -224,7 +224,8 @@ public class JsonTests
                                     "point": { "x": 2, "y": -2 },
                                     "axisU": { "x": 1 },
                                     "axisV": { "y": 1 },
-                                    "material": "bla"
+                                    "material": "bla",
+                                    "id": "lightSource"
                                 }
                                 """;
 
@@ -237,6 +238,7 @@ public class JsonTests
         qd.AxisU.Should().Be(new Vector3(1, 0, 0));
         qd.AxisV.Should().Be(new Vector3(0, 1, 0));
         qd.MaterialReference.Should().Be("bla");
+        qd.Id.Should().Be("lightSource");
     }
 
     [Test]

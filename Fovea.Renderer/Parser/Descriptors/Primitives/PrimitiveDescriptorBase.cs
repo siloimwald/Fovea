@@ -12,6 +12,11 @@ public abstract class PrimitiveDescriptorBase
     [JsonPropertyName("material")]
     public string MaterialReference { get; init; } = string.Empty;
 
+    /// <summary>
+    /// allow importance list to refer to this primitive
+    /// </summary>
+    public string Id { get; init; } = string.Empty;
+    
     protected IMaterial GetMaterial(Dictionary<string, IMaterial> materials)
     {
         return materials.GetValueOrDefault(MaterialReference, null);

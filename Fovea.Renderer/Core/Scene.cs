@@ -4,14 +4,21 @@ namespace Fovea.Renderer.Core;
 
 public class Scene
 {
+    /// <summary>
+    /// scene objects
+    /// </summary>
     public IPrimitive World { get; init; }
-    public IPrimitive Lights { get; set; }
+    
+    /// <summary>
+    /// in the books, this is called light source(s), but, as the last example scene with the
+    /// glass sphere demonstrates, basically is a list of things that should be sampled
+    /// explicitly. And i hopefully understood that correctly :)
+    /// </summary>
+    public IPrimitive ImportanceSamplingList { get; set; }
+    
     public PerspectiveCamera Camera { get; set; }
+    
     public RGBColor Background { get; init; } = new(0.7f, 0.8f, 1f);
 
     public RenderOptions Options { get; init; }
-
-    
-    // hacky attempt at skybox
-    public IPrimitive Environment { get; set; }
 }

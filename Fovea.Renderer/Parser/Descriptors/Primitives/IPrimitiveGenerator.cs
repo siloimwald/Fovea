@@ -16,4 +16,5 @@ namespace Fovea.Renderer.Parser.Descriptors.Primitives;
 public interface IPrimitiveGenerator
 {
     IPrimitive Generate(ParserContext context);
+    public string Id { get; }
 }

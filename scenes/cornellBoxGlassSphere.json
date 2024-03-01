@@ -38,6 +38,10 @@
     }
   },
   "materials": {
+    "glass": {
+      "$type": "glass",
+      "ior": 1.5
+    },
     "green": {
       "$type": "matte",
       "texture": "green"
@@ -66,13 +70,11 @@
       ]
     },
     {
-      "$type": "instance",
-      "material": "white",
-      "blueprint": "rightBox",
-      "transforms": [
-        { "$type": "rotate", "by": -18, "axis": "Y" },
-        { "$type": "translate", "x": 130, "z": 65 }
-      ]
+      "$type": "sphere",
+      "id": "glassSphere",
+      "material": "glass",
+      "radius": 90,
+      "center": { "x": 190, "y": 90, "z": 190 }
     },
     {
       "$type": "quad",
@@ -160,14 +162,6 @@
         "y": 330,
         "z": 165
       }
-    },
-    "rightBox": {
-      "$type": "box",
-      "pointB": {
-        "x": 165,
-        "y": 165,
-        "z": 165
-      }
     }
   },
   "camera": {
@@ -191,6 +185,7 @@
     }
   },
   "importanceList": [
-    "lightCeiling"
+    "lightCeiling",
+    "glassSphere"
   ]
 }

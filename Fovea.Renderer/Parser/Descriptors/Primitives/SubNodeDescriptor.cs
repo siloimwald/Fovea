@@ -17,4 +17,7 @@ public class SubNodeDescriptor : IPrimitiveGenerator
     {
         return new BVHTree(Children.Select(c => c.Generate(context)).ToList());
     }
+
+    // don't, this would require that everything within the sub node implements reasonable sampling 
+    public string Id => string.Empty; 
 }
