@@ -11,7 +11,8 @@ public class Metal(ITexture albedo, float fuzzy = 0.0f) : IMaterial
     public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
     {
         scatterResult.IsSpecular = true;
-        scatterResult.Pdf = null;
+        // TODO
+        // scatterResult.Pdf = null;
         scatterResult.Attenuation = albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
 
         var reflected = Vector3.Reflect(Vector3.Normalize(rayIn.Direction), hitRecord.Normal);

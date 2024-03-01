@@ -2,7 +2,7 @@
 
 namespace Fovea.Renderer.VectorMath;
 
-public class OrthonormalBasis
+public readonly struct OrthonormalBasis
 {
     public readonly Vector3 UAxis;
     public readonly Vector3 VAxis;

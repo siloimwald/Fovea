@@ -15,89 +15,46 @@ public class Raytracer
     
     private static readonly ILogger<Raytracer> Log = Logging.GetLogger<Raytracer>();
 
-    private RGBColor ColorRayBookOneAndTwo(in Ray ray, Scene scene, int depth)
+    private RGBColor ColorRay(in Ray ray, Scene scene, int depth)
     {
         if (depth <= 0)
             return RGBColor.Black;
         
         var hitRecord = new HitRecord();
 
-        if (scene.World.Hit(ray, new Interval(1e-3f, float.PositiveInfinity), ref hitRecord))
+        // no hit
+        if (!scene.World.Hit(ray, new Interval(1e-3f, float.PositiveInfinity), ref hitRecord))
         {
-
-            var colorFromEmission = hitRecord.Material.Emitted(ray, hitRecord);
-            
-            var scatterResult = new ScatterResult();
-            if (hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
-            {
-                return colorFromEmission + 
-                    scatterResult.Attenuation * ColorRayBookOneAndTwo(scatterResult.OutRay, scene, depth - 1);
-            }
-
-            return colorFromEmission;
-        }
-
-        return scene.Background;
-    }
-    
-    private RGBColor ColorRay(Ray ray, Scene scene, int depth)
-    {
-        if (depth <= 0)
-            return new RGBColor(0.0f);
-
-        var hitRecord = new HitRecord();
-        // nothing hit, yield background
-        if (!scene.World.Hit(ray, Interval.HalfOpenWithOffset(), ref hitRecord))
-        {
-            if (scene.Environment != null &&
-                scene.Environment.Hit(ray, Interval.HalfOpenWithOffset(), ref hitRecord))
-            {
-                var envScatter = new ScatterResult();
-                if (hitRecord.Material.Scatter(ray, hitRecord, ref envScatter))
-                    return envScatter.Attenuation;
-            }
-
             return scene.Background;
         }
-
-
+        
+        var colorFromEmission = hitRecord.Material.Emitted(ray, hitRecord);
+            
         var scatterResult = new ScatterResult();
-        var emitted = hitRecord.Material.Emitted(ray, hitRecord);
-        // no scattering takes place or hit emitter, return emitted
+
+        // no scattering
         if (!hitRecord.Material.Scatter(ray, hitRecord, ref scatterResult))
-            return emitted;
-
-        if (scatterResult.IsSpecular)
-            return scatterResult.Attenuation * ColorRay(scatterResult.SpecularRay, scene, depth - 1);
-
-        // attempt at being compatible with the previous book scenes
-        // if (scene.Lights == null)
-        // {
-        //     var outRay = new Ray(hitRecord.HitPoint, scatterResult.Pdf.Generate());
-        //     return emitted
-        //            + scatterResult.Attenuation
-        //            * hitRecord.Material.ScatteringPDF(ray, hitRecord, outRay)
-        //            * ColorRay(outRay, scene, depth - 1) * (1.0f / scatterResult.Pdf.Evaluate(outRay.Direction));
-        // }
-        // else
         {
-            var lightPdf = new PrimitivePDF(scene.Lights, hitRecord.HitPoint);
-            var mixPdf = new MixturePDF(scatterResult.Pdf, lightPdf);
-            var outRay = new Ray(hitRecord.HitPoint, mixPdf.Generate(), ray.Time);
-            var pdfCorrection = 1.0f / mixPdf.Evaluate(outRay.Direction);
-
-            return emitted
-                   + scatterResult.Attenuation
-                   * hitRecord.Material.ScatteringPDF(ray, hitRecord, outRay)
-                   * ColorRay(outRay, scene, depth - 1) * pdfCorrection;
+            return colorFromEmission;
         }
+        
+        var scatteringPdf = hitRecord.Material.ScatteringPDF(ray, hitRecord, scatterResult.OutRay);
+        var surfacePdf = new CosinePDF(hitRecord.Normal);
+        // var scatteredRay = new Ray(hitRecord.HitPoint, surfacePdf.Generate(), ray.Time);
+
+        var pdfValue = surfacePdf.Evaluate(scatterResult.OutRay.Direction);
+
+        var colorFromScatter
+            = (scatterResult.Attenuation * scatteringPdf *
+               ColorRay(scatterResult.OutRay, scene, depth - 1)) *  (1.0f /pdfValue);
+
+        return colorFromEmission + colorFromScatter;
     }
 
     public void Render(Scene scene)
     {
         var imageWidth = scene.Options.ImageWidth;
         var imageHeight = scene.Options.ImageHeight;
-        // var image = new ImageFilm(imageWidth, imageHeight);
         var image = new Image<RgbaVector>(imageWidth, imageHeight);
 
         // print what we're doing
@@ -132,7 +89,7 @@ public class Raytracer
                             // ray r = get_ray(i, j, s_i, s_j);
                             var ray = scene.Camera.ShootRay(px, py, si, sj);
                             // pixel_color += ray_color(r, max_depth, world);
-                            color += ColorRayBookOneAndTwo(ray, scene, scene.Options.MaxDepth);
+                            color += ColorRay(ray, scene, scene.Options.MaxDepth);
                         }
                     }
                     

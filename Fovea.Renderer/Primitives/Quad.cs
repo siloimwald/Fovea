@@ -1,5 +1,6 @@
 ﻿using System;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Sampling;
 using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Primitives;
@@ -16,7 +17,8 @@ public class Quad : IPrimitive
     private readonly Vector3 _vDirection;
     private readonly Vector3 _w;
     private readonly IMaterial _material;
-
+    private readonly float _area;
+    
     /// <summary>
     /// quadrilateral from book 2, Section 6 
     /// </summary>
@@ -28,6 +30,7 @@ public class Quad : IPrimitive
         _material = material;
         var uCrossV = Vector3.Cross(uDirection, vDirection);
         _normal = Vector3.Normalize(uCrossV);
+        _area = uCrossV.Length();
         _w = uCrossV / uCrossV.LengthSquared();
         _distance = Vector3.Dot(_normal, _point);
     }
@@ -74,5 +77,27 @@ public class Quad : IPrimitive
         var min = Vector3.Min(_point, q2);
         var max = Vector3.Max(_point, q2);
         return new BoundingBox(min, max).Padded();
+    }
+
+    public float PdfValue(Vector3 origin, Vector3 direction)
+    {
+        var hr = new HitRecord();
+        if (!Hit(new Ray(origin, direction), Interval.HalfOpenWithOffset(), ref hr))
+        {
+            return 0.0f;
+        }
+
+        var distanceSquared = hr.RayT * hr.RayT * direction.LengthSquared();
+        var cosine = MathF.Abs(Vector3.Dot(direction, hr.Normal) / direction.Length());
+
+        return distanceSquared / (cosine * _area);
+    }
+
+    public Vector3 RandomDirection(Vector3 origin)
+    {
+        var p = _point +
+                (Sampler.Instance.Random01() * _uDirection)
+                + (Sampler.Instance.Random01() * _vDirection);
+        return p - origin;
     }
 }
