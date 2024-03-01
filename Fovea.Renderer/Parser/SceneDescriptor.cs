@@ -6,6 +6,7 @@ using Fovea.Renderer.Parser.Descriptors.Materials;
 using Fovea.Renderer.Parser.Descriptors.Primitives;
 using Fovea.Renderer.Parser.Descriptors.Textures;
 using Fovea.Renderer.Parser.Json;
+using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Viewing;
 using Microsoft.Extensions.Logging;
 
@@ -39,6 +40,12 @@ public class SceneDescriptor
     /// </summary>
     public List<IPrimitiveGenerator> Primitives { get; init; } = [];
 
+    /// <summary>
+    /// references scene primitives by id, which should be added (again) to the
+    /// importance list of the scene, i.e. for directly sampling light sources
+    /// </summary>
+    public List<string> ImportanceList { get; init; } = [];
+    
     public RGBColor Background { get; init; } = new(0.7f, 0.8f, 1f);
 
     /// <summary>
@@ -73,10 +80,24 @@ public class SceneDescriptor
         {
             context.Blueprints[key] = val.Generate(context);
         }
-        
-        // generate all the primitives
-        var primList = Primitives.Select(p => p.Generate(context))
-            .ToList();
+
+        var importanceList = new PrimitiveList();
+        var primitiveList = new List<IPrimitive>();
+        foreach (var primGenerator in Primitives)
+        {
+            var generatedPrimitive = primGenerator.Generate(context);
+            primitiveList.Add(generatedPrimitive);
+            if (string.IsNullOrEmpty(primGenerator.Id)) continue;
+            if (ImportanceList.Contains(primGenerator.Id))
+            {
+                importanceList.Add(generatedPrimitive);
+                Log.LogInformation("adding {Id} to importance list", primGenerator.Id);
+            }
+            else
+            {
+                Log.LogWarning("reference id {Id} for importance list not found", primGenerator.Id);
+            }
+        }
         
         if (Options == null)
         {
@@ -86,10 +107,10 @@ public class SceneDescriptor
         
         return new Scene
         {
-            World = new BVHTree(primList),
+            World = new BVHTree(primitiveList),
             Background = Background,
             Options = Options,
-            // Lights = new PrimitiveList(lightSources), // crashes with BVH and single item
+            ImportanceSamplingList = importanceList,
             Camera = new PerspectiveCamera(Camera, Options)
         };
     }

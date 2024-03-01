@@ -8,7 +8,5 @@ public struct ScatterResult
     public RGBColor Attenuation;
     public bool IsSpecular;
     public Ray SpecularRay;
-    // public IPDF Pdf;
-    public float Pdf;
-    public Ray OutRay { get; set; }
+    public IPDF Pdf;
 }

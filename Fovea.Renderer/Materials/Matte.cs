@@ -9,16 +9,9 @@ public class Matte(ITexture albedo) : IMaterial
 {
     public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
     {
-        
         scatterResult.IsSpecular = false;
+        scatterResult.Pdf = new CosinePDF(hitRecord.Normal);
         scatterResult.Attenuation = albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
-
-        var onb = new OrthonormalBasis(hitRecord.Normal);
-        var scatterDirection = onb.Local(Sampler.Instance.RandomCosineDirection());
-        scatterResult.OutRay = 
-            new Ray(hitRecord.HitPoint, scatterDirection, rayIn.Time);
-        scatterResult.Pdf = Vector3.Dot(onb.WAxis, scatterDirection) / MathF.PI;
-        
         return true;
     }
 

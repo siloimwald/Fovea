@@ -20,10 +20,7 @@ public class Dielectric(float ior) : IMaterial
             ? Vector3.Reflect(unitDirection, hitRecord.Normal)
             : MathUtils.Refract(unitDirection, hitRecord.Normal, ratio);
         
-        scatterResult.OutRay = new Ray(hitRecord.HitPoint, outDir, rayIn.Time);
-        scatterResult.IsSpecular = true;
-        // TODO
-        // scatterResult.Pdf = null;
+        scatterResult.IsSpecular = true;        
         scatterResult.Attenuation = new RGBColor(1.0f, 1.0f, 1.0f);
         scatterResult.SpecularRay = new Ray(hitRecord.HitPoint, outDir, rayIn.Time);
         return true;

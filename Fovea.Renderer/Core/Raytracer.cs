@@ -37,16 +37,25 @@ public class Raytracer
         {
             return colorFromEmission;
         }
-        
-        var scatteringPdf = hitRecord.Material.ScatteringPDF(ray, hitRecord, scatterResult.OutRay);
-        var surfacePdf = new CosinePDF(hitRecord.Normal);
-        // var scatteredRay = new Ray(hitRecord.HitPoint, surfacePdf.Generate(), ray.Time);
 
-        var pdfValue = surfacePdf.Evaluate(scatterResult.OutRay.Direction);
+        if (scatterResult.IsSpecular)
+        {
+            return scatterResult.Attenuation 
+                   * ColorRay(scatterResult.SpecularRay, scene, depth - 1);
+        }
+        
+        var p0 = new PrimitivePDF(scene.ImportanceSamplingList, hitRecord.HitPoint);
+        var mixturePdf = new MixturePDF(p0, scatterResult.Pdf);
+        
+        var scatteredDirection = new Ray(hitRecord.HitPoint, mixturePdf.Generate(), ray.Time);
+        var pdfValue = mixturePdf.Evaluate(scatteredDirection.Direction);
+        
+        // from actual primitive
+        var scatteringPdf = hitRecord.Material.ScatteringPDF(ray, hitRecord, scatteredDirection);
 
         var colorFromScatter
             = (scatterResult.Attenuation * scatteringPdf *
-               ColorRay(scatterResult.OutRay, scene, depth - 1)) *  (1.0f /pdfValue);
+               ColorRay(scatteredDirection, scene, depth - 1)) *  (1.0f /pdfValue);
 
         return colorFromEmission + colorFromScatter;
     }

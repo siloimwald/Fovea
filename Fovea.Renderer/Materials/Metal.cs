@@ -11,21 +11,11 @@ public class Metal(ITexture albedo, float fuzzy = 0.0f) : IMaterial
     public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
     {
         scatterResult.IsSpecular = true;
-        // TODO
-        // scatterResult.Pdf = null;
         scatterResult.Attenuation = albedo.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
 
         var reflected = Vector3.Reflect(Vector3.Normalize(rayIn.Direction), hitRecord.Normal);
         var dir = reflected + Sampler.Instance.RandomOnUnitSphere() * _fuzzy;
-        
-        // book 1 drop in
-        scatterResult.OutRay = 
-            new Ray(hitRecord.HitPoint,
-                dir,
-                rayIn.Time);
-        
-        scatterResult.SpecularRay =
-            new Ray(hitRecord.HitPoint, dir, rayIn.Time);
+        scatterResult.SpecularRay = new Ray(hitRecord.HitPoint, dir, rayIn.Time);
         return true;
     }
 }

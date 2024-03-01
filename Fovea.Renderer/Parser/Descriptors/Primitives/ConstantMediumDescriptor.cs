@@ -9,7 +9,8 @@ public class ConstantMediumDescriptor : MaterialDescriptorBase, IPrimitiveGenera
 {
     public required float Density { get; init; }
     public required IPrimitiveGenerator Boundary { get; init; }
-    
+    public string Id => Boundary.Id;
+
     public IPrimitive Generate(ParserContext context)
     {
         var boundary = Boundary.Generate(context);
