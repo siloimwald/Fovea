@@ -2,7 +2,7 @@ using Fovea.Renderer.Core;
 
 namespace Fovea.Renderer.Sampling;
 
-public class PrimitivePDF(IPrimitive primitive, Vector3 origin) : IPDF
+public readonly struct PrimitivePDF(IPrimitive primitive, Vector3 origin) : IPDF
 {
     public float Evaluate(Vector3 direction)
     {

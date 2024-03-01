@@ -1,7 +1,7 @@
 namespace Fovea.Renderer.Core;
 
 /// <summary>keeps track of various bits of an intersection.</summary>
-public struct HitRecord
+public ref struct HitRecord
 {
     /// <summary>point where we've hit the object</summary>
     public Vector3 HitPoint;

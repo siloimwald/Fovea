@@ -1,6 +1,6 @@
 namespace Fovea.Renderer.Sampling;
 
-public class MixturePDF(IPDF left, IPDF right) : IPDF
+public readonly struct MixturePDF(IPDF left, IPDF right) : IPDF
 {
     public float Evaluate(Vector3 direction)
     {

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Fovea.Renderer.Core;
 
-public struct Interval
+public ref struct Interval
 {
     /// <summary>
     /// the left bound/min value of this interval
@@ -88,7 +88,4 @@ public struct Interval
     }
 
     public override string ToString() => $"[{Min:F} <=> {Max:F}]";
-
-    public static readonly Interval Universe = new Interval(float.NegativeInfinity, float.PositiveInfinity);
-    public static readonly Interval Empty = new Interval(float.PositiveInfinity, float.NegativeInfinity);
 }

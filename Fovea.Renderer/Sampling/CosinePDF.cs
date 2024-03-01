@@ -3,15 +3,10 @@ using Fovea.Renderer.VectorMath;
 
 namespace Fovea.Renderer.Sampling;
 
-public class CosinePDF : IPDF
+public readonly struct CosinePDF(Vector3 normal) : IPDF
 {
-    private readonly OrthonormalBasis _onb;
-    
-    public CosinePDF(Vector3 normal)
-    {
-        _onb = new OrthonormalBasis(normal);
-    }
-    
+    private readonly OrthonormalBasis _onb = new(normal);
+
     public float Evaluate(Vector3 direction)
     {
         var cosine = Vector3.Dot(Vector3.Normalize(direction), _onb.WAxis);
