@@ -12,8 +12,9 @@ public class PrimitiveList(List<IPrimitive> prims) : IPrimitive
     {
     }
 
-    public IPrimitive this[int index] => prims[index];
-
+    public bool IsEmpty => prims.Count == 0;
+    public int Count => prims.Count;
+    
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
     {
         var hitSomething = false;
