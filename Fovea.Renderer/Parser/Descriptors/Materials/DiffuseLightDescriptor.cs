@@ -8,5 +8,6 @@ namespace Fovea.Renderer.Parser.Descriptors.Materials;
 
 public class DiffuseLightDescriptor : MaterialDescriptorBase, IMaterialGenerator
 {
-    public IMaterial Generate(IDictionary<string, ITexture> textures) => new DiffuseLight(GetTextureOrFail(textures));
+    public bool FlipNormal { get; set; }
+    public IMaterial Generate(IDictionary<string, ITexture> textures) => new DiffuseLight(GetTextureOrFail(textures), FlipNormal);
 }

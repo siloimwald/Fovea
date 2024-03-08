@@ -2,7 +2,7 @@ using Fovea.Renderer.Core;
 
 namespace Fovea.Renderer.Materials;
 
-public class DiffuseLight(ITexture color) : IMaterial
+public class DiffuseLight(ITexture color, bool flipNormal = false) : IMaterial
 {
     public bool Scatter(in Ray rayIn, HitRecord hitRecord, ref ScatterResult scatterResult)
     {
@@ -11,6 +11,11 @@ public class DiffuseLight(ITexture color) : IMaterial
 
     public RGBColor Emitted(in Ray ray, in HitRecord hitRecord)
     {
-        return !hitRecord.IsFrontFace ? RGBColor.Black : color.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
+        var notFrontFace = !hitRecord.IsFrontFace;
+        if (flipNormal)
+        {
+            notFrontFace = !notFrontFace;
+        }
+        return notFrontFace ? RGBColor.Black : color.Value(hitRecord.TextureU, hitRecord.TextureV, hitRecord.HitPoint);
     }
 }

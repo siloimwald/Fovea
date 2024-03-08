@@ -98,6 +98,11 @@ public class SceneDescriptor
                 Log.LogWarning("reference id {Id} for importance list not found", primGenerator.Id);
             }
         }
+
+        if (ImportanceList.Count != importanceList.Count)
+        {
+            Log.LogWarning("importance list mismatch");
+        }
         
         if (Options == null)
         {
