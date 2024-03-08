@@ -72,10 +72,11 @@ public class Quad : IPrimitive
 
     public BoundingBox GetBoundingBox()
     {
-        // the point opposite to point
-        var q2 = _point + _uDirection + _vDirection;
-        var min = Vector3.Min(_point, q2);
-        var max = Vector3.Max(_point, q2);
+        var p1 = _point + _uDirection + _vDirection;
+        var p2 = _point + _uDirection;
+        var p3 = _point + _vDirection;
+        var min = Vector3.Min(Vector3.Min(Vector3.Min(_point, p1), p2), p3);
+        var max = Vector3.Max(Vector3.Max(Vector3.Max(_point, p1), p2), p3);
         return new BoundingBox(min, max).Padded();
     }
 
