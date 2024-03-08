@@ -95,7 +95,7 @@ public class SceneDescriptor
             }
             else
             {
-                Log.LogWarning("reference id {Id} for importance list not found", primGenerator.Id);
+                Log.LogWarning("reference id {Id} for importance list not found or unused", primGenerator.Id);
             }
         }
 

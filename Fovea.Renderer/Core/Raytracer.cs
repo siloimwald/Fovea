@@ -44,8 +44,8 @@ public class Raytracer
                    * ColorRay(scatterResult.SpecularRay, scene, depth - 1);
         }
         
-        var p0 = new PrimitivePDF(scene.ImportanceSamplingList, hitRecord.HitPoint);
-        var mixturePdf = new MixturePDF(p0, scatterResult.Pdf);
+        var lightPdf = new PrimitivePDF(scene.ImportanceSamplingList, hitRecord.HitPoint);
+        var mixturePdf = new MixturePDF(lightPdf, scatterResult.Pdf);
         
         var scatteredDirection = new Ray(hitRecord.HitPoint, mixturePdf.Generate(), ray.Time);
         var pdfValue = mixturePdf.Evaluate(scatteredDirection.Direction);
@@ -95,9 +95,7 @@ public class Raytracer
                     
                     for (var sj = 0; sj < sqrtSpp ; sj++) {
                         for (var si = 0; si < sqrtSpp; si++) {
-                            // ray r = get_ray(i, j, s_i, s_j);
                             var ray = scene.Camera.ShootRay(px, py, si, sj);
-                            // pixel_color += ray_color(r, max_depth, world);
                             color += ColorRay(ray, scene, scene.Options.MaxDepth);
                         }
                     }

@@ -16,12 +16,21 @@
       "$type": "matte",
       "texture": "ground"
     },
+    "forest": {
+      "$type": "diffuseLight",
+      "texture": "forest",
+      "flipNormal": true
+    },
     "light": {
       "$type": "diffuseLight",
       "texture": "light"
     }
   },
   "textures": {
+    "forest": {
+      "$type": "image",
+      "fileName": "assets/forest.jpg"
+    },
     "teapot": {
       "$type": "color",
       "r": 0.8,
@@ -34,9 +43,9 @@
     },
     "light": {
       "$type": "color",
-      "r": 6,
-      "g": 6,
-      "b": 6
+      "r": 2,
+      "g": 2,
+      "b": 2
     }
   },
   "primitives": [
@@ -48,14 +57,22 @@
       "vertexNormals": true
     },
     {
+      "$type": "sphere",
+      "id": "forest",
+      "center": {"x": 0, "y": 0, "z": 0},
+      "radius": 50,
+      "material": "forest"
+    },
+    {
       "$type": "quad",
+      "id": "lightSource",
       "point": {
         "x": -3,
         "y": 5,
         "z": -3
       },
       "axisU": {
-        "z": 6
+        "x": 6
       },
       "axisV": {
         "z": 6
@@ -78,15 +95,23 @@
       "material": "ground"
     }
   ],
+  "importanceList": [
+    "lightSource"
+  ],
+  "background": {
+    "r": 0,
+    "g": 0,
+    "b": 0
+  },
   "camera": {
-    "fieldOfView": 40,
-    "focusDistance": 10,
-    "defocusAngle": 0,
+    "fieldOfView": 55,
+    "focusDistance": 3,
+    "defocusAngle": 1,
     "orientation": {
       "lookFrom": {
         "x": -1,
-        "y": 1.5,
-        "z": -3
+        "y": 1.2,
+        "z": -2.5
       },
       "lookAt": {
         "x": 0,
