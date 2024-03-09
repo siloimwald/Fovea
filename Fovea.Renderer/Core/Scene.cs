@@ -1,3 +1,4 @@
+using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Viewing;
 
 namespace Fovea.Renderer.Core;
@@ -14,7 +15,7 @@ public class Scene
     /// glass sphere demonstrates, basically is a list of things that should be sampled
     /// explicitly. And i hopefully understood that correctly :)
     /// </summary>
-    public IPrimitive ImportanceSamplingList { get; set; }
+    public PrimitiveList ImportanceSamplingList { get; set; }
     
     public PerspectiveCamera Camera { get; set; }
     

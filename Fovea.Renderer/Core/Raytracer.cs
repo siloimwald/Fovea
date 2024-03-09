@@ -43,19 +43,22 @@ public class Raytracer
             return scatterResult.Attenuation 
                    * ColorRay(scatterResult.SpecularRay, scene, depth - 1);
         }
-        
-        var lightPdf = new PrimitivePDF(scene.ImportanceSamplingList, hitRecord.HitPoint);
-        var mixturePdf = new MixturePDF(lightPdf, scatterResult.Pdf);
-        
-        var scatteredDirection = new Ray(hitRecord.HitPoint, mixturePdf.Generate(), ray.Time);
-        var pdfValue = mixturePdf.Evaluate(scatteredDirection.Direction);
+
+        // scenes with an empty importance sampling list would break, this keeps things
+        // working with scenes from book 1 and 2
+        var pdf = scene.ImportanceSamplingList.IsEmpty
+            ? scatterResult.Pdf
+            : new MixturePDF(scatterResult.Pdf, new PrimitivePDF(scene.ImportanceSamplingList, hitRecord.HitPoint));
+   
+        var scatteredRay = new Ray(hitRecord.HitPoint, pdf.Generate(), ray.Time);
+        var pdfValue = pdf.Evaluate(scatteredRay.Direction);
         
         // from actual primitive
-        var scatteringPdf = hitRecord.Material.ScatteringPDF(ray, hitRecord, scatteredDirection);
+        var scatteringPdf = hitRecord.Material.ScatteringPDF(ray, hitRecord, scatteredRay);
 
         var colorFromScatter
             = (scatterResult.Attenuation * scatteringPdf *
-               ColorRay(scatteredDirection, scene, depth - 1)) *  (1.0f /pdfValue);
+               ColorRay(scatteredRay, scene, depth - 1)) *  (1.0f /pdfValue);
 
         return colorFromEmission + colorFromScatter;
     }
