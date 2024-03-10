@@ -18,17 +18,17 @@ public class JsonParser
         };
 
 
-    public static Scene ParseFile(string fileName)
+    public static Scene ParseFile(string fileName, OptionsOverride optionOverrides)
     {
         var fullPath = Path.GetFullPath(Path.GetDirectoryName(fileName)!);
         var fileContent = File.ReadAllText(fileName);
         return Parse(fileContent, new ParserContext
         {
             SceneFileLocation = fullPath
-        });
+        }, optionOverrides);
     }
 
-    private static Scene Parse(string fileContent, ParserContext context)
+    private static Scene Parse(string fileContent, ParserContext context, OptionsOverride optionOverrides)
     {
         var sceneDescriptor = JsonSerializer.Deserialize<SceneDescriptor>(fileContent, JsonOptions);
         // try to do some hardening and sanity checking
@@ -42,14 +42,8 @@ public class JsonParser
         {
             Log.LogWarning("no textures defined");
         }
-
-        // if (sceneDescriptor.Lights == null || sceneDescriptor.Lights.Count == 0)
-        // {
-        //     Log.LogWarning("no light source defined");
-        //     throw new NotSupportedException("scene needs at least one light source");
-        // }
-
-        return sceneDescriptor.Build(context);
+        // need to pass options along since camera construction depends on that
+        return sceneDescriptor.Build(context, optionOverrides);
     }
 
 }

@@ -24,8 +24,8 @@ public class SceneDescriptor
     /// <summary>
     /// non scene related render options
     /// </summary>
-    public RenderOptions Options { get; set; } 
-    
+    public RenderOptions Options { get; set; }
+
     /// <summary>
     /// reusable map of texture definitions, keyed by string to make referencing them easier
     /// </summary>
@@ -46,21 +46,21 @@ public class SceneDescriptor
     /// importance list of the scene, i.e. for directly sampling light sources
     /// </summary>
     public List<string> ImportanceList { get; init; } = [];
-    
+
     public RGBColor Background { get; init; } = new(0.7f, 0.8f, 1f);
 
     /// <summary>
     /// instance-able objects, instances provide transformation and different material
     /// </summary>
     public Dictionary<string, IPrimitiveGenerator> Blueprints { get; init; } = new();
-    
+
     public CameraDescriptor Camera { get; init; }
 
-    public Scene Build(ParserContext context)
+    public Scene Build(ParserContext context, OptionsOverride optionOverrides)
     {
         // keep track of stuff we should dispose after rendering, mostly image textures for now
         var disposables = new List<IDisposable>();
-        
+
         // step 1, convert all textures to their real representation
         var textures =
             Textures.ToDictionary(
@@ -68,7 +68,7 @@ public class SceneDescriptor
                 vs =>
                 {
                     var texture = vs.Value.Generate(context);
-                    if (texture is IDisposable disposable)       
+                    if (texture is IDisposable disposable)
                         disposables.Add(disposable);
                     return texture;
                 });
@@ -77,12 +77,25 @@ public class SceneDescriptor
         var materials = Materials.ToDictionary(
             ks => ks.Key,
             vs => vs.Value.Generate(textures));
-        
+
         // pass materials and texture into context
         // note that blueprints might use these as well
         context.Materials = materials;
         context.Textures = textures;
-        
+
+        if (Options == null)
+        {
+            Log.LogWarning("no options defined, use defaults");
+            Options = new RenderOptions();
+        }
+
+        Options.ImageWidth = optionOverrides.ImageWidth.GetValueOrDefault(Options.ImageWidth);
+        Options.ImageHeight = optionOverrides.ImageHeight.GetValueOrDefault(Options.ImageHeight);
+        Options.NumSamples = optionOverrides.NumSamples.GetValueOrDefault(Options.NumSamples);
+        Options.OutputFile = string.IsNullOrEmpty(optionOverrides.OutputFile)
+            ? Options.OutputFile
+            : optionOverrides.OutputFile;
+
         // slight hack so blueprints/instancing fits into the existing interface
         // needs more work to actually instance whole meshes (idea: whole mesh is one bvh on its own...)
         context.Blueprints = new Dictionary<string, IPrimitive>();
@@ -113,13 +126,7 @@ public class SceneDescriptor
         {
             Log.LogWarning("importance list mismatch");
         }
-        
-        if (Options == null)
-        {
-            Log.LogWarning("no options defined, use defaults");
-            Options = new RenderOptions();
-        }
-        
+
         return new Scene(disposables)
         {
             World = new BVHTree(primitiveList),

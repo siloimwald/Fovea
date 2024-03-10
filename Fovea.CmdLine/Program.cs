@@ -1,6 +1,7 @@
 ﻿using System;
 using CommandLine;
 using Fovea.Renderer.Core;
+using Fovea.Renderer.Parser;
 using Fovea.Renderer.Parser.Json;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp.Diagnostics;
@@ -20,41 +21,16 @@ internal class Program
 
                 try
                 {
-                    var scene = JsonParser.ParseFile(opts.SceneFile);
+                    var optionOverrides = new OptionsOverride
+                    {
+                        ImageHeight = opts.ImageHeight,
+                        ImageWidth = opts.ImageWidth,
+                        OutputFile = opts.OutputFilename,
+                        NumSamples = opts.NumSamples
+                    };
+                    
+                    var scene = JsonParser.ParseFile(opts.SceneFile, optionOverrides);
                     var renderer = new Raytracer();
-
-                    // not great, but does the job. allow optional parameters to override
-                    // certain parameters to be overruled. mostly those that affect render speed
-                    // for easier testing
-
-                    if (opts.NumSamples > 0)
-                    {
-                        Log.LogInformation("override sample count new={newSampleCount} old=({oldSampleCount})",
-                            opts.NumSamples, scene.Options.NumSamples);
-                        scene.Options.NumSamples = opts.NumSamples;
-                    }
-
-                    if (opts.ImageWidth > 0)
-                    {
-                        Log.LogInformation("override image width new={newImageWidth} old=({oldImageWidth})",
-                            opts.ImageWidth, scene.Options.ImageWidth);
-                        scene.Options.ImageWidth = opts.ImageWidth;
-                    }
-
-                    if (opts.ImageHeight > 0)
-                    {
-                        Log.LogInformation("override image height new={newImageHeight} old=({oldImageHeight})",
-                            opts.ImageHeight, scene.Options.ImageHeight);
-                        scene.Options.ImageHeight = opts.ImageHeight;
-                    }
-
-                    if (!string.IsNullOrEmpty(opts.OutputFilename))
-                    {
-                        Log.LogInformation("override output filename new={newOutputFileName} old=({oldOutputFileName})",
-                            opts.OutputFilename, scene.Options.OutputFile);
-                        scene.Options.OutputFile = opts.OutputFilename;
-                    }
-
                     renderer.Render(scene);
                 }
                 catch (Exception err)

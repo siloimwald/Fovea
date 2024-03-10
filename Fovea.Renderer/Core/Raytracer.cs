@@ -71,8 +71,7 @@ public class Raytracer
         var image = new Image<RgbaVector>(imageWidth, imageHeight);
 
         // print what we're doing
-        Log.LogInformation("Image size {imageWidth}x{imageHeight}, samples = {numSamples}",
-            imageWidth, imageHeight, scene.Options.NumSamples);
+        Log.LogInformation("{Opts}", scene.Options);
         
         var sw = Stopwatch.StartNew();
 
@@ -119,6 +118,9 @@ public class Raytracer
 
         Parallel.For(0, threadCount,
             new ParallelOptions {MaxDegreeOfParallelism = Environment.ProcessorCount}, RenderInterleaved);
+
+        scene.Dispose(); // attempt to free image textures
+
         
         // average and gamma correct whole image in one go
         image.Mutate(c => c.ProcessPixelRowsAsVector4(row =>
@@ -134,6 +136,5 @@ public class Raytracer
         Console.WriteLine($"\nFinished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
         image.SaveAsPng(scene.Options.OutputFile);
         image.Dispose();
-        scene.Dispose(); // attempt to free image textures
     }
 }
