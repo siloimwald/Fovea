@@ -31,7 +31,7 @@ internal class Program
                     
                     var scene = JsonParser.ParseFile(opts.SceneFile, optionOverrides);
                     var renderer = new Raytracer();
-                    renderer.Render(scene);
+                    renderer.Render(scene, opts.DoBenchmarkRuns);
                 }
                 catch (Exception err)
                 {

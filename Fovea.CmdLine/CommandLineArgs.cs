@@ -19,4 +19,7 @@ public class CommandLineArgs
 
     [Option('f', Required = false, HelpText = "filename override")]
     public string OutputFilename { get; set; } = string.Empty;
+
+    [Option('b', Required = false, HelpText = "repeat render runs for time measurements")]
+    public bool DoBenchmarkRuns { get; set; } = false;
 }

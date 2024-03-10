@@ -64,23 +64,14 @@ public class Raytracer
         return colorFromEmission + colorFromScatter;
     }
 
-    public void Render(Scene scene)
+    private void RenderSceneInto(Scene scene, Image<RgbaVector> imageBuffer)
     {
-        var imageWidth = scene.Options.ImageWidth;
-        var imageHeight = scene.Options.ImageHeight;
-        var image = new Image<RgbaVector>(imageWidth, imageHeight);
-
-        // print what we're doing
-        Log.LogInformation("{Opts}", scene.Options);
-        
-        var sw = Stopwatch.StartNew();
-
         // a simple image partitioning scheme, each thread renders chunks of 'pixelPerThread'
         // many pixels. the next chunk is found by simply skipping the chunks of all other threads
 
         const int pixelPerThread = 10;
         var threadCount = Environment.ProcessorCount;
-        var totalPixels = imageHeight * imageWidth;
+        var totalPixels = scene.Options.ImageWidth * scene.Options.ImageHeight;
         var pixelDone = 0;
 
         void RenderInterleaved(int taskNum)
@@ -93,7 +84,7 @@ public class Raytracer
                 var max = Math.Min(offset + pixelPerThread, totalPixels);
                 for (var p = offset; p < max; p++)
                 {
-                    var py = Math.DivRem(p, imageWidth, out var px);
+                    var py = Math.DivRem(p, scene.Options.ImageWidth, out var px);
                     var color = new RGBColor();
                     
                     for (var sj = 0; sj < sqrtSpp ; sj++) {
@@ -104,7 +95,7 @@ public class Raytracer
                     }
                     
                     // ReSharper disable once AccessToDisposedClosure
-                    image[px, py] = new RgbaVector(color.R, color.G, color.B);                    
+                    imageBuffer[px, py] = new RgbaVector(color.R, color.G, color.B);                    
                 }
 
                 Interlocked.Add(ref pixelDone, max - offset);
@@ -118,9 +109,39 @@ public class Raytracer
 
         Parallel.For(0, threadCount,
             new ParallelOptions {MaxDegreeOfParallelism = Environment.ProcessorCount}, RenderInterleaved);
+    }
+    
+    public void Render(Scene scene, bool doBenchmarkRuns)
+    {
+        var imageWidth = scene.Options.ImageWidth;
+        var imageHeight = scene.Options.ImageHeight;
+        var image = new Image<RgbaVector>(imageWidth, imageHeight);
+
+        // print what we're doing
+        Log.LogInformation("{Opts}", scene.Options);
+        
+        var sw = Stopwatch.StartNew();
+
+        if (doBenchmarkRuns)
+        {
+            const int totalRuns = 5;
+            var total = 0.0;
+            for (var run = 0; run < totalRuns; run++)
+            {
+                sw.Restart();
+                RenderSceneInto(scene, image);
+                total += sw.Elapsed.TotalSeconds; 
+                Log.LogInformation("Run {Run} done in {Seconds:0.##}", run, sw.Elapsed.TotalSeconds);
+            }
+            Log.LogInformation("Average {Average:0.####}", total/totalRuns);
+        }
+        else
+        {
+            RenderSceneInto(scene, image);
+        }
+        
 
         scene.Dispose(); // attempt to free image textures
-
         
         // average and gamma correct whole image in one go
         image.Mutate(c => c.ProcessPixelRowsAsVector4(row =>
@@ -133,7 +154,7 @@ public class Raytracer
             }
         }));
         
-        Console.WriteLine($"\nFinished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
+        Log.LogInformation("\nFinished rendering in {seconds:0.##} secs.", sw.Elapsed.TotalSeconds);
         image.SaveAsPng(scene.Options.OutputFile);
         image.Dispose();
     }
