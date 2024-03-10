@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Fovea.Renderer.Parser;
 using Fovea.Renderer.Sampling;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
@@ -133,5 +134,6 @@ public class Raytracer
         Console.WriteLine($"\nFinished rendering in {sw.Elapsed.TotalSeconds:0.##} secs.");
         image.SaveAsPng(scene.Options.OutputFile);
         image.Dispose();
+        scene.Dispose(); // attempt to free image textures
     }
 }

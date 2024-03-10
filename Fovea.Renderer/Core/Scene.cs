@@ -1,10 +1,19 @@
+using System;
+using System.Collections.Generic;
 using Fovea.Renderer.Primitives;
 using Fovea.Renderer.Viewing;
 
 namespace Fovea.Renderer.Core;
 
-public class Scene
+public class Scene : IDisposable
 {
+    private readonly List<IDisposable> _cleanUpList;
+
+    public Scene(List<IDisposable> cleanUpList = null)
+    {
+        _cleanUpList = cleanUpList;
+    }
+    
     /// <summary>
     /// scene objects
     /// </summary>
@@ -22,4 +31,15 @@ public class Scene
     public RGBColor Background { get; init; } = new(0.7f, 0.8f, 1f);
 
     public RenderOptions Options { get; init; }
+    
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this); // rider made me do this :)
+        if (_cleanUpList == null) return;
+        // try to clean up image textures and all that
+        foreach (var disposable in _cleanUpList)
+        {
+            disposable.Dispose();
+        }
+    }
 }

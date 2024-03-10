@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Fovea.Renderer.Core;
 using Fovea.Renderer.Core.BVH;
@@ -57,17 +58,26 @@ public class SceneDescriptor
 
     public Scene Build(ParserContext context)
     {
+        // keep track of stuff we should dispose after rendering, mostly image textures for now
+        var disposables = new List<IDisposable>();
+        
         // step 1, convert all textures to their real representation
         var textures =
             Textures.ToDictionary(
                 ks => ks.Key,
-                vs => vs.Value.Generate(context));
+                vs =>
+                {
+                    var texture = vs.Value.Generate(context);
+                    if (texture is IDisposable disposable)       
+                        disposables.Add(disposable);
+                    return texture;
+                });
 
         // step 2, do the same for materials and use texture references from above
         var materials = Materials.ToDictionary(
             ks => ks.Key,
             vs => vs.Value.Generate(textures));
-
+        
         // pass materials and texture into context
         // note that blueprints might use these as well
         context.Materials = materials;
@@ -110,7 +120,7 @@ public class SceneDescriptor
             Options = new RenderOptions();
         }
         
-        return new Scene
+        return new Scene(disposables)
         {
             World = new BVHTree(primitiveList),
             Background = Background,

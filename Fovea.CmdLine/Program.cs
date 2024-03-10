@@ -10,7 +10,7 @@ namespace Fovea.CmdLine;
 internal class Program
 {
     private static readonly ILogger<Program> Log = Logging.GetLogger<Program>();
-    
+
     private static void Main(string[] args)
     {
         Parser.Default.ParseArguments<CommandLineArgs>(args)
@@ -62,8 +62,11 @@ internal class Program
                     Log.LogInformation("rendering failed due to error: {Message}", err.Message);
                 }
             });
-        
-        Log.LogDebug("not disposed image sharp allocations {nonDisposedAllocations}",
-            MemoryDiagnostics.TotalUndisposedAllocationCount);
+
+        if (MemoryDiagnostics.TotalUndisposedAllocationCount > 0)
+        {
+            Log.LogWarning("not disposed image sharp allocations {nonDisposedAllocations}",
+                MemoryDiagnostics.TotalUndisposedAllocationCount);
+        }
     }
 }
