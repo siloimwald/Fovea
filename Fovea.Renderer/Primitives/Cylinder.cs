@@ -14,8 +14,8 @@ namespace Fovea.Renderer.Primitives;
 public class Cylinder(float zMin, float zMax, float radius, IMaterial material)
     : IPrimitive
 {
-    private readonly float _zMax = Math.Max(zMin, zMax);
-    private readonly float _zMin = Math.Min(zMin, zMax);
+    private readonly float _zMax = MathF.Max(zMin, zMax);
+    private readonly float _zMin = MathF.Min(zMin, zMax);
 
     public bool Hit(in Ray ray, in Interval rayInterval, ref HitRecord hitRecord)
     {
@@ -63,7 +63,7 @@ public class Cylinder(float zMin, float zMax, float radius, IMaterial material)
     {
         var min = new Vector3(-radius, -radius, _zMin);
         var max = new Vector3(radius, radius, _zMax);
-        return new BoundingBox(min, max);
+        return new BoundingBox(Vector3.Min(min, max), Vector3.Max(min, max));
     }
 
     /// <summary>returns true if we hit either of the caps</summary>
